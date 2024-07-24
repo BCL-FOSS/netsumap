@@ -1,20 +1,22 @@
 # NetiFi Dash #
 
-## Experimental Webapp for UbiquiPy Automation Framework ##
+## Experimental, Webapp for UbiquiPy Automation Framework ##
 
 * [UbiquiPy Repo](https://github.com/BCL-FOSS/UbiquiPy-UniFi-Automation)
 * [Learn more about UbiquiPy here](https://www.baughcl.com/ubiquipy.html) 
 * This is a repo mainly for learning and experimentation, though there are plans to push this into production in the near future.
+* Quart for async calls
+* Caddy reverse proxy(s) for SSL/TLS
 
 ## Upcoming Features ##
-* Async Websocket 
-* * Behind Caddy Reverse Proxy
-* Async Backend
+* Websocket 
+* Webhook
+* Backend
 * Frontend with Flask/Jinja Templates
 
-### Asynchronous, Secure Websocket ###
+### Websocket ###
 
-#### Environment Initialization ####
+#### Init ####
 
 * git clone 
 * cd netifi_dash/async_websocket
@@ -29,7 +31,7 @@
 
 ### Backend, Frontend, Webhook ###
 
-#### Environment Initialization ####
+#### Init ####
 
 * git clone 
 * cd netifi_dash/
@@ -40,7 +42,7 @@
 
 #### Production ####
 
-* waitress-serve --host 127.0.0.1 hello:app
+* waitress-serve --host 127.0.0.1 app:app
 
 
 

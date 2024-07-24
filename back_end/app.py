@@ -4,7 +4,7 @@ import websockets
 from quart import Quart
 
 from flask import Response, render_template, request, Flask
-from models.UniFiAPI import UniFiAPI
+from ubiquipy import UniFiAPI
 
 import config
 from init_app import app
@@ -19,7 +19,7 @@ def login():
     if request.method == "POST":
         data = request.get_json()
         if data:
-            unifi_connect = UniFiAPI(request.get_json().get('ip'), request.get_json().get('port'), request.get_json().get('username'), request.get_json().get('password'))
+            unifi_connect = 
             
 @app.route("/site_dpi", methods=['POST'])
 def unifi_site_dpi():
@@ -27,7 +27,7 @@ def unifi_site_dpi():
         data = request.get_json()
         if data:
             print("received data =", data)
-            unifi_connect = UniFiAPI(request.get_json().get('ip'), request.get_json().get('port'), request.get_json().get('username'), request.get_json().get('password'))
+            unifi_connect = 
             ubnt_data = unifi_connect.get_sitedpi_data()
             unifi_event = {
                 "uid":"",
@@ -47,7 +47,7 @@ def unifi_sta_dpi():
         data = request.get_json()
         if data:
             print("received data =", data)
-            unifi_connect = UniFiAPI(request.get_json().get('ip'), request.get_json().get('port'), request.get_json().get('username'), request.get_json().get('password'))
+            unifi_connect = 
             ubnt_data = unifi_connect.get_stadpi_data()
             unifi_event = {
                 "uid":"",
@@ -67,7 +67,7 @@ def unifi_sta_dpi():
         data = request.get_json()
         if data:
             print("received data =", data)
-            unifi_connect = UniFiAPI(request.get_json().get('ip'), request.get_json().get('port'), request.get_json().get('username'), request.get_json().get('password'))
+            unifi_connect = 
             ubnt_data = unifi_connect.get_event_data()
             return ubnt_data
         
@@ -79,7 +79,7 @@ def unifi_sta_dpi():
         data = request.get_json()
         if data:
             print("received data =", data)
-            unifi_connect = UniFiAPI(request.get_json().get('ip'), request.get_json().get('port'), request.get_json().get('username'), request.get_json().get('password'))
+            unifi_connect = 
             ubnt_data = unifi_connect.get_alarm_data()
             return ubnt_data
         

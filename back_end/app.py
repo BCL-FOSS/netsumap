@@ -1,4 +1,3 @@
-#app_producer.py
 import json
 import websockets
 from quart import Quart
@@ -82,6 +81,73 @@ def unifi_sta_dpi():
             unifi_connect = 
             ubnt_data = unifi_connect.get_alarm_data()
             return ubnt_data
+
+async def send_message(message):
+    async with websockets.connect(config.WEBSOCKET_URL) as websocket:
+        await websocket.send(message)
+
+@app.route('/site_dpi_listener', methods=['POST'])
+def unifi_webhook():
+    if request.method == "POST":
+        data = request.get_json()
+        if data:
+            msg = json.dumps(data)
+            unifi_event = {
+                "uid":"",
+                "type": "",
+                "message": msg,
+            }
+            send_message(unifi_event)
+        else:
+            return 'failed'
+
+@app.route('/sta_dpi_listener', methods=['POST'])
+def unifi_webhook():
+    if request.method == "POST":
+        data = request.get_json()
+        if data:
+            msg = json.dumps(data)
+            unifi_event = {
+                "uid":"",
+                "type": "",
+                "message": msg,
+            }
+            send_message(unifi_event)
+
+        else:
+            return 'failed'
+        
+@app.route('/event_listener', methods=['POST'])
+def unifi_webhook():
+    if request.method == "POST":
+        data = request.get_json()
+        if data:
+            msg = json.dumps(data)
+            unifi_event = {
+                "uid":"",
+                "type": "",
+                "message": msg,
+            }
+            send_message(unifi_event)
+
+        else:
+            return 'failed'
+        
+@app.route('/alarm_listener', methods=['POST'])
+def unifi_webhook():
+    if request.method == "POST":
+        data = request.get_json()
+        if data:
+            msg = json.dumps(data)
+            unifi_event = {
+                "uid":"",
+                "type": "",
+                "message": msg,
+            }
+            send_message(unifi_event)
+
+        else:
+            return 'failed'
         
 
 

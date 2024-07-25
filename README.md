@@ -19,7 +19,7 @@
 
 * git clone 
 * cd netifi_dash/socket
-* apt install python3.10-venv
+* apt install python3.12-venv
 * python3 -m venv .venv 
 * . .venv/bin/activate
 * pip install poetry 

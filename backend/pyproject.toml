@@ -9,6 +9,7 @@ packages = [{include = "backend", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 quart = "^0.19.6"
+websockets = "^12.0"
 
 [tool.poetry.scripts]
 start = "backend:run"

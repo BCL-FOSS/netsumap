@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "chat"
+name = "websocket"
 version = "0.1.0"
 description = ""
 authors = ["D.B. <derek.baugh1775@gmail.com>"]
@@ -12,6 +12,7 @@ quart = "^0.19.6"
 asyncio = "^3.4.3"
 hypercorn = "^0.17.3"
 aioredis = "^2.0.1"
+quart-auth = "^0.10.1"
 
 [tool.poetry.scripts]
 start = "socket:run"

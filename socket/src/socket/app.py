@@ -1,6 +1,5 @@
 from quart import Quart, render_template, websocket
 import asyncio
-
 from models.broker import Broker
 from init_app import app
 
@@ -21,6 +20,8 @@ async def ws() -> None:
         task = asyncio.ensure_future(_receive())
         async for message in broker.subscribe():
             await websocket.send(message)
+    except Exception as e:
+        print(e)
     finally:
         task.cancel()
         await task

@@ -1,7 +1,6 @@
 import json
 import websockets
 from quart import Quart
-
 from flask import Response, render_template, request, Flask
 from ubiquipy import UniFiAPI
 

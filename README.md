@@ -35,7 +35,7 @@
 
 #### Production ####
 
-* hypercorn app:app
+* hypercorn app:app --bind '0.0.0.0:CUSTOM_PORT'
 
 ### Backend + Webhook, Frontend ###
 

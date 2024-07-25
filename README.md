@@ -10,26 +10,34 @@
 
 ## Upcoming Features ##
 * Websocket 
-* Webhook
-* Backend
-* Frontend with Flask/Jinja Templates
+* Backend API + Webhook
+* Frontend with Bootstrap + Jinja2 Templates
 
 ### Websocket ###
 
 #### Init ####
 
 * git clone 
-* cd netifi_dash/async_websocket
+* cd netifi_dash/socket
 * apt install python3.10-venv
 * python3 -m venv .venv 
 * . .venv/bin/activate
+* pip install poetry 
+* poetry install
+* cd /src/socket/
+* poetry run python app.py
+
+##### If Not Using Poetry #####
+
 * pip install quart asyncio hypercorn pytest-asyncio
+* cd /src/socket/
+* python3 app.py
 
 #### Production ####
 
 * hypercorn app:app
 
-### Backend, Frontend, Webhook ###
+### Backend + Webhook, Frontend ###
 
 #### Init ####
 

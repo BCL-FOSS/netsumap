@@ -2,7 +2,7 @@ import asyncio
 
 from quart.testing.connections import TestWebsocketConnection as _TestWebsocketConnection
 
-from init_app import app
+from chat import app
 
 async def _receive(test_websocket: _TestWebsocketConnection) -> str:
     return await test_websocket.receive()

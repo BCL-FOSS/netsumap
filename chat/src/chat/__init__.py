@@ -1,8 +1,9 @@
+from quart import Quart, render_template, websocket
 import asyncio
-from quart import websocket
-from models.broker import Broker
-import aioredis
-from init_app import app
+
+from chat.models.broker import Broker
+
+app = Quart(__name__)
 
 broker = Broker()
 
@@ -11,11 +12,9 @@ async def _receive() -> None:
         message = await websocket.receive()
         await broker.publish(message)
 
-async def add_session():
-    redis = await aioredis.from_url("redis://localhost", username="user", password="sEcRet")
-    await redis.set("my-key", "value")
-    value = await redis.get("my-key")
-    print(value)
+@app.get("/")
+async def index():
+    return await render_template("index.html")
 
 @app.websocket("/ws")
 async def ws() -> None:
@@ -26,3 +25,9 @@ async def ws() -> None:
     finally:
         task.cancel()
         await task
+
+def run() -> None:
+    app.run()
+
+if __name__ == "__main__":
+    run()

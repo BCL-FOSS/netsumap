@@ -12,7 +12,7 @@ ws=create_connection("ws://45.63.53.182:30000/ws")
 @app.post("/unifi_webhook")
 async def webhook():
     try:
-        data = request.get_json()
+        data = await request.get_json()
         if data:
             msg = json.dumps(data)
             unifi_event = {

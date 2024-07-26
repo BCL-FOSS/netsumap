@@ -2,16 +2,16 @@ from quart import render_template, websocket, request, redirect, url_for
 import asyncio
 from models.broker import Broker
 from init_app import app
-from quart_auth import AuthManager, login_required, AuthUser, login_user, current_user, logout_user
+from quart_auth import QuartAuth, login_required, AuthUser, login_user, current_user, logout_user
 import os
 from secrets import compare_digest
 
 broker = Broker()
 
 # export SECRET_KEY=secrets.token_urlsafe(16)
-app.secret_key = os.environ['SECRET_KEY']
+app.secret_key = app.config['SECRET_KEY']
 
-auth_manager = AuthManager(app)
+QuartAuth(app)
 
 
 async def _receive() -> None:

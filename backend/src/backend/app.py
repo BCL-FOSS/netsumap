@@ -20,7 +20,7 @@ async def webhook():
                 "type": "",
                 "message": msg,
             }
-            await ws.send(unifi_event)
+            await ws.send(str(unifi_event))
         else:
             raise Exception('Ensure JSON message is attached to the request')
     except Exception as e:

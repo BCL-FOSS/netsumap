@@ -5,11 +5,11 @@ class Broker:
     def __init__(self) -> None:
         self.connections = set()
 
-    async def publish(self, message: str) -> None:
+    async def publish(self, message: dict) -> None:
         for connection in self.connections:
             await connection.put(message)
 
-    async def subscribe(self) -> AsyncGenerator[str, None]:
+    async def subscribe(self) -> AsyncGenerator[dict, None]:
         connection = asyncio.Queue()
         self.connections.add(connection)
         try:

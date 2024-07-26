@@ -7,11 +7,14 @@ from websocket import create_connection
 
 
 websocket.enableTrace = True
-ws=create_connection("ws://gitxiv.com/sockjs/212/2aczpiim/websocket")
+ws=create_connection("ws://45.63.53.182:30000/ws")
 
 @app.post("/unifi_webhook")
 async def webhook():
-    ws.send()
+    ws.send("Message from backend. Backend -> Websocket")
+
+def run() -> None:
+    app.run()
 
 
 

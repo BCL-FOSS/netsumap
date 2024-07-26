@@ -7,4 +7,6 @@ SECRET_KEY='UN2gP0OU02ItHTVPdF_F9g'
 WEBSOCKET_ADDRESS='ws://45.63.53.182:30000/ws'
 # IP or Hostname of the frontend server
 GUI_ADDRESS='http://144.202.126.43:25000/'
+GUI_USER='test_admin'
+GUI_PASSWORD='unifi_admin'
 

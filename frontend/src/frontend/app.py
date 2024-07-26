@@ -13,7 +13,6 @@ app.secret_key = app.config['SECRET_KEY']
 QuartAuth(app)
 
 @app.get("/")
-@login_required
 async def index():
     return await render_template("index.html")
 

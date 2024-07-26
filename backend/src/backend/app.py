@@ -15,9 +15,7 @@ async def webhook():
         if data:
             msg = json.dumps(data)
             unifi_event = {
-                "uid":"",
-                "type": "",
-                "message": msg,
+                "message": str(msg)
             }
             await ws.send(str(unifi_event))
         else:

@@ -6,7 +6,7 @@ from websocket import create_connection
 import os
 
 websocket.enableTrace = True
-ws=create_connection(os.environ['WEBSOCKET_ADDRESS'])
+ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
 
 @app.post("/unifi_webhook")
 async def webhook():

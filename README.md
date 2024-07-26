@@ -9,6 +9,7 @@
 * Caddy reverse proxy(s) for SSL/TLS
 * Websocket for realtime alerts
 * Webhooks for UniFi events, alarms and DPI data
+* Flexibility of single service or microservice(s) deployment
 
 ## Upcoming Features ##
 * Frontend with Bootstrap + Jinja2 Templates
@@ -18,13 +19,13 @@
 ### Poetry Init ###
 
 * git clone 
-* cd netifi_dash/
+* cd netifi_dash/FOLDER_NAME
 * apt install python3.12-venv
 * python3 -m venv .venv 
 * . .venv/bin/activate
 * pip install poetry 
 * poetry install
-* cd /src/socket/
+* cd FOLDER_NAME/src/FOLDER_NAME
 * poetry run python app.py
 
 ### If Not Using Poetry ###
@@ -34,7 +35,7 @@
 * apt install python3.12-venv
 * python3 -m venv .venv 
 * . .venv/bin/activate
-* pip install quart asyncio hypercorn pytest-asyncio websocket-client websockets
+* pip install quart asyncio hypercorn pytest-asyncio websocket-client
 * cd FOLDER_NAME/src/FOLDER_NAME/ 
 * python3 app.py
 

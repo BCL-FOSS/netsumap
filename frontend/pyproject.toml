@@ -11,6 +11,7 @@ python = "^3.10"
 quart = "^0.19.6"
 hypercorn = "^0.17.3"
 websocket-client = "^1.8.0"
+quart-auth = "^0.10.1"
 
 
 [build-system]

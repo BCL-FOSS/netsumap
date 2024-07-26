@@ -8,7 +8,7 @@ import os
 from secrets import compare_digest
 
 # export SECRET_KEY=secrets.token_urlsafe(16)
-app.secret_key = os.environ['SECRET_KEY']
+app.secret_key = app.config['SECRET_KEY']
 
 QuartAuth(app)
 

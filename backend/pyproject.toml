@@ -10,6 +10,8 @@ packages = [{include = "backend", from = "src"}]
 python = "^3.10"
 quart = "^0.19.6"
 websockets = "^12.0"
+hypercorn = "^0.17.3"
+websocket-client = "^1.8.0"
 
 [tool.poetry.scripts]
 start = "backend:run"

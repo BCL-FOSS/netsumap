@@ -3,7 +3,7 @@ from init_app import app
 import websocket
 from websocket import create_connection
 import os
-from quart_auth import login_required, AuthUser, login_user, current_user, logout_user
+from quart_auth import login_required, AuthUser, login_user, current_user, logout_user, QuartAuth
 import os
 from secrets import compare_digest
 

@@ -5,15 +5,15 @@
 
 * [UbiquiPy Repo](https://github.com/BCL-FOSS/UbiquiPy-UniFi-Automation)
 * [Learn more about UbiquiPy here](https://www.baughcl.com/ubiquipy.html) 
-* This is a repo mainly for learning and experimentation, though there are plans to push this into production in the near future.
-* Quart for async calls
+* Quart for asynchronous usage
 * Caddy reverse proxy(s) for SSL/TLS
-* Websocket 
+* Websocket for realtime alerts
 * Webhooks for UniFi events, alarms and DPI data
 
 ## Upcoming Features ##
 * Frontend with Bootstrap + Jinja2 Templates
 * DPI analysis with AI
+* NOC Dashboard 
 
 ### Poetry Init ###
 

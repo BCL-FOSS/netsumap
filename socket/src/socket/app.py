@@ -35,7 +35,8 @@ async def login():
     if request.method == 'POST':
         data = await request.form
         if data["username"] == app.config['GUI_USER'] and compare_digest(data["password"], app.config['GUI_PASSWORD']):
-            login_user(QuartAuth(app.config['GUI_USER']))
+            user_name = app.config['GUI_USER']
+            login_user(QuartAuth(str(user_name)))
             return redirect(url_for("index"))
         else:
             return redirect(url_for("about"))

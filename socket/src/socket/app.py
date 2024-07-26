@@ -21,7 +21,15 @@ async def ws() -> None:
         async for message in broker.subscribe():
             await websocket.send(message)
     except Exception as e:
-        print(e)
+        await websocket.accept()
+        await websocket.close(1000)
+        raise e
+        
+    except asyncio.CancelledError:
+        # Handle disconnection here
+        await websocket.accept()
+        await websocket.close(1000)
+        raise Exception(asyncio.CancelledError)
     finally:
         task.cancel()
         await task

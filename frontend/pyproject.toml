@@ -1,21 +1,16 @@
 [tool.poetry]
-name = "backend"
+name = "frontend"
 version = "0.1.0"
 description = ""
 authors = ["D.B. <derek.baugh1775@gmail.com>"]
 readme = "README.md"
-packages = [{include = "backend", from = "src"}]
+packages = [{include = "frontend", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 quart = "^0.19.6"
-websockets = "^12.0"
 hypercorn = "^0.17.3"
 websocket-client = "^1.8.0"
-quart-auth = "^0.10.1"
-
-[tool.poetry.scripts]
-start = "backend:run"
 
 
 [build-system]

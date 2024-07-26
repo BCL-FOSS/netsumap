@@ -1,13 +1,12 @@
-from quart import Quart, request
+from quart import request
 import json
-import asyncio
-from models.broker import Broker
 from init_app import app
 import websocket
 from websocket import create_connection
+import os
 
 websocket.enableTrace = True
-ws=create_connection("ws://45.63.53.182:30000/ws")
+ws=create_connection(os.environ['WEBSOCKET_ADDRESS'])
 
 @app.post("/unifi_webhook")
 async def webhook():

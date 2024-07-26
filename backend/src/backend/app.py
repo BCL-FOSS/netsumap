@@ -16,7 +16,7 @@ async def webhook():
         print(e)
         return {'Error' : e}
     finally:
-        return {'Success?' : 'Check the websocket UI'}
+        return {'Success' : 'Check the websocket UI'}
 
 
 def run() -> None:

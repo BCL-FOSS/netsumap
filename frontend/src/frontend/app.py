@@ -25,7 +25,7 @@ async def about():
 @app.route("/login", methods={"GET","POST"})
 async def login():
     if request.method == 'POST':
-        data = await request.json()
+        data = await request.form
         if data["username"] == app.config['GUI_USER'] and compare_digest(data["password"], app.config['GUI_PASSWORD']):
             login_user(AuthUser(app.config['GUI_USER']))
             return redirect(url_for("index"))

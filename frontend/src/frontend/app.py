@@ -15,7 +15,6 @@ QuartAuth(app)
 @app.get("/")
 @login_required
 async def index():
-    print(f"{current_user.auth_id} has signed in")
     return await render_template("index.html")
 
 @app.get("/about_netifidash")
@@ -28,7 +27,7 @@ async def login():
         data = await request.form
         if data["username"] == app.config['GUI_USER'] and compare_digest(data["password"], app.config['GUI_PASSWORD']):
             user_name = app.config['GUI_USER']
-            login_user(QuartAuth(str(user_name)))
+            login_user(AuthUser(app.config['GUI_USER_ID']))
             return redirect(url_for("index"))
         else:
             return redirect(url_for("about"))

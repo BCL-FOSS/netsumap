@@ -1,24 +1,24 @@
 # NetiFi Dash #
 
-## Experimental, Webapp for UbiquiPy Automation Framework ##
+## Self-hosted NOC Dashboard, DPI Threat Analysis & Admin Tool for Ubiquiti UniFi ##
+### EXPERIMENTAL, WILL GO INTO PRODUCTION SOON ###
 
 * [UbiquiPy Repo](https://github.com/BCL-FOSS/UbiquiPy-UniFi-Automation)
 * [Learn more about UbiquiPy here](https://www.baughcl.com/ubiquipy.html) 
 * This is a repo mainly for learning and experimentation, though there are plans to push this into production in the near future.
 * Quart for async calls
 * Caddy reverse proxy(s) for SSL/TLS
+* Websocket 
+* Webhooks for UniFi events, alarms and DPI data
 
 ## Upcoming Features ##
-* Websocket 
-* Backend API + Webhook
 * Frontend with Bootstrap + Jinja2 Templates
+* DPI analysis with AI
 
-### Websocket ###
-
-#### Init ####
+### Poetry Init ###
 
 * git clone 
-* cd netifi_dash/socket
+* cd netifi_dash/
 * apt install python3.12-venv
 * python3 -m venv .venv 
 * . .venv/bin/activate
@@ -27,31 +27,20 @@
 * cd /src/socket/
 * poetry run python app.py
 
-##### If Not Using Poetry #####
-
-* pip install quart asyncio hypercorn pytest-asyncio
-* cd /src/socket/
-* python3 app.py
-
-#### Production ####
-
-* hypercorn app:app --bind '0.0.0.0:CUSTOM_PORT'
-
-### Backend + Webhook, Frontend ###
-
-#### Init ####
+### If Not Using Poetry ###
 
 * git clone 
-* cd netifi_dash/
-* apt install python3.10-venv
+* cd netifi_dash/FOLDER_NAME
+* apt install python3.12-venv
 * python3 -m venv .venv 
 * . .venv/bin/activate
-* pip install Flask requests Faker waitress
+* pip install quart asyncio hypercorn pytest-asyncio websocket-client websockets
+* cd FOLDER_NAME/src/FOLDER_NAME/ 
+* python3 app.py
 
-#### Production ####
+### Production ###
 
-* waitress-serve --host 127.0.0.1 app:app
-
+* hypercorn app:app --bind '0.0.0.0:CUSTOM_PORT'
 
 
 

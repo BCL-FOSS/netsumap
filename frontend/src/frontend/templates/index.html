@@ -6,6 +6,30 @@
       li.appendChild(document.createTextNode(event.data));
       document.getElementById("messages").appendChild(li);
     });
+
+  ws.addEventListener('site_dpi', function (event) {
+      const li = document.createElement("li");
+      li.appendChild(document.createTextNode(event.data));
+      document.getElementById("sites_dpi").appendChild(li);
+    });
+  
+  ws.addEventListener('sta_dpi', function (event) {
+      const li = document.createElement("li");
+      li.appendChild(document.createTextNode(event.data));
+      document.getElementById("client_dpi").appendChild(li);
+    });
+  
+  ws.addEventListener('events', function (event) {
+      const li = document.createElement("li");
+      li.appendChild(document.createTextNode(event.data));
+      document.getElementById("ubnt_events").appendChild(li);
+    });
+
+  ws.addEventListener('alarms', function (event) {
+      const li = document.createElement("li");
+      li.appendChild(document.createTextNode(event.data));
+      document.getElementById("ubnt_alarms").appendChild(li);
+    });
   
   function send(event) {
     const message = (new FormData(event.target)).get("message");
@@ -19,6 +43,10 @@
   
 <div style="display: flex; height: 100%; flex-direction: column">
   <ul id="messages" style="flex-grow: 1; list-style-type: none"></ul>
+  <ul id="sites_dpi" style="flex-grow: 1; list-style-type: none"></ul>
+  <ul id="client_dpi" style="flex-grow: 1; list-style-type: none"></ul>
+  <ul id="ubnt_alarms" style="flex-grow: 1; list-style-type: none"></ul>
+  <ul id="ubnt_events" style="flex-grow: 1; list-style-type: none"></ul>
   
   <form onsubmit="return send(event)">
     <input type="text" name="message" minlength="1" />

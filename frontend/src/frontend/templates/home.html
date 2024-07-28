@@ -3,32 +3,48 @@
   
   ws.addEventListener('message', function (event) {
       const li = document.createElement("li");
+      const li_2 = document.createElement("li");
       li.appendChild(document.createTextNode(event.data));
+      li_2.appendChild(document.createTextNode('message'))
       document.getElementById("messages").appendChild(li);
+      document.getElementById("messages").appendChild(li_2);
     });
 
   ws.addEventListener('site_dpi', function (event) {
       const li = document.createElement("li");
+      const li_3 = document.createElement("li");
       li.appendChild(document.createTextNode(event.data));
+      li_3.appendChild(document.createTextNode('site_dpi'));
       document.getElementById("sites_dpi").appendChild(li);
+      document.getElementById("sites_dpi").appendChild(li_3);
     });
   
   ws.addEventListener('sta_dpi', function (event) {
       const li = document.createElement("li");
+      const li_4 = document.createElement("li");
       li.appendChild(document.createTextNode(event.data));
+      li_4.appendChild(document.createTextNode('sta_dpi'))
       document.getElementById("client_dpi").appendChild(li);
+      document.getElementById("sites_dpi").appendChild(li_4);
     });
   
   ws.addEventListener('events', function (event) {
       const li = document.createElement("li");
+      const li_5 = document.createElement("li");
       li.appendChild(document.createTextNode(event.data));
+      li_5.appendChild(document.createTextNode('sta_dpi'));
       document.getElementById("ubnt_events").appendChild(li);
+      document.getElementById("sites_dpi").appendChild(li_5);
+
     });
 
   ws.addEventListener('alarms', function (event) {
       const li = document.createElement("li");
+      const li_6 = document.createElement("li");
       li.appendChild(document.createTextNode(event.data));
+      li_6.appendChild(document.createTextNode('sta_dpi'));
       document.getElementById("ubnt_alarms").appendChild(li);
+      document.getElementById("sites_dpi").appendChild(li_6);
     });
   
   function send(event) {
@@ -42,14 +58,20 @@
 </script>
   
 <div style="display: flex; height: 100%; flex-direction: column">
+
   <ul id="messages" style="flex-grow: 1; list-style-type: none"></ul>
+  <br>
   <ul id="sites_dpi" style="flex-grow: 1; list-style-type: none"></ul>
+  <br>
   <ul id="client_dpi" style="flex-grow: 1; list-style-type: none"></ul>
+  <br>
   <ul id="ubnt_alarms" style="flex-grow: 1; list-style-type: none"></ul>
+  <br>
   <ul id="ubnt_events" style="flex-grow: 1; list-style-type: none"></ul>
   
   <form onsubmit="return send(event)">
     <input type="text" name="message" minlength="1" />
     <button type="submit">Send</button>
   </form>
+
 </div>

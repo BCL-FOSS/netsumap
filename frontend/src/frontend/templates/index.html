@@ -163,20 +163,20 @@
   
     ws.addEventListener('message', function (event) {
       json = JSON.parse(event.data);
-      if ("event" in json)
+      if ("unifi_event" in json)
       {
         const li = document.createElement("li");
         const li_2 = document.createElement("li");
-        li.appendChild(document.createTextNode(json.back_end));
+        li.appendChild(document.createTextNode(json.unifi_event));
         li_2.appendChild(document.createTextNode('message'));
         document.getElementById("events_list").appendChild(li);
         document.getElementById("events_list").appendChild(li_2);
 
-      } else if ("alarm" in json) 
+      } else if ("unifi_alarm" in json) 
       {
         const li = document.createElement("li");
         const li_2 = document.createElement("li");
-        li.appendChild(document.createTextNode(json.back_end));
+        li.appendChild(document.createTextNode(json.unifi_alarm));
         li_2.appendChild(document.createTextNode('message'));
         document.getElementById("alarms_list").appendChild(li);
         document.getElementById("alarms_list").appendChild(li_2);
@@ -185,16 +185,16 @@
       {
         const li = document.createElement("li");
         const li_2 = document.createElement("li");
-        li.appendChild(document.createTextNode(json.back_end));
+        li.appendChild(document.createTextNode(json.site_dpi));
         li_2.appendChild(document.createTextNode('message'));
         document.getElementById("sites_list").appendChild(li);
         document.getElementById("sites_list").appendChild(li_2);
 
-      } else if ("site_dpi" in json) 
+      } else if ("sta_dpi" in json) 
       {
         const li = document.createElement("li");
         const li_2 = document.createElement("li");
-        li.appendChild(document.createTextNode(json.back_end));
+        li.appendChild(document.createTextNode(json.sta_dpi));
         li_2.appendChild(document.createTextNode('message'));
         document.getElementById("clients_list").appendChild(li);
         document.getElementById("clients_list").appendChild(li_2);

@@ -80,9 +80,10 @@
   ws.addEventListener('message', function (event) {
       data = JSON.stringify(event.data)
       json = JSON.parse(data)
+      sent_data = json.back_end.data
       const li = document.createElement("li");
       const li_2 = document.createElement("li");
-      li.appendChild(document.createTextNode(json));
+      li.appendChild(document.createTextNode(sent_data));
       li_2.appendChild(document.createTextNode('message'))
       document.getElementById("messages").appendChild(li);
       document.getElementById("messages").appendChild(li_2);

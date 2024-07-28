@@ -22,6 +22,8 @@ async def webhook():
             raise Exception('Ensure JSON message is attached to the request')
     except Exception as e:
         return {'Error' : e}
+    finally:
+        return {'try_catch_end' : 'Check the frontend UI'}
 
 def run() -> None:
     app.run()

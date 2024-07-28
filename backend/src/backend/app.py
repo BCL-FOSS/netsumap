@@ -18,12 +18,11 @@ async def webhook():
             #    "message": str(msg)
             #}
             await ws.send(str(msg))
+            return {'Success' : 'Check frontend UI'}
         else:
             raise Exception('Ensure JSON message is attached to the request')
     except Exception as e:
         return {'Error' : e}
-    finally:
-        return {'Success' : 'Check the websocket UI'}
 
 def run() -> None:
     app.run()

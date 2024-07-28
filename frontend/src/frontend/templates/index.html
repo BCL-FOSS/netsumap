@@ -39,6 +39,8 @@
                 <input type="text" name="message" minlength="1" />
                 <button type="submit">Send</button>
               </form>
+
+              <p id="error_display"></p>
     
             </div>
             <div class="col-4"></div>
@@ -75,17 +77,28 @@
 
 
 <script type="text/javascript">
-  const ws = new WebSocket(`ws://45.63.53.182:30000/ws`);
+  try {
+    const ws = new WebSocket(`ws://45.63.53.182:30000/ws`);
+    const error_display = document.getElementById("error_display");
+    error_display.innerHTML="";
   
-  ws.addEventListener('message', function (event) {
-      json = JSON.parse(event.data)
+    ws.addEventListener('message', function (event) {
+      json = JSON.parse(event.data);
       const li = document.createElement("li");
       const li_2 = document.createElement("li");
       li.appendChild(document.createTextNode(json.back_end));
-      li_2.appendChild(document.createTextNode('message'))
+      li_2.appendChild(document.createTextNode('message'));
       document.getElementById("messages").appendChild(li);
       document.getElementById("messages").appendChild(li_2);
     });
+
+    
+  } catch (error) {
+
+    error_display.innerHTML = "Error: " + error;
+    
+  }
+  
   
   function send(event) {
     const message = (new FormData(event.target)).get("message");

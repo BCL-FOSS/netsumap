@@ -78,8 +78,7 @@
   const ws = new WebSocket(`ws://45.63.53.182:30000/ws`);
   
   ws.addEventListener('message', function (event) {
-      data = JSON.stringify(event.data)
-      json = JSON.parse(data)
+      json = JSON.parse(event.data)
       const li = document.createElement("li");
       const li_2 = document.createElement("li");
       li.appendChild(document.createTextNode(json.back_end));

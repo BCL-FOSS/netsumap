@@ -1,0 +1,32 @@
+<script type="text/javascript">
+  const ws = new WebSocket(`ws://45.63.53.182:30000/ws`);
+  
+  ws.addEventListener('message', function (event) {
+      const li = document.createElement("li");
+      const li_2 = document.createElement("li");
+      li.appendChild(document.createTextNode(event.data));
+      li_2.appendChild(document.createTextNode('message'))
+      document.getElementById("messages").appendChild(li);
+      document.getElementById("messages").appendChild(li_2);
+    });
+  
+  function send(event) {
+    const message = (new FormData(event.target)).get("message");
+    if (message) {
+      ws.send(message);
+    }
+    event.target.reset();
+    return false;
+  }
+</script>
+  
+<div style="display: flex; height: 100%; flex-direction: column">
+
+  <ul id="messages" style="flex-grow: 1; list-style-type: none"></ul>
+  
+  <form onsubmit="return send(event)">
+    <input type="text" name="message" minlength="1" />
+    <button type="submit">Send</button>
+  </form>
+
+</div>

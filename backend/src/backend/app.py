@@ -14,10 +14,10 @@ async def webhook():
         data = await request.get_json()
         if data:
             msg = json.dumps(data)
-            unifi_event = {
-                "message": str(msg)
-            }
-            await ws.send(str(unifi_event))
+            #unifi_event = {
+            #    "message": str(msg)
+            #}
+            await ws.send(str(msg))
         else:
             raise Exception('Ensure JSON message is attached to the request')
     except Exception as e:

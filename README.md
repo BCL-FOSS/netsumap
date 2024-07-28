@@ -43,6 +43,17 @@
 
 * hypercorn app:app --bind '0.0.0.0:CUSTOM_PORT'
 
+##### Backend #####
+* hypercorn app:app --bind '0.0.0.0:25000'
+
+##### Websocket #####
+* hypercorn app:app --bind '0.0.0.0:30000'
+
+##### Frontend #####
+* hypercorn app:app --bind '0.0.0.0:20000'
+
+
+
 
 
 

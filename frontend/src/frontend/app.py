@@ -6,7 +6,7 @@ app.secret_key = app.config['SECRET_KEY']
 
 @app.get("/")
 async def index():
-    return await render_template("index.html")
+    return await render_template("home.html")
 
 @app.get("/about_netifidash")
 async def about():

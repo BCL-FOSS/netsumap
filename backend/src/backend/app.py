@@ -17,14 +17,12 @@ async def webhook():
             #unifi_event = {
             #    "message": str(msg)
             #}
-            await ws.send(str(msg))
+            await ws.send(dict(msg))
+            return {'Success' : 'Check the websocket UI'}
         else:
             raise Exception('Ensure JSON message is attached to the request')
     except Exception as e:
         return {'Error' : e}
-    finally:
-        return {'Success' : 'Check the websocket UI'}
-
 
 def run() -> None:
     app.run()

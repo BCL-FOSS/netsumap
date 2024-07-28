@@ -13,11 +13,11 @@ async def webhook():
     try:
         data = await request.get_json()
         if data:
-            msg = json.dumps(data)
+            #msg = json.dumps(data)
             #unifi_event = {
             #    "message": str(msg)
             #}
-            await ws.send(dict(msg))
+            await ws.send(str(data))
             return {'Success' : 'Check the websocket UI'}
         else:
             raise Exception('Ensure JSON message is attached to the request')

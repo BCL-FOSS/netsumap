@@ -1,15 +1,16 @@
 import asyncio
 from typing import AsyncGenerator
+import json
 
 class Broker:
     def __init__(self) -> None:
         self.connections = set()
 
-    async def publish(self, message: dict) -> None:
+    async def publish(self, message: str) -> None:
         for connection in self.connections:
             await connection.put(message)
 
-    async def subscribe(self) -> AsyncGenerator[dict, None]:
+    async def subscribe(self) -> AsyncGenerator[str, None]:
         connection = asyncio.Queue()
         self.connections.add(connection)
         try:

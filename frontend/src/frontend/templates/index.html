@@ -8,30 +8,33 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>NetifiDash</title>
+    <title>Netifievent</title>
   </head>
   <body>
     <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="dash-tab" data-bs-toggle="tab" data-bs-target="#dash" type="button" role="tab" aria-controls="dash" aria-selected="true">Network Alerts</button>
+        <button class="nav-link active" id="event-tab" data-bs-toggle="tab" data-bs-target="#event" type="button" role="tab" aria-controls="event" aria-selected="true">Network Events</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="cyber-tab" data-bs-toggle="tab" data-bs-target="#cyber" type="button" role="tab" aria-controls="cyber" aria-selected="false">Threat Analysis</button>
+        <button class="nav-link" id="alarm-tab" data-bs-toggle="tab" data-bs-target="#alarm" type="button" role="tab" aria-controls="alarm" aria-selected="false">Network Alarms</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="mgmt-tab" data-bs-toggle="tab" data-bs-target="#mgmt" type="button" role="tab" aria-controls="mgmt" aria-selected="false">Management</button>
+        <button class="nav-link" id="site-dpi-tab" data-bs-toggle="tab" data-bs-target="#sites" type="button" role="tab" aria-controls="sites" aria-selected="false">Site(s) DPI Stats</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="client-dpi-tab" data-bs-toggle="tab" data-bs-target="#clients" type="button" role="tab" aria-controls="clients" aria-selected="false">Client(s) DPI Stats</button>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="dash" role="tabpanel" aria-labelledby="dash-tab">
+      <div class="tab-pane fade show active" id="event" role="tabpanel" aria-labelledby="event-tab">
         <div class="container">
           <div class="row">
             <div class="col-4"></div>
             <div class="col-4">
     
-              <h1>NetiFiDash NOC Tool</h1>
+              <h1>Network Events</h1>
     
-              <ul id="messages" style="flex-grow: 1; list-style-type: none"></ul>
+              <ul id="events_list" style="flex-grow: 1; list-style-type: none"></ul>
     
               <br>
     
@@ -49,11 +52,87 @@
         </div>
       </div>
 
-      <div class="tab-pane fade" id="cyber" role="tabpanel" aria-labelledby="cyber-tab">
+      <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm-tab">
+
+        <div class="container">
+          <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+    
+              <h1>Network Alarms</h1>
+    
+              <ul id="alarms_list" style="flex-grow: 1; list-style-type: none"></ul>
+    
+              <br>
+    
+              <form onsubmit="return send(event)">
+                <input type="text" name="message" minlength="1" />
+                <button type="submit">Send</button>
+              </form>
+
+              <p id="error_display"></p>
+    
+            </div>
+            <div class="col-4"></div>
+    
+          </div>
+        </div>
 
       </div>
 
-      <div class="tab-pane fade" id="mgmt" role="tabpanel" aria-labelledby="mgmt-tab">
+      <div class="tab-pane fade" id="sites" role="tabpanel" aria-labelledby="site-dpi-tab">
+
+        <div class="container">
+          <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+    
+              <h1>DPI Stats for all Sites</h1>
+    
+              <ul id="sites_list" style="flex-grow: 1; list-style-type: none"></ul>
+    
+              <br>
+    
+              <form onsubmit="return send(event)">
+                <input type="text" name="message" minlength="1" />
+                <button type="submit">Send</button>
+              </form>
+
+              <p id="error_display"></p>
+    
+            </div>
+            <div class="col-4"></div>
+    
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tab-pane fade" id="clients" role="tabpanel" aria-labelledby="client-dpi-tab">
+
+        <div class="container">
+          <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+    
+              <h1>DPI Stats for all Clients</h1>
+    
+              <ul id="clients_list" style="flex-grow: 1; list-style-type: none"></ul>
+    
+              <br>
+    
+              <form onsubmit="return send(event)">
+                <input type="text" name="message" minlength="1" />
+                <button type="submit">Send</button>
+              </form>
+
+              <p id="error_display"></p>
+    
+            </div>
+            <div class="col-4"></div>
+    
+          </div>
+        </div>
 
       </div>
     </div>
@@ -84,12 +163,44 @@
   
     ws.addEventListener('message', function (event) {
       json = JSON.parse(event.data);
-      const li = document.createElement("li");
-      const li_2 = document.createElement("li");
-      li.appendChild(document.createTextNode(json.back_end));
-      li_2.appendChild(document.createTextNode('message'));
-      document.getElementById("messages").appendChild(li);
-      document.getElementById("messages").appendChild(li_2);
+      if ("event" in json)
+      {
+        const li = document.createElement("li");
+        const li_2 = document.createElement("li");
+        li.appendChild(document.createTextNode(json.back_end));
+        li_2.appendChild(document.createTextNode('message'));
+        document.getElementById("events_list").appendChild(li);
+        document.getElementById("events_list").appendChild(li_2);
+
+      } else if ("alarm" in json) 
+      {
+        const li = document.createElement("li");
+        const li_2 = document.createElement("li");
+        li.appendChild(document.createTextNode(json.back_end));
+        li_2.appendChild(document.createTextNode('message'));
+        document.getElementById("alarms_list").appendChild(li);
+        document.getElementById("alarms_list").appendChild(li_2);
+
+      } else if ("site_dpi" in json) 
+      {
+        const li = document.createElement("li");
+        const li_2 = document.createElement("li");
+        li.appendChild(document.createTextNode(json.back_end));
+        li_2.appendChild(document.createTextNode('message'));
+        document.getElementById("sites_list").appendChild(li);
+        document.getElementById("sites_list").appendChild(li_2);
+
+      } else if ("site_dpi" in json) 
+      {
+        const li = document.createElement("li");
+        const li_2 = document.createElement("li");
+        li.appendChild(document.createTextNode(json.back_end));
+        li_2.appendChild(document.createTextNode('message'));
+        document.getElementById("clients_list").appendChild(li);
+        document.getElementById("clients_list").appendChild(li_2);
+
+      }
+      
     });
 
     

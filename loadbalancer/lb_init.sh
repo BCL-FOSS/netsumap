@@ -31,3 +31,5 @@ ip addr show dev bird_link
 
 #Setup BIRD routing daemon
 apt install bird
+
+nano /etc/bird/bird.conf

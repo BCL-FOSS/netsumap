@@ -12,10 +12,6 @@ async def index():
 async def app_main():
     return await render_template("web_app.html")
 
-@app.get("/about")
-async def about_app():
-    return await render_template("about.html")
-
 
 @app.errorhandler(404)
 async def page_not_found():

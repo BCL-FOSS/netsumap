@@ -13,7 +13,7 @@
 }
 
 www.netifidash.io {
-    root /root/bcl_block_site/dist
+    root /home/linuxadmin/NetiFi-Dash/loadbalancer/web
     file_server
     redir /index / permanent
 
@@ -24,17 +24,11 @@ www.netifidash.io {
             rewrite @404 /404.html
             file_server
         }
-}
 
-reverse_proxy https://www.netifidash.io:50000 {
-	header_up Host http://192.168.34.4:50000
-}
-
-# Catches all requests that are not handled above:
-
-:80, :443 {
-	import logging catchall
-	respond "Access denied" 403 {
-		close
+	reverse_proxy /app/ {
+    	to http://192.168.34.4:20000
+    	header_up Host {http.reverse_proxy.upstream.host}
 	}
 }
+
+

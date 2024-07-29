@@ -26,9 +26,7 @@ www.netifidash.io {
         }
 
 	reverse_proxy /app/ {
-    	to http://192.168.34.4:20000
+    	to http://app.netifidash.io:20000
     	header_up Host {http.reverse_proxy.upstream.host}
 	}
 }
-
-

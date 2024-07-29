@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p>{% block title %} NetiFiDash NOC Web App {% endblock %}</p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+
+      <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="event-tab" data-bs-toggle="tab" data-bs-target="#event" type="button" role="tab" aria-controls="event" aria-selected="true">Network Events</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="alarm-tab" data-bs-toggle="tab" data-bs-target="#alarm" type="button" role="tab" aria-controls="alarm" aria-selected="false">Network Alarms</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="site-dpi-tab" data-bs-toggle="tab" data-bs-target="#sites" type="button" role="tab" aria-controls="sites" aria-selected="false">Site(s) DPI Stats</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="client-dpi-tab" data-bs-toggle="tab" data-bs-target="#clients" type="button" role="tab" aria-controls="clients" aria-selected="false">Client(s) DPI Stats</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="event" role="tabpanel" aria-labelledby="event-tab">
+          <div class="container">
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4">
+      
+                <h1>Network Events</h1>
+      
+                <ul id="events_list" style="flex-grow: 1; list-style-type: none"></ul>
+      
+                <br>
+      
+                <form onsubmit="return send(event)">
+                  <input type="text" name="message" minlength="1" />
+                  <button type="submit">Send</button>
+                </form>
+      
+                <p id="error_display"></p>
+      
+              </div>
+              <div class="col-4"></div>
+      
+            </div>
+          </div>
+        </div>
+      
+        <div class="tab-pane fade" id="alarm" role="tabpanel" aria-labelledby="alarm-tab">
+      
+          <div class="container">
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4">
+      
+                <h1>Network Alarms</h1>
+      
+                <ul id="alarms_list" style="flex-grow: 1; list-style-type: none"></ul>
+      
+                <br>
+      
+                <form onsubmit="return send(event)">
+                  <input type="text" name="message" minlength="1" />
+                  <button type="submit">Send</button>
+                </form>
+      
+                <p id="error_display"></p>
+      
+              </div>
+              <div class="col-4"></div>
+      
+            </div>
+          </div>
+      
+        </div>
+      
+        <div class="tab-pane fade" id="sites" role="tabpanel" aria-labelledby="site-dpi-tab">
+      
+          <div class="container">
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4">
+      
+                <h1>DPI Stats for all Sites</h1>
+      
+                <ul id="sites_list" style="flex-grow: 1; list-style-type: none"></ul>
+      
+                <br>
+      
+                <form onsubmit="return send(event)">
+                  <input type="text" name="message" minlength="1" />
+                  <button type="submit">Send</button>
+                </form>
+      
+                <p id="error_display"></p>
+      
+              </div>
+              <div class="col-4"></div>
+      
+            </div>
+          </div>
+      
+        </div>
+      
+        <div class="tab-pane fade" id="clients" role="tabpanel" aria-labelledby="client-dpi-tab">
+      
+          <div class="container">
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4">
+      
+                <h1>DPI Stats for all Clients</h1>
+      
+                <ul id="clients_list" style="flex-grow: 1; list-style-type: none"></ul>
+      
+                <br>
+      
+                <form onsubmit="return send(event)">
+                  <input type="text" name="message" minlength="1" />
+                  <button type="submit">Send</button>
+                </form>
+      
+                <p id="error_display"></p>
+      
+              </div>
+              <div class="col-4"></div>
+      
+            </div>
+          </div>
+      
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+{% endblock %}
+

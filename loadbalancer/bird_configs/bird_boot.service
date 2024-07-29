@@ -1,0 +1,7 @@
+[Unit]
+Description=Start BIRD routing daemon at boot
+After=network.target
+[Service]
+ExecStart=/usr/local/bin/bird_boot.sh
+[Install]
+WantedBy=default.target

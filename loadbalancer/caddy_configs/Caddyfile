@@ -1,0 +1,20 @@
+{
+	log {
+		output file /var/log/caddy/caddy.log
+		format json
+	}
+}
+
+(logging) {
+	log {
+		output file /var/log/caddy/{args[0]}.access.log
+		format json
+	}
+}
+
+www.netifidash.io {
+    reverse_proxy / {
+    	to http://app.netifidash.io:20000
+    	header_up Host {http.reverse_proxy.upstream.host}
+	}
+}

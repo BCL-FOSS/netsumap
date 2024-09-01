@@ -13,12 +13,12 @@
 }
 
 www.netifidash.io {
-    root 
-    file_server
-    redir /index / permanent
 
-	reverse_proxy / {
-    	to http://app.netifidash.io:20000
-		header_up Host {http.reverse_proxy.upstream.host}
+	handle_path /web_app {
+		reverse_proxy http://app.netifidash.io:20000{
+			header_up X_FORWARDED_URI "/web_app"
+
+		}
 	}
+	
 }

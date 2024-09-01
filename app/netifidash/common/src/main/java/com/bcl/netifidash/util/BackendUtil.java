@@ -11,12 +11,11 @@ public class BackendUtil {
 
     }
 
-    public void auth(String username, String pass){
+    public void auth(){
 
-        Response<Map> result = Rest.post("https://api.twilio.com/2010-04-01/Accounts/" + accountSID + "/Messages.json").
-                queryParam("To", destinationPhone).
-                queryParam("From", fromPhone).
-                queryParam("Body", "Hello World").basicAuth(accountSID, authToken).getAsJsonMap();
+        Response<Map> result = Rest.post("http://107.191.44.222:25000/unifi_webhook").
+                contentType("application/json").body("{\"unifi_alarm\" : \"from_mobile_app\"}")
+                .getAsJsonMap();
 
 
         if(result.getResponseData() != null) {

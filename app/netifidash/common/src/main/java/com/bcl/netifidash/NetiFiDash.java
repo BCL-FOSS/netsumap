@@ -18,8 +18,15 @@ public class NetiFiDash extends Lifecycle {
     public void runApp() {
         Form hi = new Form("Hi World", BoxLayout.y());
         Button helloButton = new Button("Hello World");
+        Button socketTest = new Button("Send message to backend");
+        TextField eventType = new TextField("Enter Event Type");
+        TextField eventMessage = new TextField("Enter Event Message");
         hi.add(helloButton);
+        hi.add(socketTest);
+        hi.add(eventType);
+        hi.add(eventMessage);
         helloButton.addActionListener(e -> hello());
+        socketTest.addActionListener(e -> auth());
         hi.getToolbar().addMaterialCommandToSideMenu("Hello Command",
         FontImage.MATERIAL_CHECK, 4, e -> hello());
         hi.show();
@@ -29,9 +36,9 @@ public class NetiFiDash extends Lifecycle {
         Dialog.show("Hello Codename One", "Welcome to Codename One", "OK", null);
     }
 
-    private void auth(String name, String pass){
+    private void auth(){
         BackendUtil backendUtil = new BackendUtil();
-        backendUtil.auth(name, pass);
+        backendUtil.auth();
     }
 
 }

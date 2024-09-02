@@ -24,7 +24,7 @@ public class BackendUtil {
                 ToastBar.showErrorMessage(error);
             }
         } else {
-            ToastBar.showErrorMessage("Error sending SMS: " + result.getResponseCode());
+            ToastBar.showErrorMessage("Error connecting to Backend API: " + result.getResponseCode());
         }
 
     }

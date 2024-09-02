@@ -14,7 +14,7 @@ async def _receive() -> None:
         message = await websocket.receive()
         await broker.publish(message)
 
-@app.websocket("/ws")
+@app.websocket("/")
 async def ws() -> None:
     try:
         task = asyncio.ensure_future(_receive())
@@ -24,7 +24,6 @@ async def ws() -> None:
         await websocket.accept()
         await websocket.close(1000)
         raise e
-        print()
     except asyncio.CancelledError:
         # Handle disconnection here
         await websocket.accept()

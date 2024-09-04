@@ -1,10 +1,14 @@
 package com.bcl.netifidash.util;
 
 import com.codename1.components.ToastBar;
+import com.codename1.io.ConnectionRequest;
 import com.codename1.io.rest.Response;
 import com.codename1.io.rest.Rest;
 
+import java.net.http.WebSocket;
+import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class BackendUtil {
     public BackendUtil (){
@@ -26,6 +30,14 @@ public class BackendUtil {
         } else {
             ToastBar.showErrorMessage("Error connecting to Backend API: " + result.getResponseCode());
         }
+
+    }
+
+    public void wsConnection(){
+
+
+
+
 
     }
 }

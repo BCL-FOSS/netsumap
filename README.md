@@ -35,7 +35,7 @@
 * apt install python3.12-venv
 * python3 -m venv .venv 
 * . .venv/bin/activate
-* pip install quart asyncio hypercorn pytest-asyncio websocket-client
+* pip install quart asyncio hypercorn pytest-asyncio websocket-client requests ipython fpdf2
 * cd FOLDER_NAME/src/FOLDER_NAME/ 
 * python3 app.py
 

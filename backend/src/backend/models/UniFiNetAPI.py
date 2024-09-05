@@ -5,6 +5,7 @@ from os import system
 from models.util_models.Utility import Utility
 import random
 import string
+import json
 
 error_codes = [460, 472, 489]
 
@@ -64,23 +65,23 @@ class UniFiNetAPI:
                 #print("Authentication successful!")
                 self.auth_check = True
                 response.close()
-                return {"status_code": response.status_code,
+                return json.dumps({"status_code": response.status_code,
                         "account_id": self.id,
-                        "status": "successful"}
+                        "status": "successful"})
                 
             else:
                 #print("Authentication failed. Status code:", response.status_code)
                 response.close()
-                return {"status_code": response.status_code,
+                return json.dumps({"status_code": response.status_code,
                         "status_msg" : response.content,
-                        "status": "failed"}
+                        "status": "failed"})
 
         except Exception as e:
             #print("Error occurred during authentication:", str(e))
             response.close()
-            return {"status_code": response.status_code,
+            return json.dumps({"status_code": response.status_code,
                         "status_msg" : response.content,
-                        "status": "Error occurred during authentication"}
+                        "status": "Error occurred during authentication"})
 
     def sign_out(self):
 

@@ -16,7 +16,8 @@ async def ubnt_auth():
     try:
         data = await request.get_json()
         if data:
-            return data['username']
+            unifi_profile = await generate_ubiquipy_profile(ip=data['ip'], port=data['port'], user_name=data['username'], pass_word=data['password'])
+            return unifi_profile
         
     except Exception as e:
         return {'Error' : e}
@@ -37,6 +38,17 @@ async def webhook():
         return {'Error' : e}
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
+
+def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
+    try:
+
+        ubnt_profile = UniFiNetAPI(controller_ip=ip, controller_port=port, username=user_name, password=pass_word)
+        ubnt_profile.authenticate()
+    except Exception as e:
+        return {'Error' : e}
+    
+    
+    return ubnt_profile
 
 def run() -> None:
     app.run()

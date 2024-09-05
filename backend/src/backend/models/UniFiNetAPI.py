@@ -3,6 +3,8 @@ import os,os.path
 import pprint
 from os import system
 from models.util_models.Utility import Utility
+import random
+import string
 
 error_codes = [460, 472, 489]
 
@@ -19,11 +21,22 @@ class UniFiNetAPI:
         self.is_udm = is_udm
         self.auth_check = False
         self.util_obj = Utility()
+        self.id = ''
 
     def input_validation(self, inputs=[]):
         for input in inputs:
             if str(input).strip() == '':
                 return 0
+            
+    def gen_id(self):
+        try:
+            random = ''.join([random.choice(string.ascii_letters
+                + string.digits) for n in range(32)])
+        except Exception as e:
+            return {"status_msg": "ID Gen Failed",
+                    "status_code": e}
+        
+        return random
 
     def authenticate(self):
         if self.is_udm is True:
@@ -46,20 +59,28 @@ class UniFiNetAPI:
                 session_token = csrf + unifises
                 #print(session_token)
                 self.token = session_token
+                self.id = self.gen_id()
                 
-                print("Authentication successful!")
+                #print("Authentication successful!")
                 self.auth_check = True
                 response.close()
-                return response.status_code
+                return {"status_code": response.status_code,
+                        "account_id": self.id,
+                        "status": "successful"}
                 
             else:
-                print("Authentication failed. Status code:", response.status_code)
+                #print("Authentication failed. Status code:", response.status_code)
                 response.close()
-                return response.status_code
+                return {"status_code": response.status_code,
+                        "status_msg" : response.content,
+                        "status": "failed"}
 
         except Exception as e:
-            print("Error occurred during authentication:", str(e))
+            #print("Error occurred during authentication:", str(e))
             response.close()
+            return {"status_code": response.status_code,
+                        "status_msg" : response.content,
+                        "status": "Error occurred during authentication"}
 
     def sign_out(self):
 

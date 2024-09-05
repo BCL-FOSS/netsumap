@@ -21,8 +21,6 @@ async def ubnt_auth():
         
     except Exception as e:
         return {'Error' : e}
-    finally:
-        return {'try_catch_end' : 'Check the frontend UI'}
 
 @app.post("/unifi_webhook")
 async def webhook():

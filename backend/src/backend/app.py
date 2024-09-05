@@ -16,8 +16,9 @@ ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
 async def ubnt_auth():
     try:
         data = await request.get_json()
+        msg = json.dumps(data)
         if data:
-            unifi_profile = await generate_ubiquipy_profile(ip=data['ip'], port=data['port'], user_name=data['username'], pass_word=data['password'])
+            unifi_profile = generate_ubiquipy_profile(ip=msg['ip'], port=msg['port'], user_name=msg['username'], pass_word=msg['password'])
             return unifi_profile
         
     except Exception as e:

@@ -48,7 +48,7 @@ def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
     except Exception as e:
         return {'Error' : e}
     
-    return ubnt_profile
+    return ubnt_profile.id
 
 def run() -> None:
     app.run()

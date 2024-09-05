@@ -65,23 +65,18 @@ class UniFiNetAPI:
                 #print("Authentication successful!")
                 self.auth_check = True
                 response.close()
-                return {"status_code": response.status_code,
-                        "account_id": self.id,
-                        "status": "successful"}
+                return self.id
                 
             else:
                 #print("Authentication failed. Status code:", response.status_code)
                 response.close()
-                return {"status_code": response.status_code,
-                        "status_msg" : response.content,
-                        "status": "failed"}
+                return "Authentication Failed:\n",response.status_code, '\n + \n', response.content
+                        
 
         except Exception as e:
             #print("Error occurred during authentication:", str(e))
             response.close()
-            return {"status_code": response.status_code,
-                        "status_msg" : response.content,
-                        "status": "Error occurred during authentication"}
+            return "Error occurred during authentication:\n", e
 
     def sign_out(self):
 

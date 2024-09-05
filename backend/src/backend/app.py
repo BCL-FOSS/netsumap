@@ -15,7 +15,7 @@ async def ubnt_auth():
         if data:
             msg = json.dumps(data)
             #unifi_profile = generate_ubiquipy_profile(ip=msg['ip'], port=msg['port'], user_name=msg['username'], pass_word=msg['password'])
-            return msg['ip']
+            return data
         
     except Exception as e:
         return {'Error' : e}

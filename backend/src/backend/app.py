@@ -16,8 +16,7 @@ async def ubnt_auth():
     try:
         data = await request.get_json()
         if data:
-            msg = json.dumps(data)
-            return msg['username']
+            return data['username']
         
     except Exception as e:
         return {'Error' : e}

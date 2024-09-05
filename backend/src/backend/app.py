@@ -16,7 +16,8 @@ async def ubnt_auth():
     try:
         data = await request.get_json()
         if data:
-            unifi_profile = await generate_ubiquipy_profile(ip=data['ip'], port=data['port'], user_name=data['username'], pass_word=data['password'])
+            profile = await generate_ubiquipy_profile(ip=data['ip'], port=data['port'], user_name=data['username'], pass_word=data['password'])
+            unifi_profile = json.dumps(profile)
             return unifi_profile
         
     except Exception as e:

@@ -8,18 +8,14 @@ from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 
-
-websocket.enableTrace = True
-ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
-
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
         data = await request.get_json()
-        msg = json.dumps(data)
         if data:
-            unifi_profile = generate_ubiquipy_profile(ip=msg['ip'], port=msg['port'], user_name=msg['username'], pass_word=msg['password'])
-            return unifi_profile
+            msg = json.dumps(data)
+            #unifi_profile = generate_ubiquipy_profile(ip=msg['ip'], port=msg['port'], user_name=msg['username'], pass_word=msg['password'])
+            return msg
         
     except Exception as e:
         return {'Error' : e}
@@ -33,6 +29,7 @@ async def webhook():
             #unifi_event = {
             #    "message": str(msg)
             #}
+            ws = activate_websocket()
             await ws.send(str(msg))
         else:
             raise Exception('Ensure JSON message is attached to the request')
@@ -43,13 +40,18 @@ async def webhook():
 
 def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
     try:
-
         ubnt_profile = UniFiNetAPI(controller_ip=ip, controller_port=port, username=user_name, password=pass_word)
         ubnt_profile.authenticate()
     except Exception as e:
         return {'Error' : e}
     
     return ubnt_profile.id
+
+def activate_websocket():
+    websocket.enableTrace = True
+    ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
+    return ws
+
 
 def run() -> None:
     app.run()

@@ -39,7 +39,7 @@ class UniFiNetAPI:
         
         return random
 
-    def authenticate(self):
+    async def authenticate(self):
         if self.is_udm is True:
             auth_url = f"{self.base_url}/proxy/network/api/auth/login"
         else:
@@ -49,7 +49,7 @@ class UniFiNetAPI:
 
         try:
             
-            response = requests.post(auth_url, json=payload, verify=True)
+            response = await requests.post(auth_url, json=payload, verify=True)
             if response.status_code == 200:
                 #print(response.headers.get("Set-Cookie"))
                 header_data = response.headers.get("Set-Cookie")

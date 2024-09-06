@@ -11,10 +11,13 @@ from models.util_models.Utility import Utility
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
-        data = request.get_json()
+        data = await request.json
+        
         if data:
+            dump = json.dumps(data)
+            load = json.loads(dump)
             
-            unifi_profile = generate_ubiquipy_profile(ip=str(data['ip']), port=str(data['port']), user_name=str(data['username']), pass_word=str(data['password']))
+            unifi_profile = generate_ubiquipy_profile(ip=str(load['ip']), port=str(load['port']), user_name=str(load['username']), pass_word=str(load['password']))
             return unifi_profile
         
     except Exception as e:

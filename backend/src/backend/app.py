@@ -11,7 +11,7 @@ from models.util_models.Utility import Utility
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
-        data = await request.json()
+        data = await request.get_json()
         if data:
             
             unifi_profile = generate_ubiquipy_profile(ip=str(data['ip']), port=str(data['port']), user_name=str(data['username']), pass_word=str(data['password']))

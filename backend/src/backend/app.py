@@ -1,4 +1,4 @@
-from quart import request
+from quart import request, jsonify
 import json
 from init_app import app
 import websocket
@@ -11,13 +11,12 @@ from models.util_models.Utility import Utility
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
-        data = await request.json
+        data = await request.get_json()
         
         if data:
-            dump = json.dumps(data)
-            load = json.loads(dump)
+            dump = jsonify(data)
             
-            unifi_profile = generate_ubiquipy_profile(ip=str(load['ip']), port=str(load['port']), user_name=str(load['username']), pass_word=str(load['password']))
+            unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
             return unifi_profile
         
     except Exception as e:

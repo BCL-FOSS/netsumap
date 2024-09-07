@@ -8,25 +8,43 @@ from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 import asyncio
+import time
 
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
         my_tasks = set()
+
         task_data = asyncio.create_task(request.get_json())
         my_tasks.add(task_data)
         task_data.add_done_callback(my_tasks.discard)
 
-        def sync_processor():
+        while not task_data.done():
+            print('Data coroutine not complete')
+
+        if task_data.done():
+            print('Data coroutine complete')
             dump = jsonify(task_data.result())
+            
+        def sync_processor():
+            
             unifi_profile = generate_ubiquipy_profile(ip=str(dump.get_json()['ip']), port=str(dump.get_json()['port']), user_name=str(dump.get_json()['username']), pass_word=str(dump.get_json()['password']))
             return unifi_profile
         
-        if task_data:
-            task_result = asyncio.create_task(sync_processor())
-            my_tasks.add(task_result)
-            task_result.add_done_callback(my_tasks.discard)
-            #return jsonify(task_result.result())
+        task_result = asyncio.create_task(sync_processor())
+        my_tasks.add(task_result)
+        task_result.add_done_callback(my_tasks.discard)
+
+        while not task_result.done():
+            print('Result coroutine not complete')
+
+        if task_result.done():
+            print('Result coroutine complete')
+            result = jsonify(task_result.result())
+
+            
+
+        return result
             
     except TypeError as error:
         return {'Error' :  str(error)}

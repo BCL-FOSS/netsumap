@@ -27,7 +27,7 @@ async def ubnt_auth():
             my_tasks.add(task_result)
             task_result.add_done_callback(my_tasks.discard)
 
-            return task_result
+            return jsonify(task_result.result())
             
     except TypeError as error:
         return {'Error' :  str(error)}

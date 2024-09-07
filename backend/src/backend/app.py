@@ -19,12 +19,14 @@ async def ubnt_auth():
         my_tasks.add(task_data)
         task_data.add_done_callback(my_tasks.discard)
 
-        while not task_data.done():
+        while task_data.done() == False:
             print('Data coroutine not complete')
 
-        if task_data.done():
-            print('Data coroutine complete')
-            dump = jsonify(task_data.result())
+            if task_data.done():
+                print('Data coroutine complete')
+                dump = jsonify(task_data.result())
+
+        
             
         def sync_processor():
             
@@ -38,11 +40,9 @@ async def ubnt_auth():
         while not task_result.done():
             print('Result coroutine not complete')
 
-        if task_result.done():
-            print('Result coroutine complete')
-            result = jsonify(task_result.result())
-
-            
+            if task_result.done():
+                print('Result coroutine complete')
+                result = jsonify(task_result.result())
 
         return result
             

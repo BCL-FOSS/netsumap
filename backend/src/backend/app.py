@@ -12,7 +12,7 @@ import asyncio
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
-        data = await asyncio.get_running_loop().run_in_executor(None, request.get_json())
+        data = await asyncio.run(request.get_json())
 
         def sync_processor():
             dump = jsonify(data)
@@ -20,7 +20,7 @@ async def ubnt_auth():
             return unifi_profile
         
         if data:
-            result = await asyncio.get_running_loop().run_in_executor(None, sync_processor)
+            result = await asyncio.run(sync_processor())
 
             return result
             

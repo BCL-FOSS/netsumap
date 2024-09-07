@@ -7,17 +7,23 @@ import os
 from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
+import asyncio
 
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
-        data = await request.get_json()
-        
-        if data:
+        data = await asyncio.get_running_loop().run_in_executor(None, request.get_json())
+
+        def sync_processor():
             dump = jsonify(data)
-            
             unifi_profile = generate_ubiquipy_profile(ip=str(dump.get_json()['ip']), port=str(dump.get_json()['port']), user_name=str(dump.get_json()['username']), pass_word=str(dump.get_json()['password']))
             return unifi_profile
+        
+        if data:
+            result = await asyncio.get_running_loop().run_in_executor(None, sync_processor)
+
+            return result
+            
     except TypeError as error:
         return {'Error' :  str(error)}
 

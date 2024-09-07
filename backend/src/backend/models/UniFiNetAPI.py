@@ -49,7 +49,7 @@ class UniFiNetAPI:
 
         try:
             
-            response = await requests.post(auth_url, json=payload, verify=True)
+            response = requests.post(auth_url, json=payload, verify=True)
             if response.status_code == 200:
                 #print(response.headers.get("Set-Cookie"))
                 header_data = response.headers.get("Set-Cookie")

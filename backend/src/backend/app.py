@@ -18,7 +18,7 @@ async def ubnt_auth():
         task_data.add_done_callback(my_tasks.discard)
 
         def sync_processor():
-            dump = jsonify(task_data)
+            dump = jsonify(task_data.result())
             unifi_profile = generate_ubiquipy_profile(ip=str(dump.get_json()['ip']), port=str(dump.get_json()['port']), user_name=str(dump.get_json()['username']), pass_word=str(dump.get_json()['password']))
             return unifi_profile
         
@@ -26,8 +26,7 @@ async def ubnt_auth():
             task_result = asyncio.create_task(sync_processor())
             my_tasks.add(task_result)
             task_result.add_done_callback(my_tasks.discard)
-
-            return jsonify(task_result.result())
+            #return jsonify(task_result.result())
             
     except TypeError as error:
         return {'Error' :  str(error)}

@@ -26,8 +26,10 @@ async def ubnt_auth():
 
         def sync_processor():
 
-            unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
-            return unifi_profile
+            print(dump)
+
+            #unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
+            #return unifi_profile
 
         task_result = asyncio.create_task(sync_processor())
         my_tasks.add(task_result)

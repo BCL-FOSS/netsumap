@@ -13,22 +13,33 @@ import time
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
-        loop = asyncio.get_event_loop()
-        my_tasks = set()
+        loop = asyncio.new_event_loop()
         dump = {}
 
-        task_data = asyncio.create_task(request.get_json())
-        asyncio.run(task_data)
+        task_data = loop.create_task(request.get_json())
+        loop.run_until_complete(task_data)
 
         if task_data.done():
             print('Data coroutine complete')
             dump = jsonify(task_data.result())
             print(dump)
 
-        return dump
+        def sync_processor():
+            unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
+            return unifi_profile
+
+        task_result = loop.create_task(sync_processor())
+        loop.run_until_complete(task_result)
+
+        if task_result.done():
+            print('Result coroutine complete')
+            result = jsonify(task_result.result())
+            return result
 
     except TypeError as error:
-        return {'Error' :  str(error)}
+        return {'TypeError' :  str(error)}
+    except Exception as e:
+        return {'Exception' :  str(e)}
     
 
 @app.post("/unifi_webhook")

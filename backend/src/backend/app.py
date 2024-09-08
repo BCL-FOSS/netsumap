@@ -20,7 +20,7 @@ async def ubnt_auth():
         
 
         task_data = loop.create_task(request.get_json())
-        data_value = loop.run_until_complete(task_data)
+        data_value = await loop.run_until_complete(task_data)
 
         if task_data.done():
             print('Data coroutine complete')

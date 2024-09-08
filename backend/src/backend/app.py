@@ -16,27 +16,26 @@ async def ubnt_auth():
     try:
         nest_asyncio.apply()
         loop = asyncio.new_event_loop()
-        dump = {}
+        asyncio.set_event_loop(loop)
+        
 
         task_data = loop.create_task(request.get_json())
-        loop.run_until_complete(task_data)
+        data_value = loop.run_until_complete(task_data)
 
         if task_data.done():
             print('Data coroutine complete')
-            dump = jsonify(task_data.result())
-            print(dump)
+            print(jsonify(data_value))
 
-        def sync_processor():
-            unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
-            return unifi_profile
+        #def sync_processor():
+        #    unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
+        #    return unifi_profile
 
-        task_result = loop.create_task(sync_processor())
-        loop.run_until_complete(task_result)
+        #task_result = loop.create_task(sync_processor())
+        #result_value = loop.run_until_complete(task_result)
 
-        if task_result.done():
-            print('Result coroutine complete')
-            result = jsonify(task_result.result())
-            return result
+        #if task_result.done():
+        #    print('Result coroutine complete')
+        #    print(jsonify(result_value))
 
     except TypeError as error:
         return {'TypeError' :  str(error)}

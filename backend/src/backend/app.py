@@ -17,8 +17,8 @@ async def ubnt_auth():
         my_tasks = set()
         dump = {}
 
-        task_data = loop.create_task(request.get_json())
-        loop.run_until_complete(task_data)
+        task_data = asyncio.create_task(request.get_json())
+        asyncio.run(task_data)
 
         if task_data.done():
             print('Data coroutine complete')

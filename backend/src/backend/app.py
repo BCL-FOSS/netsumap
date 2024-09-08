@@ -9,10 +9,12 @@ from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 import asyncio
 import time
+import nest_asyncio
 
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
+        nest_asyncio.apply()
         loop = asyncio.new_event_loop()
         dump = {}
 

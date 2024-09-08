@@ -16,6 +16,7 @@ quart-auth = "^0.10.1"
 requests = "^2.32.3"
 ipython = "^8.27.0"
 fpdf2 = "^2.7.9"
+nest-asyncio = "^1.6.0"
 
 [tool.poetry.scripts]
 start = "backend:run"

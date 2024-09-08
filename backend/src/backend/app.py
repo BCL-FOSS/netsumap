@@ -28,6 +28,8 @@ async def ubnt_auth():
             print('Data coroutine complete')
             print(jsonify(data_value))
 
+        loop.close()
+
         #def sync_processor():
         #    unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
         #    return unifi_profile

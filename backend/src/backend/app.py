@@ -21,10 +21,10 @@ _executor = ThreadPoolExecutor(1)
 async def ubnt_auth():
     try:
 
-        #task_data = loop.create_task(request.get_json())
-        data_value = loop.run_until_complete(run_func_async(request.get_json))
+        task_data = loop.create_task(request.get_json())
+        data_value = loop.run_in_executor(_executor, task_data)
 
-        if data_value:
+        if task_data.done():
             print('Data coroutine complete')
             print(jsonify(data_value))
 

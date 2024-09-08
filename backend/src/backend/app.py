@@ -14,6 +14,7 @@ import time
 async def ubnt_auth():
     try:
         my_tasks = set()
+        dump = {}
 
         task_data = asyncio.create_task(request.get_json())
         my_tasks.add(task_data)

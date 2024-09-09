@@ -73,11 +73,9 @@ async def webhook():
 async def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
     try:
         ubnt_profile = UniFiNetAPI(controller_ip=ip, controller_port=port, username=user_name, password=pass_word)
-        post_tasks=[]
         async with aiohttp.ClientSession() as session:
-            post_tasks.append(ubnt_profile.authenticate(session=session))
-            result = await asyncio.gather(*post_tasks)
-        
+            result = await ubnt_profile.authenticate(session=session)
+            
         return result
     except Exception as e:
         return {'Error' : e}

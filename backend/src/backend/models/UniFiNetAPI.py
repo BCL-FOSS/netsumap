@@ -6,6 +6,9 @@ from models.util_models.Utility import Utility
 import random
 import string
 import json
+import aiohttp
+import asyncio
+
 
 error_codes = [460, 472, 489]
 
@@ -38,6 +41,28 @@ class UniFiNetAPI:
                     "status_code": e}
         
         return random
+    
+    async def make_request(self, url, payload, headers):
+        async with aiohttp.ClientSession() as session:
+
+
+            if payload and self.auth_check == False:
+                print('Empty payload')
+                headers={'':''}
+
+            elif not payload and self.auth_check == True:
+                headers={
+                        'Content-Type':'application/json',
+                        'Cookie':self.token
+                    }     
+                
+            else:
+                print('Empty payload')
+                headers={'Cookie':self.token}
+            
+            async with session.post(url=url, data=payload, headers=headers, ssl=True) as resp:
+                print(resp.status)
+                print(await resp.text())
 
     async def authenticate(self):
         if self.is_udm is True:
@@ -49,38 +74,42 @@ class UniFiNetAPI:
 
         try:
             
-            response = requests.post(auth_url, json=payload, verify=True)
-            if response.status_code == 200:
-                #print(response.headers.get("Set-Cookie"))
-                header_data = response.headers.get("Set-Cookie")
-                unifises = str(header_data[0:41])
-                #print(unifises)
-                csrf = str(header_data[69:113])
-                #print(csrf)
-                session_token = csrf + unifises
-                #print(session_token)
-                self.token = session_token
-                self.id = self.gen_id()
-                #print(self.id)
+            async with aiohttp.ClientSession() as session:
+                response = await session.post(url=auth_url, json=payload, ssl=True)
+
+            #response = requests.post(auth_url, json=payload, verify=True)
+            if response.status == 200:
+                cookies = response.cookies['Set-Cookie']
+                ##print(response.headers.get("Set-Cookie"))
+                #header_data = response.headers.get("Set-Cookie")
+                #unifises = str(header_data[0:41])
+                ##print(unifises)
+                #csrf = str(header_data[69:113])
+                ##print(csrf)
+                #session_token = csrf + unifises
+                ##print(session_token)
+                #self.token = session_token
+                #self.id = self.gen_id()
+                ##print(self.id)
                 
-                #print("Authentication successful!")
-                self.auth_check = True
+                ##print("Authentication successful!")
+                #self.auth_check = True
                 response.close()
-                return self
+                return cookies
                 
             else:
                 #print("Authentication failed. Status code:", response.status_code)
                 response.close()
-                return str({"status":"authentication failed",
+                return {"status":"authentication failed",
                         "status_code":response.status_code,
-                        "status_content":response.content})
+                        "status_content":response.content}
                         
 
         except Exception as e:
             #print("Error occurred during authentication:", str(e))
             response.close()
-            return str({"status":"error occurred during authentication",
-                        "error_message":e})
+            return {"status":"error occurred during authentication",
+                        "error_message":e}
 
     def sign_out(self):
 

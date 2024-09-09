@@ -3,18 +3,15 @@ import json
 from init_app import app
 import websocket
 from websocket import create_connection
-import os
 from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 import asyncio
-import nest_asyncio
 
 @app.post("/unifi_auth")
 async def ubnt_auth():
     try:
 
-        #nest_asyncio.apply()
         loop = asyncio.new_event_loop()
         auth_loop = asyncio.new_event_loop()
         
@@ -31,7 +28,7 @@ async def ubnt_auth():
 
         loop.close()
         auth_loop.close()
-        return profile_value.id
+        return profile_value
 
         #def sync_processor():
         #    unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))

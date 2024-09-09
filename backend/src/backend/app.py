@@ -27,7 +27,7 @@ async def ubnt_auth():
 
         if data_value:
             print('Data coroutine complete')
-            
+
             print(jsonify(data_value))
 
         loop.close()
@@ -44,7 +44,10 @@ async def ubnt_auth():
         #    print(jsonify(result_value))
 
     except TypeError as error:
-        return {'TypeError' :  str(error)}
+        if " The response value returned by the view function cannot be None" in error:
+            pass
+        else:
+            return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
     

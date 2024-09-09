@@ -32,7 +32,7 @@ async def ubnt_auth():
             #json_data = json.dumps(data_value, indent=4, sort_keys=True)
             json_data = json.dumps(data_value)
 
-            print(json_data['ip'])
+            print(json_data)
 
         loop.close()
 

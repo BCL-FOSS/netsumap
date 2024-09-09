@@ -3,7 +3,7 @@ import requests
 import os,os.path
 import pprint
 from os import system
-from models.util_models.Utility import Utility
+from ..models.util_models.Utility import Utility
 import random
 import string
 import json
@@ -66,10 +66,7 @@ class UniFiNetAPI:
             resp = grequests.post(url=url, data=payload, headers=headers, ssl=True)
 
             resp.response.json()
-
-
-            
-
+   
     def authenticate(self):
         if self.is_udm is True:
             auth_url = f"{self.base_url}/proxy/network/api/auth/login"
@@ -79,51 +76,37 @@ class UniFiNetAPI:
         payload = {"username": self.username, "password": self.password}
 
         try:
-
-            resp = grequests.post(url=auth_url, data=payload, ssl=True)
-
-            if resp.response.status_code == 200:
-                cookies = resp.response.cookies['Set-Cookie']
-                resp.response.close()
-                return cookies
-            else:
-                        #print("Authentication failed. Status code:", response.status_code)
-                resp.response.close()
-                return {"status":"authentication failed",
-                        "status_code":resp.response.status_code,
-                        "status_content":resp.response.content}
                     
-            #response = requests.post(auth_url, json=payload, verify=True)
-            #if response.status == 200:
-                #cookies = response.cookies['Set-Cookie']
+            response = requests.post(auth_url, json=payload, verify=True)
+            if response.status == 200:
+                cookies = response.cookies['Set-Cookie']
                 ##print(response.headers.get("Set-Cookie"))
-                #header_data = response.headers.get("Set-Cookie")
-                #unifises = str(header_data[0:41])
+                header_data = response.headers.get("Set-Cookie")
+                unifises = str(header_data[0:41])
                 ##print(unifises)
-                #csrf = str(header_data[69:113])
+                csrf = str(header_data[69:113])
                 ##print(csrf)
-                #session_token = csrf + unifises
+                session_token = csrf + unifises
                 ##print(session_token)
-                #self.token = session_token
-                #self.id = self.gen_id()
+                self.token = session_token
+                self.id = self.gen_id()
                 ##print(self.id)
                 
                 ##print("Authentication successful!")
-                #self.auth_check = True
-                #response.close()
-                #return cookies
+                self.auth_check = True
+                response.close()
+                return cookies
                 
-                #else:
-                #print("Authentication failed. Status code:", response.status_code)
-                #response.close()
-                #return {"status":"authentication failed",
-                        #"status_code":response.status_code,
-                        #"status_content":response.content}
+            else:
+                print("Authentication failed. Status code:", response.status_code)
+                response.close()
+                return {"status":"authentication failed",
+                        "status_code":response.status_code,
+                        "status_content":response.content}
                         
 
         except Exception as e:
-            #print("Error occurred during authentication:", str(e))
-            resp.response.close()
+            response.close()
             return {"status":"error occurred during authentication",
                         "error_message":e}
 

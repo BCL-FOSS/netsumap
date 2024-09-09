@@ -12,8 +12,7 @@ import time
 import nest_asyncio
 from concurrent.futures import ThreadPoolExecutor
 
-nest_asyncio.apply()
-loop = asyncio.new_event_loop()
+
 _executor = ThreadPoolExecutor(1)
 
 
@@ -21,10 +20,12 @@ _executor = ThreadPoolExecutor(1)
 async def ubnt_auth():
     try:
 
-        task_data = loop.create_task(request.get_json())
-        data_value = loop.run_until_complete(task_data)
+        nest_asyncio.apply()
+        loop = asyncio.new_event_loop()
+        
+        data_value = loop.run_until_complete(request.get_json())
 
-        if task_data.done():
+        if data_value:
             print('Data coroutine complete')
             print(jsonify(data_value))
 

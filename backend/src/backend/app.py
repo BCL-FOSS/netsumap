@@ -27,6 +27,7 @@ async def ubnt_auth():
 
         if data_value:
             print('Data coroutine complete')
+            
             print(jsonify(data_value))
 
         loop.close()

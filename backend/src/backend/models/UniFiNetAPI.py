@@ -61,15 +61,12 @@ class UniFiNetAPI:
                 #print(session_token)
                 self.token = session_token
                 self.id = self.gen_id()
-                print(self.id)
+                #print(self.id)
                 
                 #print("Authentication successful!")
                 self.auth_check = True
                 response.close()
-                return str({"status":"success",
-                        "status_code":response.status_code,
-                        "status_content":response.content,
-                        "obj_id": self.id})
+                return self
                 
             else:
                 #print("Authentication failed. Status code:", response.status_code)

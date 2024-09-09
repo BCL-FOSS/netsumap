@@ -30,7 +30,10 @@ async def ubnt_auth():
 
         loop.close()
         auth_loop.close()
-        return profile_value
+
+        loop_data = json.dumps(profile_value)
+        loop_json = json.loads(loop_data)
+        return loop_json
 
         #def sync_processor():
         #    unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))

@@ -26,8 +26,7 @@ async def ubnt_auth():
             
             print(data)        
 
-        profile_value = auth_loop.run_until_complete(generate_ubiquipy_profile(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password']))
-
+        profile_value = auth_loop.run_until_complete(generate_ubiquipy_profile(ip=data['ip'], port=data['port'], user_name=data['username'], pass_word=data['password']))
 
         loop.close()
         auth_loop.close()

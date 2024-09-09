@@ -75,11 +75,23 @@ class UniFiNetAPI:
         try:
             
             async with aiohttp.ClientSession() as session:
-                response = await session.post(url=auth_url, json=payload, ssl=True)
+                async with session.post(url=auth_url, json=payload, ssl=True) as response:
+                    if response.status == 200:
+                        cookies = await response.cookies['Set-Cookie']
+                        response.close()
+                        return cookies
+                    else:
+                        #print("Authentication failed. Status code:", response.status_code)
+                        response.close()
+                        return {"status":"authentication failed",
+                            "status_code":response.status_code,
+                            "status_content":response.content}
+                    
+                
 
             #response = requests.post(auth_url, json=payload, verify=True)
-            if response.status == 200:
-                cookies = response.cookies['Set-Cookie']
+            #if response.status == 200:
+                #cookies = response.cookies['Set-Cookie']
                 ##print(response.headers.get("Set-Cookie"))
                 #header_data = response.headers.get("Set-Cookie")
                 #unifises = str(header_data[0:41])
@@ -94,15 +106,15 @@ class UniFiNetAPI:
                 
                 ##print("Authentication successful!")
                 #self.auth_check = True
-                response.close()
-                return cookies
+                #response.close()
+                #return cookies
                 
-            else:
+                #else:
                 #print("Authentication failed. Status code:", response.status_code)
-                response.close()
-                return {"status":"authentication failed",
-                        "status_code":response.status_code,
-                        "status_content":response.content}
+                #response.close()
+                #return {"status":"authentication failed",
+                        #"status_code":response.status_code,
+                        #"status_content":response.content}
                         
 
         except Exception as e:

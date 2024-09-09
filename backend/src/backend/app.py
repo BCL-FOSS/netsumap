@@ -16,6 +16,7 @@ async def ubnt_auth():
 
         #nest_asyncio.apply()
         loop = asyncio.new_event_loop()
+        auth_loop = asyncio.new_event_loop()
         
         data_value = loop.run_until_complete(request.get_json())
 
@@ -26,9 +27,10 @@ async def ubnt_auth():
             
             print(data)
 
-        profile_value = loop.run_until_complete(generate_ubiquipy_profile(ip=str(data['ip']), port=str(data['port']), user_name=str(data['username']), pass_word=str(data['password'])))
+        profile_value = auth_loop.run_until_complete(generate_ubiquipy_profile(ip=str(data['ip']), port=str(data['port']), user_name=str(data['username']), pass_word=str(data['password'])))
 
         loop.close()
+        auth_loop.close()
         return profile_value.id
 
         #def sync_processor():

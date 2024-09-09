@@ -1,4 +1,4 @@
-from quart import request, jsonify
+from quart import request
 import json
 from init_app import app
 import websocket
@@ -8,14 +8,7 @@ from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 import asyncio
-import time
 import nest_asyncio
-from concurrent.futures import ThreadPoolExecutor
-from ast import literal_eval
-
-
-_executor = ThreadPoolExecutor(1)
-
 
 @app.post("/unifi_auth")
 async def ubnt_auth():
@@ -28,14 +21,13 @@ async def ubnt_auth():
 
         if data_value:
             print('Data coroutine complete')
-            #json_data = json.dumps(data_value, indent=4, sort_keys=True)
             json_data = json.dumps(data_value)
             data = json.loads(json_data)
             
             print(data)
             
         loop.close()
-        return data
+        return data['ip']
 
         #def sync_processor():
         #    unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))

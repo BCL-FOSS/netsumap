@@ -70,7 +70,7 @@ class UniFiNetAPI:
 
             
 
-    def authenticate(self):
+    async def authenticate(self):
         if self.is_udm is True:
             auth_url = f"{self.base_url}/proxy/network/api/auth/login"
         else:
@@ -80,7 +80,7 @@ class UniFiNetAPI:
 
         try:
 
-            resp = grequests.post(url=auth_url, data=payload, ssl=True)
+            resp = await grequests.post(url=auth_url, data=payload, ssl=True)
 
             if resp.response.status_code == 200:
                 cookies = resp.response.cookies['Set-Cookie']

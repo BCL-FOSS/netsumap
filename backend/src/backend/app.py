@@ -26,8 +26,6 @@ async def ubnt_auth():
         
         data_value = loop.run_until_complete(request.get_data())
 
-
-
         if data_value:
             data = literal_eval(data_value)
             print('Data coroutine complete')
@@ -75,9 +73,6 @@ async def webhook():
         return {'Error' : e}
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
-    
-async def run_func_async(func=None):
-    await loop.run_in_executor(_executor, func)
     
 def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
     try:

@@ -80,7 +80,7 @@ class UniFiNetAPI:
 
         try:
 
-            resp = await grequests.post(url=auth_url, data=payload, ssl=True)
+            resp = grequests.post(url=auth_url, data=payload, ssl=True)
 
             if resp.response.status_code == 200:
                 cookies = resp.response.cookies['Set-Cookie']

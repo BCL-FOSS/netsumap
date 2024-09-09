@@ -65,7 +65,7 @@ async def webhook():
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
     
-def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
+async def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
     try:
         ubnt_profile = UniFiNetAPI(controller_ip=ip, controller_port=port, username=user_name, password=pass_word)
         result = ubnt_profile.authenticate()

@@ -70,7 +70,7 @@ class UniFiNetAPI:
 
             
 
-    async def authenticate(self):
+    def authenticate(self):
         if self.is_udm is True:
             auth_url = f"{self.base_url}/proxy/network/api/auth/login"
         else:

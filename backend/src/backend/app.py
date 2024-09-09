@@ -7,6 +7,8 @@ from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 import asyncio
+import aiohttp
+
 
 @app.post("/unifi_auth")
 async def ubnt_auth():
@@ -22,12 +24,9 @@ async def ubnt_auth():
             json_data = json.dumps(data_value)
             data = json.loads(json_data)
             
-            print(data)
+            print(data)        
 
-        ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
-        
-
-        profile_value = auth_loop.run_until_complete(ubnt_profile.authenticate())
+        profile_value = auth_loop.run_until_complete(generate_ubiquipy_profile(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password']))
 
 
         loop.close()
@@ -69,10 +68,14 @@ async def webhook():
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
     
-def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
+async def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
     try:
         ubnt_profile = UniFiNetAPI(controller_ip=ip, controller_port=port, username=user_name, password=pass_word)
-        result = ubnt_profile.authenticate()
+        post_tasks=[]
+        async with aiohttp.ClientSession() as session:
+            post_tasks.append(ubnt_profile.authenticate(session=session))
+            result = await asyncio.gather(*post_tasks)
+        
         return result
     except Exception as e:
         return {'Error' : e}

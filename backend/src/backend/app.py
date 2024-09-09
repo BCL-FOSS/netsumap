@@ -28,13 +28,12 @@ async def ubnt_auth():
 
         if data_value:
             print('Data coroutine complete')
-
             #json_data = json.dumps(data_value, indent=4, sort_keys=True)
             json_data = json.dumps(data_value)
-
-            print(json_data)
-
+            print(jsonify(json_data))
+            
         loop.close()
+        return json_data
 
         #def sync_processor():
         #    unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))

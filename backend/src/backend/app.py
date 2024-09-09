@@ -27,7 +27,7 @@ async def ubnt_auth():
         data_value = loop.run_until_complete(request.get_data())
 
         if data_value:
-            data = literal_eval(data_value)
+            data = literal_eval(str(data_value))
             print('Data coroutine complete')
 
             json_data = json.dumps(data, indent=4, sort_keys=True)

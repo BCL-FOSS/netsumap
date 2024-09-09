@@ -79,4 +79,9 @@ def activate_websocket():
     return ws
 
 def run() -> None:
-    app.run()
+    try:
+
+        app.run()
+
+    except OSError as oserror:
+        return{"Application Server Error": "Server is already running. Please stop and restart the service.\n" + str(oserror)}

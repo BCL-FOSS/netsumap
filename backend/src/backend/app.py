@@ -11,6 +11,7 @@ import asyncio
 import time
 import nest_asyncio
 from concurrent.futures import ThreadPoolExecutor
+from ast import literal_eval
 
 
 _executor = ThreadPoolExecutor(1)
@@ -23,12 +24,17 @@ async def ubnt_auth():
         nest_asyncio.apply()
         loop = asyncio.new_event_loop()
         
-        data_value = loop.run_until_complete(request.get_json())
+        data_value = loop.run_until_complete(request.get_data())
+
+
 
         if data_value:
+            data = literal_eval(data_value)
             print('Data coroutine complete')
 
-            print(jsonify(data_value))
+            json_data = json.dumps(data, indent=4, sort_keys=True)
+
+            print(json_data)
 
         loop.close()
 

@@ -1,3 +1,4 @@
+import grequests
 import requests
 import os,os.path
 import pprint
@@ -8,6 +9,8 @@ import string
 import json
 import aiohttp
 import asyncio
+
+
 
 
 error_codes = [460, 472, 489]
@@ -59,12 +62,15 @@ class UniFiNetAPI:
             else:
                 print('Empty payload')
                 headers={'Cookie':self.token}
-            
-            async with session.post(url=url, data=payload, headers=headers, ssl=True) as resp:
-                print(resp.status)
-                print(await resp.text())
 
-    async def authenticate(self):
+            resp = grequests.post(url=url, data=payload, headers=headers, ssl=True)
+
+            resp.response.json()
+
+
+            
+
+    def authenticate(self):
         if self.is_udm is True:
             auth_url = f"{self.base_url}/proxy/network/api/auth/login"
         else:
@@ -73,22 +79,20 @@ class UniFiNetAPI:
         payload = {"username": self.username, "password": self.password}
 
         try:
-            
-            async with aiohttp.ClientSession() as session:
-                async with session.post(url=auth_url, json=payload, ssl=True) as response:
-                    if response.status == 200:
-                        cookies = await response.cookies['Set-Cookie']
-                        response.close()
-                        return cookies
-                    else:
-                        #print("Authentication failed. Status code:", response.status_code)
-                        response.close()
-                        return {"status":"authentication failed",
-                            "status_code":response.status_code,
-                            "status_content":response.content}
-                    
-                
 
+            resp = grequests.post(url=auth_url, data=payload, ssl=True)
+
+            if resp.response.status_code == 200:
+                cookies = resp.response.cookies['Set-Cookie']
+                resp.response.close()
+                return cookies
+            else:
+                        #print("Authentication failed. Status code:", response.status_code)
+                resp.response.close()
+                return {"status":"authentication failed",
+                        "status_code":resp.response.status_code,
+                        "status_content":resp.response.content}
+                    
             #response = requests.post(auth_url, json=payload, verify=True)
             #if response.status == 200:
                 #cookies = response.cookies['Set-Cookie']
@@ -119,7 +123,7 @@ class UniFiNetAPI:
 
         except Exception as e:
             #print("Error occurred during authentication:", str(e))
-            response.close()
+            resp.response.close()
             return {"status":"error occurred during authentication",
                         "error_message":e}
 

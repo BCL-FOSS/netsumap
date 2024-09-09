@@ -49,10 +49,7 @@ async def ubnt_auth():
         #    print(jsonify(result_value))
 
     except TypeError as error:
-        if str(error) == "The response value returned by the view function cannot be None":
-            pass
-        else:
-            return {'TypeError' :  str(error)}
+        return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
     

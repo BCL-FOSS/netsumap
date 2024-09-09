@@ -23,11 +23,11 @@ async def ubnt_auth():
         nest_asyncio.apply()
         loop = asyncio.new_event_loop()
         
-        data_value = loop.run_until_complete(request.get_data())
+        data_value = loop.run_until_complete(request.get_json())
 
         if data_value:
             print('Data coroutine complete')
-            print(str(data_value))
+            print(jsonify(data_value))
 
         loop.close()
 

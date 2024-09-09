@@ -32,9 +32,9 @@ async def ubnt_auth():
             print('Data coroutine complete')
 
             json_data = json.dumps(data_value.decode(), indent=4, sort_keys=True)
-            jsonify(json_data)
+            
 
-            print(jsonify(json_data))
+            print(json_data)
 
         loop.close()
 

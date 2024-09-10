@@ -60,7 +60,15 @@ class UniFiNetAPI:
                 async with session.post(auth_url, json=payload) as response:
                     if response.status == 200:
                         response_data = await response.json()
-                        return {"message": "Authentication successful", "data": response_data}
+                        cookies = response.cookies['Set-Cookie']
+                        ##print(response.headers.get("Set-Cookie"))
+                        header_data = response.headers.get("Set-Cookie")
+                        unifises = str(header_data[0:41])
+                        ##print(unifises)
+                        csrf = str(header_data[69:113])
+                        ##print(csrf)
+                        session_token = csrf + unifises
+                        return {"message": "Authentication successful", "data": response_data, "token": session_token}
                     else:
                         return {"message": "Authentication failed", "status_code": response.status}
             except aiohttp.ClientError as e:
@@ -68,14 +76,14 @@ class UniFiNetAPI:
 
             #response = requests.post(auth_url, json=payload, verify=True)
             #if response.status == 200:
-            #    cookies = response.cookies['Set-Cookie']
+                cookies = response.cookies['Set-Cookie']
                 ##print(response.headers.get("Set-Cookie"))
-            #    header_data = response.headers.get("Set-Cookie")
-            #    unifises = str(header_data[0:41])
+                header_data = response.headers.get("Set-Cookie")
+                unifises = str(header_data[0:41])
                 ##print(unifises)
-            #    csrf = str(header_data[69:113])
+                csrf = str(header_data[69:113])
                 ##print(csrf)
-            #    session_token = csrf + unifises
+                session_token = csrf + unifises
                 ##print(session_token)
             #    self.token = session_token
             #    self.id = self.gen_id()

@@ -26,14 +26,14 @@ async def ubnt_auth():
             
             print(data)        
 
-        profile_value = auth_loop.run_until_complete(generate_ubiquipy_profile(ip=data['ip'], port=data['port'], user_name=data['username'], pass_word=data['password']))
+        profile_value = await auth_loop.run_until_complete(generate_ubiquipy_profile(ip=data['ip'], port=data['port'], user_name=data['username'], pass_word=data['password']))
 
         print(profile_value)
 
         loop.close()
         auth_loop.close()
 
-        return data
+        return profile_value
 
         #def sync_processor():
         #    unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
@@ -70,12 +70,10 @@ async def webhook():
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
     
-async def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
+def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
     try:
         ubnt_profile = UniFiNetAPI(controller_ip=ip, controller_port=port, username=user_name, password=pass_word)
-        async with aiohttp.ClientSession() as session:
-            result = await ubnt_profile.authenticate(session=session)
-            
+        result = ubnt_profile.authenticate()
         return result
     except Exception as e:
         return {'Error' : e}

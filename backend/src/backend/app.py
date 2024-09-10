@@ -13,7 +13,7 @@ async def ubnt_auth():
     try:
 
         loop = asyncio.new_event_loop()
-        auth_loop = asyncio.new_event_loop()
+        #auth_loop = asyncio.new_event_loop()
         
         data_value = loop.run_until_complete(request.get_json())
 
@@ -24,12 +24,14 @@ async def ubnt_auth():
             
             print(data)        
 
-        profile_value = await auth_loop.run_until_complete(generate_ubiquipy_profile(ip=data['ip'], port=data['port'], user_name=data['username'], pass_word=data['password']))
+        ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
+
+        profile_value = await ubnt_profile.authenticate()
 
         print(profile_value)
 
         loop.close()
-        auth_loop.close()
+        #auth_loop.close()
 
         return profile_value
 

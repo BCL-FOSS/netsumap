@@ -1,11 +1,10 @@
-import requests
 import os,os.path
 import pprint
 from os import system
 from models.util_models.Utility import Utility
 import string
 import aiohttp
-import ssl
+import uuid
 
 
 
@@ -35,13 +34,12 @@ class UniFiNetAPI:
             
     def gen_id(self):
         try:
-            random = ''.join([random.choice(string.ascii_letters
-                + string.digits) for n in range(32)])
+            id = uuid.uuid4()
         except Exception as e:
             return {"status_msg": "ID Gen Failed",
                     "status_code": e}
         
-        return str(random)
+        return str(id)
    
     async def authenticate(self):
 

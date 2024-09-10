@@ -6,10 +6,6 @@ import string
 import aiohttp
 import uuid
 
-
-
-
-
 error_codes = [460, 472, 489]
 
 class UniFiNetAPI:
@@ -43,8 +39,6 @@ class UniFiNetAPI:
         return str(id)
    
     async def authenticate(self):
-
-        print(self.base_url)
 
         if self.is_udm is True:
             auth_url = f"{self.base_url}/proxy/network/api/auth/login"
@@ -119,13 +113,10 @@ class UniFiNetAPI:
                                 return {"Message": "Success", "Data": response_data}
                     case _:
                         system('clear')
-                        print('choose an available requests option.')
-                        return None
+                        return {"Message":"Choose a request cmd"}
                
             except aiohttp.ClientError as e:
                 return {"error": str(e), "status_code": 500}
-
-       
 
     def sign_out(self):
 

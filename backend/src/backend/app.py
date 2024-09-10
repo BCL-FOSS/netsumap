@@ -35,17 +35,6 @@ async def ubnt_auth():
 
         return profile_value
 
-        #def sync_processor():
-        #    unifi_profile = generate_ubiquipy_profile(ip=str(dump['ip']), port=str(dump['port']), user_name=str(dump['username']), pass_word=str(dump['password']))
-        #    return unifi_profile
-
-        #task_result = loop.create_task(sync_processor())
-        #result_value = loop.run_until_complete(task_result)
-
-        #if task_result.done():
-        #    print('Result coroutine complete')
-        #    print(jsonify(result_value))
-
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:

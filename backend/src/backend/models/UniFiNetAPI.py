@@ -44,6 +44,9 @@ class UniFiNetAPI:
         return random
    
     async def authenticate(self):
+
+        print(self.base_url)
+
         if self.is_udm is True:
             auth_url = f"{self.base_url}/proxy/network/api/auth/login"
         else:
@@ -60,7 +63,7 @@ class UniFiNetAPI:
         async with aiohttp.ClientSession() as session:
             try:
                 # Asynchronous POST request to UniFi API
-                async with session.post(auth_url, json=payload, ssl=ssl_context) as response:
+                async with session.post(auth_url, json=payload, ssl=False) as response:
                     if response.status == 200:
                         response_data = await response.json()
                         return {"message": "Authentication successful", "data": response_data}

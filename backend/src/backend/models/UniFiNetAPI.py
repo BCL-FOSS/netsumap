@@ -60,7 +60,7 @@ class UniFiNetAPI:
                 async with session.post(auth_url, json=payload) as response:
                     if response.status == 200:
                         response_data = await response.json()
-                        cookies = response.cookies.get('Set-Cookie')
+                        cookies = response.headers.getall('Set-Cookie', [])
                         ##print(response.headers.get("Set-Cookie"))
                         #header_data = response.headers.get("Set-Cookie")
                         #unifises = str(header_data[0:41])

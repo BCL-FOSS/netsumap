@@ -7,8 +7,6 @@ from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 import asyncio
-import aiohttp
-
 
 @app.post("/unifi_auth")
 async def ubnt_auth():

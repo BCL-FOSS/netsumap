@@ -1,14 +1,10 @@
-import grequests
 import requests
 import os,os.path
 import pprint
 from os import system
 from models.util_models.Utility import Utility
-import random
 import string
-import json
-import aiohttp
-import asyncio
+
 
 
 
@@ -44,31 +40,6 @@ class UniFiNetAPI:
                     "status_code": e}
         
         return random
-    
-    async def make_request(self, session, url, payload, headers):
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, data=payload, headers=headers) as response:
-                data = await response.text()
-
-
-
-            if payload and self.auth_check == False:
-                print('Empty payload')
-                headers={'':''}
-
-            elif not payload and self.auth_check == True:
-                headers={
-                        'Content-Type':'application/json',
-                        'Cookie':self.token
-                    }     
-                
-            else:
-                print('Empty payload')
-                headers={'Cookie':self.token}
-
-            resp = grequests.post(url=url, data=payload, headers=headers, ssl=True)
-
-            resp.response.json()
    
     def authenticate(self):
         if self.is_udm is True:

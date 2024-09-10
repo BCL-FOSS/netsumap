@@ -5,6 +5,7 @@ from os import system
 from models.util_models.Utility import Utility
 import string
 import aiohttp
+import ssl
 
 
 
@@ -50,10 +51,16 @@ class UniFiNetAPI:
 
         payload = {"username": self.username, "password": self.password}
 
+        # Create an SSL context that trusts the UniFi controller's self-signed certificate
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE  # Skip certificate verification for self-signed certs
+
+
         async with aiohttp.ClientSession() as session:
             try:
                 # Asynchronous POST request to UniFi API
-                async with session.post(auth_url, json=payload, ssl=None) as response:
+                async with session.post(auth_url, json=payload, ssl=ssl_context) as response:
                     if response.status == 200:
                         response_data = await response.json()
                         return {"message": "Authentication successful", "data": response_data}

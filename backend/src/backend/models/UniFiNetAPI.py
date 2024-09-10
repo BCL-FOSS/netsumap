@@ -41,7 +41,7 @@ class UniFiNetAPI:
             return {"status_msg": "ID Gen Failed",
                     "status_code": e}
         
-        return random
+        return str(random)
    
     async def authenticate(self):
 

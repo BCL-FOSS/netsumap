@@ -57,7 +57,7 @@ class UniFiNetAPI:
         async with aiohttp.ClientSession(trust_env = True) as session:
             try:
                 # Asynchronous POST request to UniFi API
-                async with session.post(auth_url, json=payload, ssl=True) as response:
+                async with session.post(auth_url, json=payload) as response:
                     if response.status == 200:
                         response_data = await response.json()
                         return {"message": "Authentication successful", "data": response_data}

@@ -71,7 +71,7 @@ class UniFiNetAPI:
                         ##print(unifises)
                         csrf = str(csrf_token)
                         ##print(csrf)
-                        session_token = csrf + unifises
+                        session_token = csrf + " + " + unifises
                         return {"message": "Authentication successful", "data": response_data, "token": session_token}
                     else:
                         return {"message": "Authentication failed", "status_code": response.status}

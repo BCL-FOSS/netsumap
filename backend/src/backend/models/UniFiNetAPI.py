@@ -72,38 +72,16 @@ class UniFiNetAPI:
                         csrf = str(csrf_token)
                         ##print(csrf)
                         session_token = "unifises="+unifises + ";"+ "csrf_token="+csrf + ";"
-                        return {"message": "Authentication successful", "data": response_data, "token": session_token}
+                        self.token = session_token
+                        self.id = self.gen_id()
+                        self.auth_check = True
+                        response.close()
+
+                        return {"message": "Authentication successful", "data": response_data, "token": session_token, "id": self.id}
                     else:
                         return {"message": "Authentication failed", "status_code": response.status}
             except aiohttp.ClientError as e:
                 return {"error": str(e), "status_code": 500}
-
-            #response = requests.post(auth_url, json=payload, verify=True)
-            #if response.status == 200:
-                #cookies = response.cookies['Set-Cookie']
-                ##print(response.headers.get("Set-Cookie"))
-                #header_data = response.headers.get("Set-Cookie")
-                #unifises = str(header_data[0:41])
-                ##print(unifises)
-                #csrf = str(header_data[69:113])
-                ##print(csrf)
-                #session_token = csrf + unifises
-                ##print(session_token)
-            #    self.token = session_token
-            #    self.id = self.gen_id()
-                ##print(self.id)
-                
-                ##print("Authentication successful!")
-            #    self.auth_check = True
-            #    response.close()
-            #    return cookies
-                
-            #else:
-            #    response.close()
-            #    return {"status":"authentication failed",
-            #            "status_code":response.status_code,
-            #            "status_content":response.content}
-                        
        
 
     def sign_out(self):
@@ -129,50 +107,6 @@ class UniFiNetAPI:
         else:
             #Clean up
             response.close()
-
-    def make_request(self, url='', cmd='', payload={'':''}):
-
-        if payload and self.auth_check == False:
-            print('Empty payload')
-            headers={'':''}
-
-        elif not payload and self.auth_check == True:
-            print('Full payload')
-            headers={
-                        'Content-Type':'application/json',
-                        'Cookie':self.token
-                    }     
-                
-        else:
-            print('Empty payload')
-            headers={'Cookie':self.token}
-            
-        try:
-
-            match cmd.strip():
-                case 'g':
-                    response = requests.get(url, json=payload, verify=True, headers=headers)
-                case 'p':
-                    response = requests.post(url, json=payload, verify=True, headers=headers)
-                case 'e':
-                    response = requests.put(url, json=payload, verify=True, headers=headers)
-                case _:
-                    system('clear')
-                    print('choose an available requests option.')
-                    return error_codes[1]
-
-            if response.status_code == 200:
-                response.close()
-                return response
-            else:
-                print(response.status_code)
-                response.close()
-                return error_codes[2]
-
-        except Exception as e:
-            response.close()
-            return(print("Error occurred during authentication:", str(e), '\n','Status Code: ', response.status_code))
-
 
     def site_dpi_data(self, site='', type=False, cmd=''):
 

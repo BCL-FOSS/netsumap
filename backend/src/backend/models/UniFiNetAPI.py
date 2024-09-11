@@ -47,7 +47,7 @@ class UniFiNetAPI:
 
         payload = {"username": self.username, "password": self.password}
 
-        result = self.make_async_request(url=auth_url, payload=payload, cmd='p')
+        result = await self.make_async_request(url=auth_url, payload=payload, cmd='p')
 
         return result
 
@@ -104,16 +104,25 @@ class UniFiNetAPI:
                         async with session.get(url=url, json=payload, headers=headers) as response:
                             if response.status == 200:
                                 response_data = await response.json()
+                                self.auth_check = True
+                                response.close()
+                                session.close()
                                 return {"Message": "Success", "Data": response_data}
                     case 'p':
                         async with session.post(url=url, json=payload, headers=headers) as response:
                             if response.status == 200:
                                 response_data = await response.json()
+                                self.auth_check = True
+                                response.close()
+                                session.close()
                                 return {"Message": "Success", "Data": response_data}
                     case 'e':
                         async with session.put(url=url, json=payload, headers=headers) as response:
                             if response.status == 200:
                                 response_data = await response.json()
+                                self.auth_check = True
+                                response.close()
+                                session.close()
                                 return {"Message": "Success", "Data": response_data}
                     case _:
                         system('clear')

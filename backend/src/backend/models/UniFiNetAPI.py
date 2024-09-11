@@ -113,30 +113,35 @@ class UniFiNetAPI:
             except aiohttp.ClientError as e:
                 return {"error": str(e), "status_code": 500}
 
-    def sign_out(self):
+    async def sign_out(self):
 
         if self.is_udm is True:
             url = f"{self.base_url}/proxy/network/api/logout"
         else:
             url = f"{self.base_url}/api/logout"
 
-        try:
-            response = self.util_obj.make_request(self=self, url=url, cmd='p')
+        payload={"":""}
 
-            if response.status_code == 200:
-                data = response.json()
-                #pprint.pprint(data)
-                self.auth_check = False
-                response.close()
-                return data
+        headers={
+                        'Content-Type':'application/json',
+                        'Cookie':self.token
+                    }   
+
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.post(url=url, json=payload, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        self.auth_check = False
+                        response.close()
+                        self.ubiquipy_client_session.close()
+                        return {"message": "Signout successful", "data": response_data}
+                    else:
+                        return {"message": "Signout failed", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
             
-        except Exception as e:
-            print("Error occurred during POST request to logout endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
     def site_dpi_data(self, site='', type=False, cmd=''):
 
         input_validation = self.input_validation([site, cmd])

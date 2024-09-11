@@ -8,7 +8,7 @@ from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 import asyncio
 
-@app.post("/unifi_auth")
+@app.post("/nd_login")
 async def ubnt_auth():
     try:
 
@@ -30,16 +30,19 @@ async def ubnt_auth():
 
         print(profile_value)
 
+        logout_value = await ubnt_profile.sign_out()
+
+        print(logout_value)
+
         loop.close()
         #auth_loop.close()
 
-        return profile_value
+        return logout_value
 
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
-    
 
 @app.post("/unifi_webhook")
 async def webhook():
@@ -58,14 +61,6 @@ async def webhook():
         return {'Error' : e}
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
-    
-def generate_ubiquipy_profile(ip='', port='', user_name='', pass_word=''):
-    try:
-        ubnt_profile = UniFiNetAPI(controller_ip=ip, controller_port=port, username=user_name, password=pass_word)
-        result = ubnt_profile.authenticate()
-        return result
-    except Exception as e:
-        return {'Error' : e}
 
 def activate_websocket():
     websocket.enableTrace = True

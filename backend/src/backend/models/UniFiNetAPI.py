@@ -135,7 +135,6 @@ class UniFiNetAPI:
                         response_data = await response.json()
                         self.auth_check = False
                         response.close()
-                        self.ubiquipy_client_session.close()
                         return {"message": "Signout successful", "data": response_data}
                     else:
                         return {"message": "Signout failed", "status_code": response.status}

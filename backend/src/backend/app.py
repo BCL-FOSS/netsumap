@@ -34,11 +34,9 @@ async def ubnt_auth():
 
         print(profile_value)
 
-        db_loop = asyncio.new_event_loop()
-
         db = RedisDB()
 
-        db_result = await db_loop.run_in_executor(executor, db.connect_to_db, app.config['REDIS_DB'])
+        db_result = await loop.run_in_executor(executor, db.connect_to_db, app.config['REDIS_DB'])
         print(db_result)
 
         #logout_value = await ubnt_profile.sign_out()

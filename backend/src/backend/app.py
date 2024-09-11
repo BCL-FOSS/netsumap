@@ -34,10 +34,12 @@ async def ubnt_auth():
 
         print(profile_value)
 
-        db = RedisDB()
+        if profile_value:
 
-        db_result = await loop.run_in_executor(executor, db.connect_to_db, app.config['REDIS_DB'])
-        print(db_result)
+            db = RedisDB()
+
+            db_result = await loop.run_in_executor(executor, db.connect_to_db, app.config['REDIS_DB'])
+            print(db_result)
 
         #logout_value = await ubnt_profile.sign_out()
 

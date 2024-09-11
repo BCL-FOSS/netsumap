@@ -47,38 +47,34 @@ class UniFiNetAPI:
 
         payload = {"username": self.username, "password": self.password}
 
-        result = await self.make_async_request(url=auth_url, payload=payload, cmd='p')
-
-        return result
-
-        #async with self.ubiquipy_client_session as session:
-        #    try:
+        async with self.ubiquipy_client_session as session:
+            try:
                 # Asynchronous POST request to UniFi API
-        #        async with session.post(url=auth_url, json=payload) as response:
-        #            if response.status == 200:
-        #                response_data = await response.json()
-        #                header_data = response.headers.getall('Set-Cookie', [])
-        #                for cookie in header_data:
-        #                    if 'unifises' in cookie:
-        #                       unifises_token = cookie.split(';')[0].split('=')[1]
-        #                    if 'csrf_token' in cookie:
-        #                        csrf_token = cookie.split(';')[0].split('=')[1]
+                async with session.post(url=auth_url, json=payload) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        header_data = response.headers.getall('Set-Cookie', [])
+                        for cookie in header_data:
+                            if 'unifises' in cookie:
+                               unifises_token = cookie.split(';')[0].split('=')[1]
+                            if 'csrf_token' in cookie:
+                                csrf_token = cookie.split(';')[0].split('=')[1]
 
-        #                unifises = str(unifises_token)
+                        unifises = str(unifises_token)
                         ##print(unifises)
-        #                csrf = str(csrf_token)
+                        csrf = str(csrf_token)
                         ##print(csrf)
-        #                session_token = "unifises="+unifises + ";"+ "csrf_token="+csrf + ";"
-        #                self.token = session_token
-        #                self.id = self.gen_id()
-        #                self.auth_check = True
-        #                response.close()
+                        session_token = "unifises="+unifises + ";"+ "csrf_token="+csrf + ";"
+                        self.token = session_token
+                        self.id = self.gen_id()
+                        self.auth_check = True
+                        response.close()
 
-        #                return {"message": "Authentication successful", "data": response_data, "token": session_token, "id": self.id}
-        #            else:
-        #                return {"message": "Authentication failed", "status_code": response.status}
-        #    except aiohttp.ClientError as e:
-        #        return {"error": str(e), "status_code": 500}
+                        return {"message": "Authentication successful", "data": response_data, "token": session_token, "id": self.id}
+                    else:
+                        return {"message": "Authentication failed", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
             
     
     async def make_async_request(self, url='', payload={}, cmd=''):

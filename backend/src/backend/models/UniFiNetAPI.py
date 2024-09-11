@@ -1,7 +1,7 @@
 import os,os.path
 import pprint
 from os import system
-from models.util_models.Utility import Utility
+from util_models.Utility import Utility
 import string
 import aiohttp
 import uuid

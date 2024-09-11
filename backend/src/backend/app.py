@@ -4,8 +4,6 @@ from init_app import app
 import websocket
 from websocket import create_connection
 from models.UniFiNetAPI import UniFiNetAPI
-from models.util_models.PDF import PDF
-from models.util_models.Utility import Utility
 import asyncio
 
 @app.post("/nd_login")

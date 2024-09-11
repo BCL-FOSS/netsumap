@@ -1,4 +1,5 @@
 import uuid
+from util_models.PDF import PDF
 
 class Session:
 
@@ -8,6 +9,7 @@ class Session:
         self.net_sess = []
         self.prtct_sess =[]
         self.accs_sess = []
+        self.pdf = PDF()
 
 
     def gen_id(self):

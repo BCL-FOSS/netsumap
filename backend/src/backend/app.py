@@ -8,6 +8,11 @@ from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
 from models.util_models.RedisDB import RedisDB
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+
+executor = ThreadPoolExecutor()
+
 
 @app.post("/nd_login")
 async def ubnt_auth():
@@ -34,7 +39,7 @@ async def ubnt_auth():
 
         db = RedisDB()
 
-        db_result = db_loop.run_until_complete(db.connect_to_db())
+        db_result = await db_loop.run_in_executor(executor, db.connect_to_db, app.config['REDIS_DB'])
         print(db_result)
 
         #logout_value = await ubnt_profile.sign_out()

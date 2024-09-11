@@ -22,6 +22,7 @@ class UniFiNetAPI:
         self.auth_check = False
         self.util_obj = Utility()
         self.id = ''
+        self.name = ''
         self.ubiquipy_client_session = aiohttp.ClientSession()
 
     def input_validation(self, inputs=[]):

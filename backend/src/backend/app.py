@@ -6,6 +6,7 @@ from websocket import create_connection
 from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.PDF import PDF
 from models.util_models.Utility import Utility
+from models.util_models.RedisDB import RedisDB
 import asyncio
 
 @app.post("/nd_login")
@@ -13,7 +14,6 @@ async def ubnt_auth():
     try:
 
         loop = asyncio.new_event_loop()
-        #auth_loop = asyncio.new_event_loop()
         
         data_value = loop.run_until_complete(request.get_json())
 
@@ -30,12 +30,19 @@ async def ubnt_auth():
 
         print(profile_value)
 
+        db_loop = asyncio.new_event_loop()
+
+        db = RedisDB()
+
+        db_result = db_loop.run_until_complete(db.connect_to_db())
+        print(db_result)
+
         #logout_value = await ubnt_profile.sign_out()
 
         #print(logout_value)
 
         loop.close()
-        #auth_loop.close()
+        db_loop.close()
 
         return profile_value
 
@@ -43,6 +50,8 @@ async def ubnt_auth():
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
+    
+
 
 @app.post("/unifi_webhook")
 async def webhook():

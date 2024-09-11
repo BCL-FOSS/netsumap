@@ -47,7 +47,7 @@ class UniFiNetAPI:
 
         payload = {"username": self.username, "password": self.password}
 
-        result = await self.make_async_request(url=auth_url, payload=payload, cmd='p')
+        result = self.make_async_request(url=auth_url, payload=payload, cmd='p')
 
         return result
 
@@ -83,8 +83,8 @@ class UniFiNetAPI:
     
     async def make_async_request(self, url='', payload={}, cmd=''):
          
-        if payload and self.auth_check == False:
-            print('Empty payload')
+        if not payload and self.auth_check == False:
+            print('Authentication Payload')
             headers={'':''}
 
         elif not payload and self.auth_check == True:

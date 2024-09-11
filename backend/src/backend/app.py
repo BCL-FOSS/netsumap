@@ -32,19 +32,6 @@ async def ubnt_auth():
 
         profile_value = await ubnt_profile.authenticate()
 
-        print(profile_value)
-
-        if profile_value:
-
-            db = RedisDB()
-
-            db_result = await loop.run_in_executor(executor, db.connect_to_db, app.config['REDIS_DB'])
-            print(db_result)
-
-        #logout_value = await ubnt_profile.sign_out()
-
-        #print(logout_value)
-
         return profile_value
 
     except TypeError as error:

@@ -30,14 +30,14 @@ async def ubnt_auth():
 
         print(profile_value)
 
-        logout_value = await ubnt_profile.sign_out()
+        #logout_value = await ubnt_profile.sign_out()
 
-        print(logout_value)
+        #print(logout_value)
 
         loop.close()
         #auth_loop.close()
 
-        return logout_value
+        return profile_value
 
     except TypeError as error:
         return {'TypeError' :  str(error)}

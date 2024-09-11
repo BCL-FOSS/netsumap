@@ -13,7 +13,6 @@ from concurrent.futures import ThreadPoolExecutor
 
 executor = ThreadPoolExecutor()
 
-
 @app.post("/nd_login")
 async def ubnt_auth():
     try:
@@ -45,9 +44,6 @@ async def ubnt_auth():
         #logout_value = await ubnt_profile.sign_out()
 
         #print(logout_value)
-
-        loop.close()
-        db_loop.close()
 
         return profile_value
 

@@ -4,12 +4,12 @@ from email.mime.text import MIMEText
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
-
+import requests
+from os import system
 
 class Utility:
 
     def __init__(self) -> None:
-        
         pass
 
     def send_email(self, subject='', body='', sender='', recipients=[], password='', file_name=''):
@@ -37,7 +37,51 @@ class Utility:
             server.login(sender, password)
             server.sendmail(sender, recipients, message.as_string())
 
-    
 
+    def make_request(self, ubiquipy=None, url='', cmd='', payload={'':''}):
+
+        if payload and ubiquipy.auth_check == False:
+            print('Empty payload')
+            headers={'':''}
+
+        elif not payload and ubiquipy.auth_check == True:
+            headers={
+                        'Content-Type':'application/json',
+                        'Cookie':ubiquipy.token
+                    }     
+                
+        else:
+            print('Empty payload')
+            headers={'Cookie':ubiquipy.token}
+            
+        try:
+
+            match cmd.strip():
+                case 'g':
+                    response = requests.get(url, json=payload, verify=True, headers=headers)
+                case 'p':
+                    #header={
+                    #    'Content-Type':'application/json',
+                    #    'Cookie':self.token
+                    #}
+                    response = requests.post(url, json=payload, verify=True, headers=headers)
+                case 'e':
+                    response = requests.put(url, json=payload, verify=True, headers=headers)
+                case _:
+                    system('clear')
+                    print('choose an available requests option.')
+                    return None
+
+            if response.status_code == 200:
+                response.close()
+                return response
+            else:
+                print(response.status_code)
+                response.close()
+                exit()
+
+        except Exception as e:
+            response.close()
+            return(print("Error occurred during authentication:", str(e), '\n','Status Code: ', response.status_code))
 
     

@@ -4,12 +4,16 @@ from email.mime.text import MIMEText
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
+from util_models.PDF import PDF
+
 import requests
 from os import system
+
 
 class Utility:
 
     def __init__(self) -> None:
+        pdf = PDF()
         pass
 
     def send_email(self, subject='', body='', sender='', recipients=[], password='', file_name=''):
@@ -37,51 +41,20 @@ class Utility:
             server.login(sender, password)
             server.sendmail(sender, recipients, message.as_string())
 
-
-    def make_request(self, ubiquipy=None, url='', cmd='', payload={'':''}):
-
-        if payload and ubiquipy.auth_check == False:
-            print('Empty payload')
-            headers={'':''}
-
-        elif not payload and ubiquipy.auth_check == True:
-            headers={
-                        'Content-Type':'application/json',
-                        'Cookie':ubiquipy.token
-                    }     
-                
-        else:
-            print('Empty payload')
-            headers={'Cookie':ubiquipy.token}
-            
+    def generate_pdf(self, title='', author='',output_file_name='', chapters=[]):
+        chap_num = 0
+        
         try:
-
-            match cmd.strip():
-                case 'g':
-                    response = requests.get(url, json=payload, verify=True, headers=headers)
-                case 'p':
-                    #header={
-                    #    'Content-Type':'application/json',
-                    #    'Cookie':self.token
-                    #}
-                    response = requests.post(url, json=payload, verify=True, headers=headers)
-                case 'e':
-                    response = requests.put(url, json=payload, verify=True, headers=headers)
-                case _:
-                    system('clear')
-                    print('choose an available requests option.')
-                    return None
-
-            if response.status_code == 200:
-                response.close()
-                return response
-            else:
-                print(response.status_code)
-                response.close()
-                exit()
-
+            self.pdf.set_title(title)
+            self.pdf.set_author(author)
+            for chapter in chapters:
+                chap_num+=1
+                self.pdf.print_chapter(chap_num, chapter['name'], json.dumps(chapter))
+            self.pdf.output(output_file_name)
         except Exception as e:
-            response.close()
-            return(print("Error occurred during authentication:", str(e), '\n','Status Code: ', response.status_code))
+                print(e)
+        else:
+                print('PDF Report Creation Complete')
+
 
     

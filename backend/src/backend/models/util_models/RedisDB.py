@@ -32,7 +32,7 @@ class RedisDB:
             connection = await asyncio_redis.Connection.create(host=db_host_name, port=db_port)
     
             # Use HMSET to upload a hashset representing the employee data
-            upload = await connection.hmset(user_id, user_data)
+            upload = await connection.hset(user_id, mapping=user_data)
     
             # Close the connection
             connection.close()

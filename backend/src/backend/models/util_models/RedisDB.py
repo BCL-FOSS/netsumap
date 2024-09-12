@@ -84,9 +84,9 @@ class RedisDB:
             # Convert fields and their corresponding values from bytes to strings
             hashmap = {field: (value if value is not None else None) for field, value in zip(fields, values)}
 
-            query_result = json.loads(hashmap)
+            
     
-            return query_result
+            return hashmap
         except Exception as e:
             return {"DB Query Error" : str(e)}
         

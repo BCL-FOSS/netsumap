@@ -14,16 +14,10 @@ class RedisDB:
             # Create Redis connection
             connection = await asyncio_redis.Connection.create(host='localhost', port=6379)
 
-            # Set a key
-            ping_result = await connection.ping()
-
-            if ping_result == True:
-                return {"DB Connection Success":"Connected to Redis DB successfully"}
-            elif ping_result == False:
-                return {"DB Connection Failed":"Could not connect to Redis DB"}
-
             # When finished, close the connection.
             connection.close()
+
+            return connection
             
         except Exception as e:
             return {"DB Connection Error":str(e)}

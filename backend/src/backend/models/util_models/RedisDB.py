@@ -12,7 +12,7 @@ class RedisDB:
         try:
             
             # Create Redis connection
-            connection = await asyncio_redis.Connection.create(host='localhost', port=6379)
+            connection = asyncio_redis.Connection.create(host='localhost', port=6379)
 
             # When finished, close the connection.
             connection.close()

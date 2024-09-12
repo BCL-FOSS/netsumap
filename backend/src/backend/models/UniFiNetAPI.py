@@ -38,6 +38,20 @@ class UniFiNetAPI:
                     "status_code": e}
         
         return str(id)
+    
+    def get_nd_profile_data(self):
+        return {
+            "id": self.id,
+            "profile_name": self.name,
+            "base_url": self.base_url,
+            "url": self.url,
+            "inform_url": self.inform_url,
+            "port" : self.port,
+            "username": self.username,
+            "token": self.token,
+            "is_udm" : self.is_udm
+        }
+
    
     async def authenticate(self):
 
@@ -70,8 +84,8 @@ class UniFiNetAPI:
                         self.id = self.gen_id()
                         self.auth_check = True
                         response.close()
-
-                        return {"message": "Authentication successful", "data": response_data, "token": session_token, "id": self.id}
+                        print({"message": "Authentication successful", "data": response_data, "token": session_token, "id": self.id})
+                        return self.get_nd_profile_data()
                     else:
                         return {"message": "Authentication failed", "status_code": response.status}
             except aiohttp.ClientError as e:

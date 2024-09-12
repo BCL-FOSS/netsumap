@@ -24,6 +24,19 @@ class RedisDB:
             
         except Exception as e:
             return {"DB Connection Error":str(e)}
+        
+    
+    async def upload_nd_profile(user_id: str, user_data: dict):
+        # Connect to the locally installed Redis database
+        connection = await asyncio_redis.Connection.create(host='127.0.0.1', port=6379)
+    
+        # Use HMSET to upload a hashset representing the employee data
+        await connection.hmset(user_id, user_data)
+    
+        # Close the connection
+        connection.close()
+
+        return f'Employee {user_id} added successfully!'
 
     def set_profile(self):
         try:

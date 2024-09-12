@@ -46,7 +46,7 @@ class RedisDB:
         except Exception as e:
             return {"DB Upload Error":str(e)}
     
-    async def get_profile(self, key: str, fields: list):
+    async def get_profile(self, key='', fields=[]):
         """
             Retrieve specific fields from a Redis hashmap using the HMGET command.
 

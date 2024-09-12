@@ -32,9 +32,9 @@ async def ubnt_auth():
 
         profile_value = await ubnt_profile.authenticate()
 
-        db = RedisDB()    
+        db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])    
 
-        db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value, db_host_name=app.config['REDIS_DB'])
+        db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
         print(db_upload)
 
         db_query_value = await db.get_profile(str(profile_value['id']))

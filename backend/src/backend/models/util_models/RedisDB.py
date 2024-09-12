@@ -26,10 +26,10 @@ class RedisDB:
             return {"DB Connection Error":str(e)}
         
     
-    async def upload_nd_profile(self, user_id = '', user_data = {}):
+    async def upload_nd_profile(self, user_id = '', user_data = {}, db_host_name='', db_port=6379):
         try: 
             # Connect to the locally installed Redis database
-            connection = await asyncio_redis.Connection.create(host='127.0.0.1', port=6379)
+            connection = await asyncio_redis.Connection.create(host=db_host_name, port=db_port)
     
             # Use HMSET to upload a hashset representing the employee data
             await connection.hmset(user_id, user_data)

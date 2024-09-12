@@ -32,12 +32,12 @@ class RedisDB:
             connection = await asyncio_redis.Connection.create(host=db_host_name, port=db_port)
     
             # Use HMSET to upload a hashset representing the employee data
-            await connection.hmset(user_id, user_data)
+            upload = await connection.hset(user_id, user_data)
     
             # Close the connection
             connection.close()
 
-            return {"DB Upload Status" : "Profile %s Upload Complete" % user_id}
+            return {"DB Upload Status" : "Profile %s Upload Complete" % user_id, "Upload Complete": upload}
         except Exception as e:
             return {"DB Upload Error":str(e)}
 

@@ -47,16 +47,14 @@ class RedisDB:
         except Exception as e:
             return {"DB Upload Error":str(e)}
     
-    async def get_profile(self, key=''):
+    async def get_profile(self, key=None):
         try:
             """
-            Retrieve specific fields from a Redis hashmap using the HMGET command.
+                Retrieve an entire hashmap from Redis using the HGETALL command.
 
-            :param key: The key of the hashmap.
-            :param fields: A list of fields to retrieve from the hashmap.
-            :return: A dictionary of field-value pairs or an error message if not found.
-
-        """
+                :param key: The key of the hashmap.
+                :return: A dictionary of field-value pairs or an error message if the key does not exist.
+            """
             # Connect to the locally installed Redis database
             connection = await asyncio_redis.Connection.create(host=self.host_name, port=self.port)
     
@@ -68,25 +66,16 @@ class RedisDB:
                 connection.close()
                 return f'Key "{key}" does not exist or is not a hashmap.'
     
-            # Retrieve all fields of the hashmap using HKEYS
-            fields = await connection.hkeys(key)
-    
-            if not fields:
-                connection.close()
-                return f'Hashmap with key "{key}" is empty or does not exist.'
-    
-            # Retrieve all values using HMGET
-            values = await connection.hmget(key, *fields)
+            # Retrieve all fields and values from the hashmap using HGETALL
+            hashmap = await connection.hgetall_asdict(key)
     
             # Close the Redis connection
             connection.close()
     
-            # Convert fields and their corresponding values from bytes to strings
-            hashmap = {field: (value if value is not None else None) for field, value in zip(fields, values)}
-
-            
+            # Convert the byte values to strings (since Redis returns values as bytes)
+            decoded_hashmap = {field: value.decode('utf-8') for field, value in hashmap.items()}
     
-            return hashmap
+            return decoded_hashmap
         except Exception as e:
             return {"DB Query Error" : str(e)}
         

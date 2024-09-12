@@ -39,7 +39,7 @@ class UniFiNetAPI:
         
         return str(id)
     
-    def get_nd_profile_data(self):
+    def get_profile_data(self):
         return {
             "id": self.id,
             "profile_name": self.name,
@@ -85,7 +85,7 @@ class UniFiNetAPI:
                         self.auth_check = True
                         response.close()
                         print({"message": "Authentication successful", "data": response_data, "token": session_token, "id": self.id})
-                        return self.get_nd_profile_data()
+                        return self.get_profile_data()
                     else:
                         return {"message": "Authentication failed", "status_code": response.status}
             except aiohttp.ClientError as e:

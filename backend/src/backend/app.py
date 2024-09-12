@@ -34,13 +34,12 @@ async def ubnt_auth():
 
         db = RedisDB()    
 
-        #db_connect = await db.connect_to_db(db_host_name=app.config['REDIS_DB'])
-        #print(db_connect)
-
-        db_upload = await db.upload_nd_profile(user_id=profile_value['id'], user_data=profile_value, db_host_name=app.config['REDIS_DB'])
+        db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value, db_host_name=app.config['REDIS_DB'])
         print(db_upload)
 
-        return profile_value
+        db_query_value = await db.get_profile(str(profile_value['id']))
+
+        return db_query_value
 
     except TypeError as error:
         return {'TypeError' :  str(error)}

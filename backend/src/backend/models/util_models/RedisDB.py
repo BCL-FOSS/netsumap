@@ -1,6 +1,7 @@
 import redis
 import asyncio
 import asyncio_redis
+import json
 
 class RedisDB:
    
@@ -74,7 +75,9 @@ class RedisDB:
     
         # Convert fields and their corresponding values from bytes to strings
         hashmap = {field: (value.decode('utf-8') if value is not None else None) for field, value in zip(fields, values)}
+
+        query_result = json.loads(hashmap)
     
-        return hashmap
+        return query_result
         
 

@@ -32,7 +32,7 @@ async def ubnt_auth():
 
         profile_value = await ubnt_profile.authenticate()
 
-        return profile_value
+        return profile_value['id']
 
     except TypeError as error:
         return {'TypeError' :  str(error)}

@@ -30,9 +30,12 @@ class RedisDB:
         try: 
             # Connect to the locally installed Redis database
             connection = await asyncio_redis.Connection.create(host=db_host_name, port=db_port)
-    
+
+            str_hashmap = {str(k): str(v) for k, v in user_data.items()}
+
             # Use HMSET to upload a hashset representing the employee data
-            upload = await connection.hset(user_id, mapping=user_data)
+
+            await connection.hmset(user_id, str_hashmap)
     
             # Close the connection
             connection.close()

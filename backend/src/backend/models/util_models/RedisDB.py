@@ -73,9 +73,9 @@ class RedisDB:
             connection.close()
     
             # Convert the byte values to strings (since Redis returns values as bytes)
-            #decoded_hashmap = {field: value for field, value in hashmap.items()}
+            decoded_hashmap = {field: value for field, value in hashmap.items()}
     
-            return hashmap
+            return decoded_hashmap
         except Exception as e:
             return {"DB Query Error" : str(e)}
         

@@ -44,6 +44,8 @@ public class NetiFiDash extends Lifecycle {
         hi.add(socketPort);
         helloButton.addActionListener(e -> hello());
         socketTest.addActionListener(e -> auth());
+
+        hi.getToolbar().addMaterialCommandToSideMenu();
         hi.getToolbar().addMaterialCommandToSideMenu("Hello Command",
         FontImage.MATERIAL_CHECK, 4, e -> hello());
         hi.show();

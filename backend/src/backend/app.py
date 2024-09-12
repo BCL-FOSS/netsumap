@@ -38,8 +38,21 @@ async def ubnt_auth():
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
-    
 
+@app.get("/nd_redis")    
+async def redis():
+    try:
+
+        loop = asyncio.new_event_loop()
+        db = RedisDB()    
+
+        db_connect = loop.run_until_complete(db.connect_to_db(db_host_name=app.config['REDIS_DB']))
+
+        return db_connect
+    except TypeError as error:
+        return {'TypeError' :  str(error)}
+    except Exception as e:
+        return {'Exception' :  str(e)}
 
 @app.post("/unifi_webhook")
 async def webhook():

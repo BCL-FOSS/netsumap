@@ -8,6 +8,7 @@ class RedisDB:
         self.r = None
         pass
 
+    @asyncio.coroutine()
     def connect_to_db(self, db_host_name='', db_port=6379):
         try:
             # Create Redis connection

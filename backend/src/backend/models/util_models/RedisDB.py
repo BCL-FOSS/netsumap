@@ -8,14 +8,14 @@ class RedisDB:
         self.r = None
         pass
 
-    @asyncio.coroutine()
-    def connect_to_db(self, db_host_name='', db_port=6379):
+    async def connect_to_db(self, db_host_name='', db_port=6379):
         try:
+            
             # Create Redis connection
-            connection = yield from asyncio_redis.Connection.create(host='localhost', port=6379)
+            connection = await asyncio_redis.Connection.create(host='localhost', port=6379)
 
             # Set a key
-            ping_result = yield from connection.ping()
+            ping_result = await connection.ping()
 
             if ping_result == True:
                 return {"DB Connection Success":"Connected to Redis DB successfully"}

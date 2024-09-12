@@ -48,7 +48,8 @@ class RedisDB:
             return {"DB Upload Error":str(e)}
     
     async def get_profile(self, key=''):
-        """
+        try:
+            """
             Retrieve specific fields from a Redis hashmap using the HMGET command.
 
             :param key: The key of the hashmap.
@@ -56,35 +57,37 @@ class RedisDB:
             :return: A dictionary of field-value pairs or an error message if not found.
 
         """
-        # Connect to the locally installed Redis database
-        connection = await asyncio_redis.Connection.create(host=self.host_name, port=self.port)
+            # Connect to the locally installed Redis database
+            connection = await asyncio_redis.Connection.create(host=self.host_name, port=self.port)
     
-        # Check if the key exists and is a hash
-        key_type = await connection.type(key)
+            # Check if the key exists and is a hash
+            key_type = await connection.type(key)
     
-        if key_type != 'hash':
-            # If the key doesn't exist or is not a hashmap
+            if key_type != 'hash':
+                # If the key doesn't exist or is not a hashmap
+                connection.close()
+                return f'Key "{key}" does not exist or is not a hashmap.'
+    
+            # Retrieve all fields of the hashmap using HKEYS
+            fields = await connection.hkeys(key)
+    
+            if not fields:
+                connection.close()
+                return f'Hashmap with key "{key}" is empty or does not exist.'
+    
+            # Retrieve all values using HMGET
+            values = await connection.hmget(key, *fields)
+    
+            # Close the Redis connection
             connection.close()
-            return f'Key "{key}" does not exist or is not a hashmap.'
     
-       # Retrieve all fields of the hashmap using HKEYS
-        fields = await connection.hkeys(key)
-    
-        if not fields:
-            connection.close()
-            return f'Hashmap with key "{key}" is empty or does not exist.'
-    
-        # Retrieve all values using HMGET
-        values = await connection.hmget(key, *fields)
-    
-        # Close the Redis connection
-        connection.close()
-    
-        # Convert fields and their corresponding values from bytes to strings
-        hashmap = {field: (value if value is not None else None) for field, value in zip(fields, values)}
+            # Convert fields and their corresponding values from bytes to strings
+            hashmap = {field: (value if value is not None else None) for field, value in zip(fields, values)}
 
-        query_result = json.loads(hashmap)
+            query_result = json.loads(hashmap)
     
-        return query_result
+            return query_result
+        except Exception as e:
+            return {"DB Query Error" : str(e)}
         
 

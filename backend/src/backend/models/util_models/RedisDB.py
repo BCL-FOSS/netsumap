@@ -12,7 +12,7 @@ class RedisDB:
         try:
             
             # Create Redis connection
-            connection = await asyncio_redis.Connection.create(host='localhost', port=6379)
+            connection = await asyncio_redis.Connection.create(host=db_host_name, port=db_port)
 
             pong = await connection.ping()
             print(pong)

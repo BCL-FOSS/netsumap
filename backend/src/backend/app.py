@@ -47,7 +47,7 @@ async def ubnt_auth():
             "token",
             "is_udm"]
     
-        db_query_value = await db.get_profile(key=profile_value['id'], fields=fields)
+        db_query_value = await db.get_profile(key=profile_value['id'])
 
         return db_query_value
 

@@ -47,7 +47,7 @@ class RedisDB:
         except Exception as e:
             return {"DB Upload Error":str(e)}
     
-    async def get_profile(self, key='', fields=[]):
+    async def get_profile(self, key=''):
         """
             Retrieve specific fields from a Redis hashmap using the HMGET command.
 
@@ -67,7 +67,14 @@ class RedisDB:
             connection.close()
             return f'Key "{key}" does not exist or is not a hashmap.'
     
-        # Retrieve specific fields using HMGET
+       # Retrieve all fields of the hashmap using HKEYS
+        fields = await connection.hkeys(key)
+    
+        if not fields:
+            connection.close()
+            return f'Hashmap with key "{key}" is empty or does not exist.'
+    
+        # Retrieve all values using HMGET
         values = await connection.hmget(key, *fields)
     
         # Close the Redis connection

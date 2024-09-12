@@ -42,11 +42,9 @@ async def ubnt_auth():
 @app.get("/nd_redis")    
 async def redis():
     try:
-
-        loop = asyncio.new_event_loop()
         db = RedisDB()    
 
-        db_connect = loop.run_until_complete(db.connect_to_db(db_host_name=app.config['REDIS_DB']))
+        db_connect = await db.connect_to_db(db_host_name=app.config['REDIS_DB'])
 
         return db_connect
     except TypeError as error:

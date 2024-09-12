@@ -12,12 +12,14 @@ class RedisDB:
         try:
             
             # Create Redis connection
-            connection = asyncio_redis.Connection.create(host='localhost', port=6379)
+            connection = await asyncio_redis.Connection.create(host='localhost', port=6379)
+
+            pong = await connection.ping()
 
             # When finished, close the connection.
             connection.close()
 
-            return connection
+            return pong
             
         except Exception as e:
             return {"DB Connection Error":str(e)}

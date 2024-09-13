@@ -76,7 +76,7 @@ async def signout():
         return {'Exception' :  str(e)}
     
 
-@app.get("/ubnt_stats")
+@app.post("/ubnt_stats")
 async def get_health_data():
     try:
         loop = asyncio.new_event_loop()

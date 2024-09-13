@@ -11,11 +11,14 @@ class RedisDB:
         self.user_name = username
         self.pass_word = password
 
+    async def get_redis_connection(self):
+        return await asyncio_redis.Connection.create(host=self.host_name, port=self.port)
+
     async def connect_to_db(self):
         try:
             
             # Create Redis connection
-            connection = await asyncio_redis.Connection.create(host=self.host_name, port=self.port)
+            connection = await self.get_redis_connection()
 
             pong = await connection.ping()
             print(pong)
@@ -32,7 +35,7 @@ class RedisDB:
     async def upload_profile(self, user_id = '', user_data = {}):
         try: 
             # Connect to the locally installed Redis database
-            connection = await asyncio_redis.Connection.create(host=self.host_name, port=self.port)
+            connection = await self.get_redis_connection()
 
             str_hashmap = {str(k): str(v) for k, v in user_data.items()}
 
@@ -47,7 +50,7 @@ class RedisDB:
         except Exception as e:
             return {"DB Upload Error":str(e)}
     
-    async def get_profile(self, key=None):
+    async def get_profile(self, key=''):
         try:
             """
                 Retrieve an entire hashmap from Redis using the HGETALL command.
@@ -56,7 +59,7 @@ class RedisDB:
                 :return: A dictionary of field-value pairs or an error message if the key does not exist.
             """
             # Connect to the locally installed Redis database
-            connection = await asyncio_redis.Connection.create(host=self.host_name, port=self.port)
+            connection = await self.get_redis_connection()
     
             # Check if the key exists and is a hash
             key_type = await connection.type(key)
@@ -78,5 +81,16 @@ class RedisDB:
             return hashmap
         except Exception as e:
             return {"DB Query Error" : str(e)}
+        
+    # Function to retrieve a hash by key
+    async def get_hash_from_redis(self, key: str):
+        try:
+            connection = await self.get_redis_connection()
+            # Get all the fields and values for the given hash key
+            result = await connection.hgetall_asdict(key)
+            await connection.close()
+            return result
+        except Exception as e:
+            return {"error": str(e)}
         
 

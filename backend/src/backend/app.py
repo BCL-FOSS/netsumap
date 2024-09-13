@@ -36,7 +36,7 @@ async def ubnt_auth():
         db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
         print(db_upload)
     
-        db_query_value = await db.get_profile(key=profile_value['id'])
+        db_query_value = await db.get_hash_from_redis(key=profile_value['id'])
         print(db_query_value)
 
         return profile_value

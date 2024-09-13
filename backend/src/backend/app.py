@@ -15,7 +15,6 @@ db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])
 @app.post("/login")
 async def authentication():
     try:
-
         loop = asyncio.new_event_loop()
         
         data_value = loop.run_until_complete(request.get_json())
@@ -39,17 +38,17 @@ async def authentication():
         db_query_value = await db.get_profile(key=profile_value['id'])
         #print(db_query_value)
 
-        return db_query_value['id']
+        return {"Auth_Status" : "Success",
+                "Profile_Data" : db_query_value}
 
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
 
-@app.get("/logout")    
+@app.post("/logout")    
 async def signout():
     try:
-
         loop = asyncio.new_event_loop()
         
         data_value = loop.run_until_complete(request.get_json())
@@ -65,11 +64,12 @@ async def signout():
         
         db_query_value = await db.get_profile(key=data['id'])
 
-        ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
+        ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
+        ubnt_profile.token = db_query_value['token']
+        ubnt_profile.id = db_query_value['id']
+        status = await ubnt_profile.sign_out()
 
-        ubnt_profile.sign_out()
-
-        return db_query_value
+        return status
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:
@@ -94,14 +94,15 @@ async def webhook():
         return {'try_catch_end' : 'Check the frontend UI'}
 
 def activate_websocket():
-    websocket.enableTrace = True
-    ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
-    return ws
+    try:
+        websocket.enableTrace = True
+        ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
+        return ws
+    except Exception as e:
+        return {"Websocket Connection Error" : "Please verify the websocket server is online and accessible",
+                "Error Message" : str(e)}
 
 def run() -> None:
-    try:
+    app.run()
 
-        app.run()
-
-    except OSError as oserror:
-        return{"Application Server Error": "Server is already running. Please stop and restart the service.\n" + str(oserror)}
+    

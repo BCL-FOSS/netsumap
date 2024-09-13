@@ -38,12 +38,12 @@ class RedisDB:
 
             # Use HMSET to upload a hashset representing the user's profile
 
-            await connection.hmset(user_id, str_hashmap)
+            upload = await connection.hmset(user_id, str_hashmap)
     
             # Close the connection
             connection.close()
 
-            return {"DB Upload Status" : "Profile %s Upload Complete" % user_id}
+            return {"DB Upload Status" : upload}
         except Exception as e:
             return {"DB Upload Error":str(e)}
     

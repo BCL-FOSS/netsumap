@@ -49,38 +49,6 @@ class RedisDB:
             return {"DB Upload Status" : "Profile ID %s upload successful" % user_id}
         except Exception as e:
             return {"DB Upload Error":str(e)}
-    
-    async def get_profile(self, key=''):
-        try:
-            """
-                Retrieve an entire hashmap from Redis using the HGETALL command.
-
-                :param key: The key of the hashmap.
-                :return: A dictionary of field-value pairs or an error message if the key does not exist.
-            """
-            # Connect to the locally installed Redis database
-            connection = await self.get_redis_connection()
-    
-            # Check if the key exists and is a hash
-            key_type = await connection.type(key)
-    
-            if key_type != 'hash':
-                # If the key doesn't exist or is not a hashmap
-                connection.close()
-                return f'Key "{key}" does not exist or is not a hashmap.'
-    
-            # Retrieve all fields and values from the hashmap using HGETALL
-            hashmap = await connection.hgetall_asdict(key)
-    
-            # Close the Redis connection
-            connection.close()
-    
-            # Convert the byte values to strings (since Redis returns values as bytes)
-            #decoded_hashmap = {field: value for field, value in hashmap.items()}
-    
-            return hashmap
-        except Exception as e:
-            return {"DB Query Error" : str(e)}
         
     # Function to retrieve a hash by key
     async def get_hash_from_redis(self, key: str):

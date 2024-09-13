@@ -37,9 +37,9 @@ async def ubnt_auth():
         print(db_upload)
     
         db_query_value = await db.get_hash_from_redis(key=profile_value['id'])
-        print(db_query_value)
+        #print(db_query_value)
 
-        return profile_value
+        return db_query_value
 
     except TypeError as error:
         return {'TypeError' :  str(error)}

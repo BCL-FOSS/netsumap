@@ -10,12 +10,10 @@ from models.util_models.RedisDB import RedisDB
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
-
-executor = ThreadPoolExecutor()
 db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
 
-@app.post("/nd_login")
-async def ubnt_auth():
+@app.post("/login")
+async def authentication():
     try:
 
         loop = asyncio.new_event_loop()
@@ -27,7 +25,9 @@ async def ubnt_auth():
             json_data = json.dumps(data_value)
             data = json.loads(json_data)
             
-            print(data)        
+            #print(data)    
+
+        loop.close()    
 
         ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
 
@@ -36,22 +36,40 @@ async def ubnt_auth():
         db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
         print(db_upload)
     
-        db_query_value = await db.get_hash_from_redis(key=profile_value['id'])
+        db_query_value = await db.get_profile(key=profile_value['id'])
         #print(db_query_value)
 
-        return db_query_value
+        return db_query_value['id']
 
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
 
-@app.get("/nd_redis")    
-async def redis():
+@app.get("/logout")    
+async def signout():
     try:
-        db_connect = await db.connect_to_db(db_host_name=app.config['REDIS_DB'])
 
-        return db_connect
+        loop = asyncio.new_event_loop()
+        
+        data_value = loop.run_until_complete(request.get_json())
+
+        if data_value:
+            print('Data coroutine complete')
+            json_data = json.dumps(data_value)
+            data = json.loads(json_data)
+            
+            print(data)    
+
+        loop.close()   
+        
+        db_query_value = await db.get_profile(key=data['id'])
+
+        ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
+
+        ubnt_profile.sign_out()
+
+        return db_query_value
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:

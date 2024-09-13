@@ -51,7 +51,7 @@ class RedisDB:
             return {"DB Upload Error":str(e)}
         
     # Function to retrieve a hash by key
-    async def get_hash_from_redis(self, key: str):
+    async def get_profile(self, key: str):
         try:
             connection = await self.get_redis_connection()
             # Get all the fields and values for the given hash key

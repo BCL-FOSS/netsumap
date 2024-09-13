@@ -43,7 +43,7 @@ class RedisDB:
             # Close the connection
             connection.close()
 
-            return {"DB Upload Status" : upload}
+            return {"DB Upload Status" : str(upload)}
         except Exception as e:
             return {"DB Upload Error":str(e)}
     

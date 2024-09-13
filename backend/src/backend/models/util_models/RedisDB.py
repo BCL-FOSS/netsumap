@@ -88,7 +88,7 @@ class RedisDB:
             connection = await self.get_redis_connection()
             # Get all the fields and values for the given hash key
             result = await connection.hgetall_asdict(key)
-            await connection.close()
+            connection.close()
             return result
         except Exception as e:
             return {"error": str(e)}

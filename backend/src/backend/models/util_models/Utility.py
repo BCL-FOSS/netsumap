@@ -85,3 +85,38 @@ class Utility:
             return(print("Error occurred during authentication:", str(e), '\n','Status Code: ', response.status_code))
 
     
+    async def make_async_request(self, url='', payload={}, headers={}, cmd=''):
+    
+        async with self.ubiquipy_client_session as session:
+            try:
+                match cmd.strip():
+                    case 'g':
+                        async with session.get(url=url, json=payload, headers=headers) as response:
+                            if response.status == 200:
+                                response_data = await response.json()
+                                self.auth_check = True
+                                response.close()
+                                session.close()
+                                return {"Message": "Success", "Data": response_data}
+                    case 'p':
+                        async with session.post(url=url, json=payload, headers=headers) as response:
+                            if response.status == 200:
+                                response_data = await response.json()
+                                self.auth_check = True
+                                response.close()
+                                session.close()
+                                return {"Message": "Success", "Data": response_data}
+                    case 'e':
+                        async with session.put(url=url, json=payload, headers=headers) as response:
+                            if response.status == 200:
+                                response_data = await response.json()
+                                self.auth_check = True
+                                response.close()
+                                session.close()
+                                return {"Message": "Success", "Data": response_data}
+                    case _:
+                        system('clear')
+                        return {"Message":"Choose a request cmd"}
+               
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}

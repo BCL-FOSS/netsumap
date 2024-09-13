@@ -12,6 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 executor = ThreadPoolExecutor()
+db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
 
 @app.post("/nd_login")
 async def ubnt_auth():
@@ -32,14 +33,13 @@ async def ubnt_auth():
 
         profile_value = await ubnt_profile.authenticate()
 
-        db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
-
         db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
         print(db_upload)
     
         db_query_value = await db.get_profile(key=profile_value['id'])
+        print(db_query_value)
 
-        return db_query_value
+        return profile_value
 
     except TypeError as error:
         return {'TypeError' :  str(error)}
@@ -49,8 +49,6 @@ async def ubnt_auth():
 @app.get("/nd_redis")    
 async def redis():
     try:
-        db = RedisDB()    
-
         db_connect = await db.connect_to_db(db_host_name=app.config['REDIS_DB'])
 
         return db_connect

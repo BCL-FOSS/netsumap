@@ -89,6 +89,8 @@ class UniFiNetAPI:
                         return {"message": "Authentication failed", "status_code": response.status}
             except aiohttp.ClientError as e:
                 return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
     async def sign_out(self):
 
@@ -117,6 +119,8 @@ class UniFiNetAPI:
                         return {"message": "Signout failed", "status_code": response.status}
             except aiohttp.ClientError as e:
                 return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
             
     def site_dpi_data(self, site='', type=False, cmd=''):
 
@@ -317,28 +321,10 @@ class UniFiNetAPI:
                         return {"message": "Failed to retrieve controller health data", "status_code": response.status}
             except aiohttp.ClientError as e:
                 return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-        try:
-
-            
-
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
-
-            if response.status_code == 200:
-                data = response.json()
-                nested_data = data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-            
-        except Exception as e:
-            print("Error occurred during the GET request to the controller health report endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
-    def site_stats(self):
+    async def site_stats(self):
 
         if self.is_udm is True:
 
@@ -350,24 +336,26 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"message": "Failed to retrieve site stats", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data = data['data']
-                response.close()
-                return nested_data
-            
-        except Exception as e:
-            print("Error occurred during the GET request to the sites statistics endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
-    def sites(self):
+    async def sites(self):
 
         if self.is_udm is True:
 
@@ -379,26 +367,27 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"message": "Failed to retrieve sites", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data = data['data'] 
-                response.close()
-                return nested_data
-            
-        except Exception as e:
-            response.close()
-            return(print("Error occurred during the GET request to the sites endpoint:", str(e)))
-        else:
-            #Clean up
-            response.close()
-            return(print("Site(s) retrieval complete", str(e)))
 
-
-    def list_admins(self):
+    async def list_admins(self):
 
         if self.is_udm is True:
 
@@ -410,24 +399,26 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"message": "Failed to retrieve admin profiles", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data = data['data']
-                response.close()
-                return nested_data
-            
-        except Exception as e:
-            print("Error occurred during the GET request to the admins list endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
-    def udm_poweroff(self):
+    async def udm_poweroff(self):
 
         
         if self.is_udm is True:
@@ -436,30 +427,30 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
         else:
-            print('This command does not work with self hosted controllers. Please reinitialize the object with is_udm=True and set the URL as the IP address of the UDM or hardware Cloud Gateway.')
-            exit()
-
-        payload = {'':''}
-
-        try:
-
-            response = self.util_obj.make_request(self=self, url=url, cmd='p', payload=payload)
-
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
+            return {"Controller Compatability Error":"This command does not work with self hosted controllers. Please reinitialize the object with is_udm=True and set the URL as the IP address of the UDM or hardware Cloud Gateway"}
             
-        except Exception as e:
-            print("Error occurred during the POST request to the UDM shutdown endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
+        headers={
+                        'Cookie':self.token
+                    }  
+        
+        payload = {"":""}
 
-    def udm_reboot(self):
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.post(url=url, headers=headers, payload=payload) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"Command Error": "Failed to power off Cloud Gateway hardware.", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
+
+    async def udm_reboot(self):
 
         if self.is_udm is True:
 
@@ -467,56 +458,57 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
         else:
-            print('This command does not work with self hosted controllers. Please reinitialize the object with is_udm=True and set the URL as the IP address of the UDM or hardware Cloud Gateway.')
-            exit()
+            return {"Controller Compatability Error":"This command does not work with self hosted controllers. Please reinitialize the object with is_udm=True and set the URL as the IP address of the UDM or hardware Cloud Gateway"}
 
-        payload = {'':''}
 
-        try:
-            response = self.util_obj.make_request(self=self, url=url, cmd='p', payload=payload)
+        headers={
+                    'Cookie':self.token
+                }  
+        
+        payload = {"":""}
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-            
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.post(url=url, headers=headers, payload=payload) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"Command Error": "Failed to reboot Cloud Gateway hardware.", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-        except Exception as e:
-            print("Error occurred during the POST request to the UDM reboot endpoint:", str(e))
-            response.close()
-
-        else:
-            #Clean up
-            response.close()
-
-    def get_sysinfo(self):
+    async def get_sysinfo(self):
 
         if self.is_udm is True:
             url = f"{self.base_url}/proxy/network/api/s/default/stat/sysinfo"
         else:
             url = f"{self.base_url}/api/s/default/stat/sysinfo"
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"message": "Failed to retrieve controller information", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data = data['data']
-                response.close()
-                return nested_data
-
-        except Exception as e:
-            print("Error occurred during the GET request to the system information endpoint:", str(e))
-            response.close()
-
-        else:
-            #Clean up
-            response.close()
-
-    def active_clients(self, site=''):
+    async def active_clients(self, site=''):
 
         input_validation = self.input_validation([site])
 
@@ -533,23 +525,24 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
-
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-           
-        except Exception as e:
-            print("Error occurred during the GET request to the active clients endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"message": "Failed to retrieve controller information", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
     def all_clients(self, cmd='', site=''):
 
@@ -597,7 +590,7 @@ class UniFiNetAPI:
             #Clean up
             response.close()
 
-    def device_data_basic(self, site=''):
+    async def device_data_basic(self, site=''):
 
         input_validation = self.input_validation([site])
 
@@ -614,22 +607,24 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-            
-        except Exception as e:
-            print("Error occurred during the GET request to the site network device information endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"message": "Failed to retrieve controller information", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
     def device_data(self, macs=[], site=''):
 
@@ -723,7 +718,7 @@ class UniFiNetAPI:
             #Clean up
             response.close()
 
-    def active_routes(self, site=''):
+    async def active_routes(self, site=''):
 
         input_validation = self.input_validation([site])
 
@@ -740,23 +735,24 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
-
-            if response.status_code == 200:
-                data = response.json()
-                #pprint.pprint(data)
-                nested_data=data['data']
-                response.close()
-                return nested_data
-            
-        except Exception as e:
-            print("Error occurred during GET request to active routes endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"message": "Failed to retrieve active routes", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
     def firewall_rules(self, cmd='', site=''):
 

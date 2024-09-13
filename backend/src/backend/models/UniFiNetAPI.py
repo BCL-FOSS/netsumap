@@ -66,7 +66,7 @@ class UniFiNetAPI:
                 # Asynchronous POST request to UniFi API
                 async with session.post(url=auth_url, json=payload) as response:
                     if response.status == 200:
-                        response_data = await response.json()
+                        #response_data = await response.json()
                         header_data = response.headers.getall('Set-Cookie', [])
                         for cookie in header_data:
                             if 'unifises' in cookie:
@@ -75,15 +75,15 @@ class UniFiNetAPI:
                                 csrf_token = cookie.split(';')[0].split('=')[1]
 
                         unifises = str(unifises_token)
-                        ##print(unifises)
+                        #print(unifises)
                         csrf = str(csrf_token)
-                        ##print(csrf)
+                        #print(csrf)
                         session_token = "unifises="+unifises + ";"+ "csrf_token="+csrf + ";"
                         self.token = session_token
                         self.id = self.gen_id()
                         self.auth_check = True
                         response.close()
-                        print({"message": "Authentication successful", "data": response_data, "token": session_token, "id": self.id})
+                        #print({"message": "Authentication successful", "data": response_data, "token": session_token, "id": self.id})
                         return self.get_profile_data()
                     else:
                         return {"message": "Authentication failed", "status_code": response.status}
@@ -289,7 +289,7 @@ class UniFiNetAPI:
             response.close()
 
 
-    def controller_health_data(self):
+    async def controller_health_data(self):
 
         if self.is_udm is True:
 
@@ -301,7 +301,26 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
+        headers={
+                        'Cookie':self.token
+                    }   
+
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        response.close()
+                        return response_data
+                    else:
+                        return {"message": "Failed to retrieve controller health data", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+
         try:
+
+            
 
             response = self.util_obj.make_request(self=self, url=url, cmd='g')
 

@@ -25,6 +25,12 @@ class UniFiNetAPI:
         self.name = ''
         self.ubiquipy_client_session = aiohttp.ClientSession()
 
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.ubiquipy_client_session.close()
+
     def input_validation(self, inputs=[]):
         for input in inputs:
             if str(input).strip() == '':

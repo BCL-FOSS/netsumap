@@ -26,16 +26,23 @@ async def authentication():
             
             #print(data)    
 
-        loop.close()                
+        loop.close()        
 
-        ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
+        with UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password']) as ubiquipy:
+            profile_value = await ubiquipy.authenticate()
+            db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
+            print(db_upload)
+            db_query_value = await db.get_profile(key=profile_value['id'])
+                  
 
-        profile_value = await ubnt_profile.authenticate()
+        #ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
 
-        db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
-        print(db_upload)
+        #profile_value = await ubnt_profile.authenticate()
+
+        #db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
+        #print(db_upload)
     
-        db_query_value = await db.get_profile(key=profile_value['id'])
+        #db_query_value = await db.get_profile(key=profile_value['id'])
         #print(db_query_value)
 
         return {"Auth_Status" : "Success",

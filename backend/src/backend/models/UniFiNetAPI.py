@@ -96,8 +96,6 @@ class UniFiNetAPI:
                 return {"error": str(e), "status_code": 500}
             except Exception as error:
                 return {"error": str(error)}
-            finally:
-                response.close()
 
 
     async def sign_out(self):
@@ -129,8 +127,6 @@ class UniFiNetAPI:
                 return {"error": str(e), "status_code": 500}
             except Exception as error:
                 return {"error": str(error)}
-            finally:
-                response.close()
 
             
     def site_dpi_data(self, site='', type=False, cmd=''):

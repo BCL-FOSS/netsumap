@@ -56,9 +56,8 @@ async def signout():
         if data_value:
             print('Data coroutine complete')
             json_data = json.dumps(data_value)
-            data = json.loads(json_data)
-            
-            print(data)    
+            data = json.loads(json_data)  
+            #print(data)    
 
         loop.close()   
         

@@ -136,30 +136,22 @@ class UniFiNetAPI:
                         'Content-Type':'application/json',
                         'Cookie':self.token
                     }   
-        
-        data = self.make_async_request(url=url, payload=payload, headers=headers, cmd='p')
 
-        if data['message']:
-            return {"message": "Signout failed", "status_code": data}
-        else:
-            self.auth_check = False
-            return {"message": "Signout successful", "data": data}
-
-        #async with self.ubiquipy_client_session as session:
-        #    try:
+        async with self.ubiquipy_client_session as session:
+            try:
                 # Asynchronous POST request to UniFi API
-        #        async with session.post(url=url, json=payload, headers=headers) as response:
-        #            if response.status == 200:
-        #                response_data = await response.json()
-        #                self.auth_check = False
-        #                response.close()
-        #                return {"message": "Signout successful", "data": response_data}
-        #            else:
-        #                return {"message": "Signout failed", "status_code": response.status}
-        #    except aiohttp.ClientError as e:
-        #        return {"error": str(e), "status_code": 500}
-        #    except Exception as error:
-        #        return {"error": str(error)}
+                async with session.post(url=url, json=payload, headers=headers) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+                        self.auth_check = False
+                        response.close()
+                        return {"message": "Signout successful", "data": response_data}
+                    else:
+                        return {"message": "Signout failed", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
             
     def site_dpi_data(self, site='', type=False, cmd=''):
 

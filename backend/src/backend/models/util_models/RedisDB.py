@@ -43,12 +43,12 @@ class RedisDB:
 
             await connection.hmset(user_id, str_hashmap)
     
-            # Close the connection
             connection.close()
 
             return {"DB Upload Status" : "Profile ID %s upload successful" % user_id}
         except Exception as e:
             return {"DB Upload Error":str(e)}
+        
         
     # Function to retrieve a hash by key
     async def get_profile(self, key: str):

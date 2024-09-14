@@ -34,8 +34,6 @@ public class NetiFiDash extends Lifecycle {
         TextField socketHost = new TextField("Enter Socket IP/Hostname");
         TextField socketPort = new TextField("Enter Socket Port");
 
-
-
         hi.add(helloButton);
         hi.add(socketTest);
         hi.add(eventType);

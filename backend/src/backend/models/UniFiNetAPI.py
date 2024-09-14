@@ -25,13 +25,6 @@ class UniFiNetAPI:
         self.name = ''
         self.ubiquipy_client_session = aiohttp.ClientSession()
 
-    def __enter__(self):
-        return self
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.ubiquipy_client_session.close()
-
-
     def input_validation(self, inputs=[]):
         for input in inputs:
             if str(input).strip() == '':
@@ -57,39 +50,7 @@ class UniFiNetAPI:
             "token": self.token,
             "is_udm" : self.is_udm
         }
-    
-    async def make_async_request(self, url, payload, headers, cmd=''):
-
-        async with self.ubiquipy_client_session as session:
-            try:
-                match cmd.strip():
-                    case 'p':
-                        # Asynchronous POST request to UniFi API
-                        async with session.post(url=url, json=payload, headers=headers) as response:
-                            if response.status == 200:
-                                response_data = await response.json()
-                                response.close()
-                                return response_data
-                            else:
-                                return {"message": "Error", "status_code": response.status}
-                    case 'g':
-                        # Asynchronous GET request to UniFi API
-                        async with session.get(url=url, json=payload, headers=headers) as response:
-                            if response.status == 200:
-                                response_data = await response.json()
-                                response.close()
-                                return response_data
-                            else:
-                                return {"message": "Error", "status_code": response.status}
-                
-            except aiohttp.ClientError as e:
-                return {"error": str(e), "status_code": 500}
-            except Exception as error:
-                return {"error": str(error)}
             
-
-            
-
     async def authenticate(self):
 
         if self.is_udm is True:
@@ -129,6 +90,9 @@ class UniFiNetAPI:
                 return {"error": str(e), "status_code": 500}
             except Exception as error:
                 return {"error": str(error)}
+            finally:
+                response.close()
+
 
     async def sign_out(self):
 
@@ -159,6 +123,9 @@ class UniFiNetAPI:
                 return {"error": str(e), "status_code": 500}
             except Exception as error:
                 return {"error": str(error)}
+            finally:
+                response.close()
+
             
     def site_dpi_data(self, site='', type=False, cmd=''):
 

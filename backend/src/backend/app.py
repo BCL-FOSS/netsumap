@@ -26,7 +26,7 @@ async def authentication():
             
             #print(data)    
 
-        loop.close()    
+        loop.close()                
 
         ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
 
@@ -63,10 +63,16 @@ async def signout():
         
         db_query_value = await db.get_profile(key=data['id'])
 
-        ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
-        ubnt_profile.token = db_query_value['token']
-        ubnt_profile.id = db_query_value['id']
-        status = await ubnt_profile.sign_out()
+        with UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password']) as ubiquipy:
+            ubiquipy.token = db_query_value['token']
+            ubiquipy.id = db_query_value['id']
+            status = await ubiquipy.sign_out()
+
+
+        #ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
+        #ubnt_profile.token = db_query_value['token']
+        #ubnt_profile.id = db_query_value['id']
+        #status = await ubnt_profile.sign_out()
 
         return status
     except TypeError as error:

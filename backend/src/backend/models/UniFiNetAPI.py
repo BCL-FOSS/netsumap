@@ -137,7 +137,7 @@ class UniFiNetAPI:
                         'Cookie':self.token
                     }   
         
-        data = await self.make_async_request(url=url, payload=payload, headers=headers, cmd='p')
+        data = self.make_async_request(url=url, payload=payload, headers=headers, cmd='p')
 
         if data['message']:
             return {"message": "Signout failed", "status_code": data}

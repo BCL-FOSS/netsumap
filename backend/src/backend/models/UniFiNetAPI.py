@@ -123,12 +123,7 @@ class UniFiNetAPI:
                 return {"error": str(error)}
 
             
-    def site_dpi_data(self, site='', type=False, cmd=''):
-
-        input_validation = self.input_validation([site, cmd])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def site_dpi_data(self, site='', type=False, cmd=''):
 
         if self.is_udm is True:
 
@@ -144,50 +139,51 @@ class UniFiNetAPI:
             payload = {'type': 'by_app'}
         else:
             payload = {'type': 'by_cat'}
-        
-        try:
-             
-            match cmd.strip():
-                case 'p':
+
+        async with self.ubiquipy_client_session as session:
+            try:
+                match cmd.strip():
+                    case 'p':
+                        headers={
+                            'Content-Type':'application/json',
+                            'Cookie':self.token
+                        }
+
+                        async with session.post(url=url, json=payload, headers=headers) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                nested_data = data['data']
+                                response.close()
+                                return nested_data
+                            else:
+                                return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
                     
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd, payload=payload)
+                    case 'g':
+                        headers={
+                            'Cookie':self.token
+                        }
 
-                case 'g':
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd)
+                        async with session.get(url=url, headers=headers) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                nested_data = data['data']
+                                response.close()
+                                return nested_data
+                            else:
+                                return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+                    case _:
+                        return error_codes[1]                
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-                case _:
-                    return error_codes[1]
+    async def client_dpi_data(self, site='', type=False, macs=[]):
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data = data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-
-        except Exception as e:
-            print("Error occurred retrieval of site DPI statistics: \n", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
-    def client_dpi_data(self, site='', type=False, macs=[]):
-
-        input_validation = self.input_validation([site])
-
-        if input_validation == 0:
-            return error_codes[0]
-
-
-        if site.strip() == '':
-            print('Enter a site to retrieve client dpi data from.')
-            exit()
-
-        if type is False and macs:
+        if type is False and macs != []:
             payload = {'type': 'by_app',
                        'macs': macs}
-        elif type is True and macs:
+        elif type is True and macs != []:
             payload = {'type': 'by_cat',
                        'macs': macs}
         elif type is False:
@@ -205,30 +201,29 @@ class UniFiNetAPI:
             url_string = "/api/s/%s/stat/stadpi" % site
 
             url = f"{self.base_url}{url_string}"
-            
-        try:
-                 
-            response = self.util_obj.make_request(self=self, url=url, cmd='p', payload=payload)
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
+        headers={
+                        'Content-Type':'application/json',
+                        'Cookie':self.token
+                    }  
 
-        except Exception as e:
-            print("Error occurred during the POST request to the client dpi endpoint:", str(e))
-            response.close()
-        else:
-            response.close()
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.post(url=url, json=payload, headers=headers) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        nested_data = data['data']
+                        response.close()
+                        return nested_data
+                    else:
+                        return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-    def event_data(self, site=''):
-
-        input_validation = self.input_validation([site])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def event_data(self, site=''):
 
         if self.is_udm is True:
 
@@ -240,30 +235,27 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        nested_data = data['data']
+                        response.close()
+                        return nested_data
+                    else:
+                        return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-            
-        except Exception as e:
-            print("Error occurred during the GET request to the site event data endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
-    def alarm_data(self, site=''):
-
-        input_validation = self.input_validation([site])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def alarm_data(self, site=''):
 
         if self.is_udm is True:
 
@@ -275,24 +267,25 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            response = self.util_obj.make_request(self=self, url=url, cmd='g')
-
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-            
-        except Exception as e:
-            print("Error occurred during the GET request to the site alarm data endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        nested_data = data['data']
+                        response.close()
+                        return nested_data
+                    else:
+                        return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
     async def controller_health_data(self):
 
@@ -374,7 +367,6 @@ class UniFiNetAPI:
 
         async with self.ubiquipy_client_session as session:
             try:
-                # Asynchronous POST request to UniFi API
                 async with session.get(url=url, headers=headers) as response:
                     if response.status == 200:
                         response_data = await response.json()
@@ -406,7 +398,6 @@ class UniFiNetAPI:
 
         async with self.ubiquipy_client_session as session:
             try:
-                # Asynchronous POST request to UniFi API
                 async with session.get(url=url, headers=headers) as response:
                     if response.status == 200:
                         response_data = await response.json()
@@ -438,7 +429,6 @@ class UniFiNetAPI:
 
         async with self.ubiquipy_client_session as session:
             try:
-                # Asynchronous POST request to UniFi API
                 async with session.post(url=url, headers=headers, payload=payload) as response:
                     if response.status == 200:
                         response_data = await response.json()
@@ -470,7 +460,6 @@ class UniFiNetAPI:
 
         async with self.ubiquipy_client_session as session:
             try:
-                # Asynchronous POST request to UniFi API
                 async with session.post(url=url, headers=headers, payload=payload) as response:
                     if response.status == 200:
                         response_data = await response.json()
@@ -496,7 +485,6 @@ class UniFiNetAPI:
 
         async with self.ubiquipy_client_session as session:
             try:
-                # Asynchronous POST request to UniFi API
                 async with session.get(url=url, headers=headers) as response:
                     if response.status == 200:
                         response_data = await response.json()
@@ -532,7 +520,6 @@ class UniFiNetAPI:
 
         async with self.ubiquipy_client_session as session:
             try:
-                # Asynchronous POST request to UniFi API
                 async with session.get(url=url, headers=headers) as response:
                     if response.status == 200:
                         response_data = await response.json()
@@ -545,12 +532,7 @@ class UniFiNetAPI:
             except Exception as error:
                 return {"error": str(error)}
 
-    def all_clients(self, cmd='', site=''):
-
-        input_validation = self.input_validation([site, cmd])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def all_clients(self, cmd='', site=''):
         
         if self.is_udm is True:
 
@@ -564,39 +546,27 @@ class UniFiNetAPI:
 
         payload = {'':''}
 
-        try:
+        headers={
+                        'Cookie':self.token
+                    }  
 
-            match cmd.strip():
-                case 'p':
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd, payload=payload) 
-                case 'e':
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd, payload=payload)
-                case 'g':
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd, payload=payload)
-                case _:
-                    return error_codes[1]
-
-
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-
-        except Exception as e:
-            print("Error occurred during the request to the (all clients) endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
+        async with self.ubiquipy_client_session as session:
+            try:
+                # Asynchronous POST request to UniFi API
+                async with session.get(url=url, headers=headers) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        nested_data = data['data']
+                        response.close()
+                        return nested_data
+                    else:
+                        return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
     async def device_data_basic(self, site=''):
-
-        input_validation = self.input_validation([site])
-
-        if input_validation == 0:
-            return error_codes[0]
 
         if self.is_udm is True:
 
@@ -617,22 +587,18 @@ class UniFiNetAPI:
                 # Asynchronous POST request to UniFi API
                 async with session.get(url=url, headers=headers) as response:
                     if response.status == 200:
-                        response_data = await response.json()
+                        data = await response.json()
+                        nested_data = data['data']
                         response.close()
-                        return response_data
+                        return nested_data
                     else:
-                        return {"message": "Failed to retrieve controller information", "status_code": response.status}
+                        return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
             except aiohttp.ClientError as e:
                 return {"error": str(e), "status_code": 500}
             except Exception as error:
                 return {"error": str(error)}
 
-    def device_data(self, macs=[], site=''):
-
-        input_validation = self.input_validation([site])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def device_data(self, macs=[], site=''):
 
         if self.is_udm is True:
 
@@ -643,36 +609,43 @@ class UniFiNetAPI:
             url_string = "/api/s/%s/stat/device" % site
 
             url = f"{self.base_url}{url_string}"
-            
-        try:
-              
-            if self.is_udm is False and not macs: 
-                payload = {'macs': macs}
+
+        async with self.ubiquipy_client_session as session:
+            try:
+                if self.is_udm is False and macs != []: 
+                    payload = {'macs': macs}
+
+                    headers={
+                        'Content-Type':'application/json',
+                        'Cookie':self.token
+                    } 
+                    async with session.post(url=url, headers=headers, json=payload) as response:
+                        if response.status == 200:
+                            data = await response.json()
+                            nested_data = data['data']
+                            response.close()
+                            return nested_data
+                        else:
+                            return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
                     
-                response = self.util_obj.make_request(self=self, url=url, cmd='p', payload=payload)
-            else:
-                response = self.util_obj.make_request(self=self, url=url, cmd='g')               
+                else:
+                    headers={
+                        'Cookie':self.token
+                    }  
+                    async with session.get(url=url, headers=headers) as response:
+                        if response.status == 200:
+                            data = await response.json()
+                            nested_data = data['data']
+                            response.close()
+                            return nested_data
+                        else:
+                            return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-            if response.status_code == 200:
-                data = response.json()
-                nested_data=data['data']
-                #pprint.pprint(data)
-                response.close()
-                return nested_data
-
-        except Exception as e:
-            print("Error occurred during the GET request to the detailed device data endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
-    def site_settings(self, key='', id='', cmd='', site=''):
-
-        input_validation = self.input_validation([site, key, id, cmd])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def site_settings(self, key='', id='', cmd='', site=''):
 
         if self.is_udm is True:
 
@@ -692,39 +665,44 @@ class UniFiNetAPI:
 
         url = f"{self.base_url}{url_string}"
 
-        try:
-
-            match cmd.strip():
-                case 'e':
-                    payload = {'': ''}
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd, payload=payload)     
-                        
-                case 'g':
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd)
-                
-                case _:
-                    return error_codes[1]
-
-            if response.status_code == 200:
-                data = response.json()
-                #pprint.pprint(data)
-                nested_data=data['data']
-                response.close()
-                return nested_data
-
-        except Exception as e:
-            print("Error occurred during the request to the site settings endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
+        async with self.ubiquipy_client_session as session:
+            try:
+                match cmd.strip():
+                    case 'e':
+                        payload = {'': ''}
+                        headers={
+                        'Content-Type':'application/json',
+                        'Cookie':self.token
+                        } 
+                        async with session.put(url=url, headers=headers, json=payload) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                nested_data = data['data']
+                                response.close()
+                                return nested_data
+                            else:
+                                return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+                    case 'g':
+                        headers={
+                        'Cookie':self.token
+                        } 
+                        async with session.get(url=url, headers=headers) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                nested_data = data['data']
+                                response.close()
+                                return nested_data
+                            else:
+                                return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+                    case _:
+                        return error_codes[1]
+                    
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
     async def active_routes(self, site=''):
-
-        input_validation = self.input_validation([site])
-
-        if input_validation == 0:
-            return error_codes[0]
 
         if self.is_udm is True:
 
@@ -755,12 +733,7 @@ class UniFiNetAPI:
             except Exception as error:
                 return {"error": str(error)}
 
-    def firewall_rules(self, cmd='', site=''):
-
-        input_validation = self.input_validation([site, cmd])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def firewall_rules(self, cmd='', site=''):
 
         if self.is_udm is True:
 
@@ -772,39 +745,44 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
-
-            match cmd.strip():
+        async with self.ubiquipy_client_session as session:
+            try:
+                match cmd.strip():
                     case 'e':
                         payload = {'': ''}
-                        response = self.util_obj.make_request(self=self, url=url, cmd=cmd, payload=payload)
-                        
+                        headers={
+                        'Content-Type':'application/json',
+                        'Cookie':self.token
+                        } 
+                        async with session.put(url=url, headers=headers, json=payload) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                nested_data = data['data']
+                                response.close()
+                                return nested_data
+                            else:
+                                return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
                     case 'g':
-                        response = self.util_obj.make_request(self=self, url=url, cmd=cmd)
-                    
+                        headers={
+                        'Cookie':self.token
+                        } 
+                        async with session.get(url=url, headers=headers) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                nested_data = data['data']
+                                response.close()
+                                return nested_data
+                            else:
+                                return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
                     case _:
                         return error_codes[1]
+                    
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-            if response.status_code == 200:
-                data = response.json()
-                #pprint.pprint(data)
-                nested_data=data['data']
-                response.close()    
-                return nested_data
-
-        except Exception as e:
-            print("Error occurred during the request to the firewall rules endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
-    def firewall_groups(self, cmd='', site=''):
-
-        input_validation = self.input_validation([site, cmd])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def firewall_groups(self, cmd='', site=''):
 
         if self.is_udm is True:
 
@@ -816,42 +794,44 @@ class UniFiNetAPI:
 
             url = f"{self.base_url}{url_string}"
 
-        try:
+        async with self.ubiquipy_client_session as session:
+            try:
+                match cmd.strip():
+                    case 'e':
+                        payload = {'': ''}
+                        headers={
+                        'Content-Type':'application/json',
+                        'Cookie':self.token
+                        } 
+                        async with session.put(url=url, headers=headers, json=payload) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                nested_data = data['data']
+                                response.close()
+                                return nested_data
+                            else:
+                                return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+                    case 'g':
+                        headers={
+                        'Cookie':self.token
+                        } 
+                        async with session.get(url=url, headers=headers) as response:
+                            if response.status == 200:
+                                data = await response.json()
+                                nested_data = data['data']
+                                response.close()
+                                return nested_data
+                            else:
+                                return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
+                    case _:
+                        return error_codes[1]
+                    
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
 
-            match cmd.strip():
-                case 'e':
-                
-                    payload = {'': ''}
-
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd, payload=payload)
-                        
-                case 'g':
-
-                    response = self.util_obj.make_request(self=self, url=url, cmd=cmd)
-
-                case _:
-                    return error_codes[1]
-
-            if response.status_code == 200:
-                data = response.json()
-                #pprint.pprint(data)
-                nested_data=data['data']
-                response.close()
-                return nested_data
-
-        except Exception as e:
-            print("Error occurred during the request to the firewall groups endpoint:", str(e))
-            response.close()
-        else:
-            #Clean up
-            response.close()
-
-    def wlans(self, wlan_name='', psswd='', site_id='', wlan_id='', cmd='', site=''):
-        
-        input_validation = self.input_validation([site, site_id, wlan_id, wlan_name, psswd, cmd])
-
-        if input_validation == 0:
-            return error_codes[0]
+    async def wlans(self, wlan_name='', psswd='', site_id='', wlan_id='', cmd='', site=''):
 
         payload = {
                 "name": wlan_name,
@@ -865,6 +845,40 @@ class UniFiNetAPI:
                 "wpa_mode": "wpa2",
                 "x_passphrase": psswd
             }
+        
+        
+        async with self.ubiquipy_client_session as session:
+            try:
+                if self.is_udm is True:
+                    match cmd.strip():
+                        case 'e':
+                            url_string = "/proxy/network/api/s/%s/rest/wlanconf/%s" % (site, wlan_id)
+
+                            url = f"{self.base_url}{url_string}"
+                            
+                        case 'p':
+                            url_string = "/proxy/network/api/s/%s/rest/wlanconfs" % site
+
+                            url = f"{self.base_url}{url_string}"
+
+
+                        case 'g':
+
+                            url_string = "/proxy/network/api/s/%s/rest/wlanconfs" % site
+
+                            url = f"{self.base_url}{url_string}"
+
+
+                        case _:
+                            return error_codes[1]
+
+
+            except aiohttp.ClientError as e:
+                return {"error": str(e), "status_code": 500}
+            except Exception as error:
+                return {"error": str(error)}
+
+
 
         
         try:

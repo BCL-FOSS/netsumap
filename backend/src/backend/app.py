@@ -46,7 +46,7 @@ async def authentication():
     except Exception as e:
         return {'Exception' :  str(e)}
     finally:
-        ubnt_profile.ubiquipy_client_session.close()
+        await ubnt_profile.ubiquipy_client_session.close()
     
 
 @app.post("/logout")    
@@ -77,7 +77,7 @@ async def signout():
     except Exception as e:
         return {'Exception' :  str(e)}
     finally:
-        ubnt_profile.ubiquipy_client_session.close()
+        await ubnt_profile.ubiquipy_client_session.close()
     
 
 @app.post("/ubnt_stats")

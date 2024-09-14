@@ -33,6 +33,8 @@ async def authentication():
             db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
             print(db_upload)
             db_query_value = await db.get_profile(key=profile_value['id'])
+            return {"Auth_Status" : "Success",
+                "Profile_Data" : db_query_value}
                   
 
         #ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
@@ -44,9 +46,6 @@ async def authentication():
     
         #db_query_value = await db.get_profile(key=profile_value['id'])
         #print(db_query_value)
-
-        return {"Auth_Status" : "Success",
-                "Profile_Data" : db_query_value}
 
     except TypeError as error:
         return {'TypeError' :  str(error)}

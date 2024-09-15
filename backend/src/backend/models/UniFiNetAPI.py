@@ -1,6 +1,6 @@
 import os,os.path
 from models.util_models.Utility import Utility
-import UbiquiPy
+import models.UbiquiPy
 
 import aiohttp
 

@@ -147,7 +147,7 @@ class UniFiNetAPI():
                         'Cookie':self.token
                     }   
         
-        response = self.make_async_request(url=url, payload=payload, cmd='p')
+        response = await self.make_async_request(url=url, payload=payload, cmd='p')
 
         #async with self.ubiquipy_client_session as session:
         #    try:

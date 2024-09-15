@@ -71,7 +71,7 @@ class UniFiNetAPI():
                                 data = await response.json()
                                 nested_data = data['data']
                                 response.close()
-                                return nested_data
+                                return data
                             else:
                                 return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
 

@@ -1,6 +1,6 @@
 import os,os.path
 from models.util_models.Utility import Utility
-from UbiquiPy import UbiquiPy
+from models.UbiquiPy import UbiquiPy
 import aiohttp
 
 error_codes = [460, 472, 489]

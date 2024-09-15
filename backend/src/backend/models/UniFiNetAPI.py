@@ -1,6 +1,7 @@
 import os,os.path
 from models.util_models.Utility import Utility
-from models.UbiquiPy import UbiquiPy
+import UbiquiPy
+
 import aiohttp
 
 error_codes = [460, 472, 489]
@@ -9,11 +10,11 @@ class UniFiNetAPI(UbiquiPy):
 
     def __init__(self, is_udm=False, **kwargs):
         self.base_url = f"https://{kwargs.get('controller_ip')}:{kwargs.get('controller_port')}"
-        #self.url = kwargs.get('controller_ip')
+        self.url = kwargs.get('controller_ip')
         self.inform_url = f"https://{kwargs.get('controller_ip')}:8080/inform"
-        #self.port = kwargs.get('controller_port')
-        #self.username = kwargs.get('username')
-        #self.password = kwargs.get('password')
+        self.port = kwargs.get('controller_port')
+        self.username = kwargs.get('username')
+        self.password = kwargs.get('password')
         self.token = None
         self.is_udm = is_udm
         self.auth_check = False

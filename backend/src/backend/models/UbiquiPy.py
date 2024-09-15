@@ -3,12 +3,7 @@ import uuid
 
 class UbiquiPy:
 
-    def __init__(self, **kwargs):
-        self.url = kwargs.get('controller_ip')
-        self.port = kwargs.get('controller_port')
-        self.username = kwargs.get('username')
-        self.password = kwargs.get('password')
-        self.auth_check = False
+    def __init__(self):
         self.id = ''
         self.name = ''
         self.ubiquipy_client_session = aiohttp.ClientSession()

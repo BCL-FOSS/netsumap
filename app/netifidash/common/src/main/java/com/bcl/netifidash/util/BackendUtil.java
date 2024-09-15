@@ -15,6 +15,22 @@ public class BackendUtil {
 
     }
 
+    public void login(){
+        Response<Map> result = Rest.post("http://107.191.44.222:25000/unifi_webhook").
+                contentType("application/json").body("{\"unifi_alarm\" : \"from_mobile_app\"}")
+                .getAsJsonMap();
+
+
+        if(result.getResponseData() != null) {
+            String error = (String)result.getResponseData().get("error_message");
+            if(error != null) {
+                ToastBar.showErrorMessage(error);
+            }
+        } else {
+            ToastBar.showErrorMessage("Error connecting to Backend API: " + result.getResponseCode());
+        }
+    }
+
     public void auth(){
 
         Response<Map> result = Rest.post("http://107.191.44.222:25000/unifi_webhook").

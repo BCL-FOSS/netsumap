@@ -1,12 +1,11 @@
 import os,os.path
 from models.util_models.Utility import Utility
-from models.UbiquiPy import UbiquiPy
-
 import aiohttp
+import uuid
 
 error_codes = [460, 472, 489]
 
-class UniFiNetAPI(UbiquiPy):
+class UniFiNetAPI():
 
     def __init__(self, is_udm=False, **kwargs):
         self.base_url = f"https://{kwargs.get('controller_ip')}:{kwargs.get('controller_port')}"
@@ -19,9 +18,9 @@ class UniFiNetAPI(UbiquiPy):
         self.is_udm = is_udm
         self.auth_check = False
         self.util_obj = Utility()
-        #self.id = ''
-        #self.name = ''
-        #self.ubiquipy_client_session = aiohttp.ClientSession()
+        self.id = ''
+        self.name = ''
+        self.ubiquipy_client_session = aiohttp.ClientSession()
     
     def get_profile_data(self):
         return {
@@ -35,6 +34,14 @@ class UniFiNetAPI(UbiquiPy):
             "token": self.token,
             "is_udm" : self.is_udm
         }
+    
+    def gen_id(self):
+        try:
+            id = uuid.uuid4()
+        except Exception as e:
+            return {"status_msg": "ID Gen Failed",
+                    "status_code": e}
+        return str(id)
             
     async def authenticate(self):
 

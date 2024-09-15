@@ -20,6 +20,7 @@
         </dependency>
 
         <!-- INJECT DEPENDENCIES -->
+
     </dependencies>
 
     <!-- The following are profiles to cover special cases -->

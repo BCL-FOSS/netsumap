@@ -103,7 +103,7 @@ async def get_health_data():
         ubnt_profile.id = db_query_value['id']
         health_data = await ubnt_profile.controller_health_data()
 
-        return health_data
+        return health_data['data']
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:

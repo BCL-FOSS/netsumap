@@ -88,9 +88,9 @@ public class NetiFiDash extends Lifecycle {
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> home().show());
         form.getToolbar().addMaterialCommandToSideMenu("Dashboard",
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> nocDash());
-        form.getToolbar().addMaterialCommandToSideMenu("Network Device Management",
+        form.getToolbar().addMaterialCommandToSideMenu("Network Devices",
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> net_dev_mgmt());
-        form.getToolbar().addMaterialCommandToSideMenu("Client Device Management",
+        form.getToolbar().addMaterialCommandToSideMenu("Client Devices",
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> client_mgmt());
 
     }

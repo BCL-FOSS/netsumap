@@ -147,7 +147,7 @@ async def webhook():
             #unifi_event = {
             #    "message": str(data)
             #}
-            ws = activate_websocket()
+            ws = activate_websocket_connection()
             await ws.send(str(data))
         else:
             raise Exception('Ensure JSON message is attached to the request')
@@ -156,7 +156,7 @@ async def webhook():
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
 
-def activate_websocket():
+def activate_websocket_connection():
     try:
         websocket.enableTrace = True
         ws=create_connection(app.config['WEBSOCKET_ADDRESS'])

@@ -1,42 +1,26 @@
 import os,os.path
-import pprint
-from os import system
 from models.util_models.Utility import Utility
-import string
+from UbiquiPy import UbiquiPy
 import aiohttp
-import uuid
 
 error_codes = [460, 472, 489]
 
-class UniFiNetAPI:
+class UniFiNetAPI(UbiquiPy):
 
     def __init__(self, is_udm=False, **kwargs):
         self.base_url = f"https://{kwargs.get('controller_ip')}:{kwargs.get('controller_port')}"
-        self.url = kwargs.get('controller_ip')
+        #self.url = kwargs.get('controller_ip')
         self.inform_url = f"https://{kwargs.get('controller_ip')}:8080/inform"
-        self.port = kwargs.get('controller_port')
-        self.username = kwargs.get('username')
-        self.password = kwargs.get('password')
+        #self.port = kwargs.get('controller_port')
+        #self.username = kwargs.get('username')
+        #self.password = kwargs.get('password')
         self.token = None
         self.is_udm = is_udm
         self.auth_check = False
         self.util_obj = Utility()
-        self.id = ''
-        self.name = ''
-        self.ubiquipy_client_session = aiohttp.ClientSession()
-
-    def input_validation(self, inputs=[]):
-        for input in inputs:
-            if str(input).strip() == '':
-                return 0
-            
-    def gen_id(self):
-        try:
-            id = uuid.uuid4()
-        except Exception as e:
-            return {"status_msg": "ID Gen Failed",
-                    "status_code": e}
-        return str(id)
+        #self.id = ''
+        #self.name = ''
+        #self.ubiquipy_client_session = aiohttp.ClientSession()
     
     def get_profile_data(self):
         return {
@@ -499,11 +483,6 @@ class UniFiNetAPI:
 
     async def active_clients(self, site=''):
 
-        input_validation = self.input_validation([site])
-
-        if input_validation == 0:
-            return error_codes[0]
-
         if self.is_udm is True:
 
             url_string = "/proxy/network/api/s/%s/stat/sta" % site
@@ -846,7 +825,6 @@ class UniFiNetAPI:
                 "x_passphrase": psswd
             }
         
-        
         async with self.ubiquipy_client_session as session:
             try:
                 if self.is_udm is True:
@@ -905,7 +883,6 @@ class UniFiNetAPI:
                                 else:
                                     return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
 
-
                 else:
 
                     match cmd.strip():
@@ -928,8 +905,6 @@ class UniFiNetAPI:
                                     return nested_data
                                 else:
                                     return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
-
-
                         
                         case 'p':
                             url_string = "/api/s/%s/rest/wlanconfs" % site
@@ -953,7 +928,6 @@ class UniFiNetAPI:
                                 else:
                                     return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
 
-
                         case 'g':
 
                             url_string = "/api/s/%s/rest/wlanconfs" % site
@@ -971,7 +945,6 @@ class UniFiNetAPI:
                                     return nested_data
                                 else:
                                     return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
-
 
             except aiohttp.ClientError as e:
                 return {"error": str(e), "status_code": 500}

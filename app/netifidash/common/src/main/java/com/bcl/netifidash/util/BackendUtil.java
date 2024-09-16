@@ -4,6 +4,9 @@ import com.codename1.components.ToastBar;
 import com.codename1.io.rest.Response;
 import com.codename1.io.rest.Rest;
 import com.codename1.ui.Dialog;
+import com.google.gson.Gson;
+
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,6 +24,8 @@ public class BackendUtil {
         json.put("username", user);
         json.put("password", pass);
 
+        //System.out.println(json.toString());
+
         Response<Map> result = Rest.post(baseURL+"/login").
                 contentType("application/json").body(json.toString())
                 .getAsJsonMap();
@@ -32,7 +37,6 @@ public class BackendUtil {
             }
         } else {
             Dialog.show("UniFi Connection Successful", result.getResponseData().toString(), "OK", null);
-
         }
     }
 

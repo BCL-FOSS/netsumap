@@ -1043,20 +1043,16 @@ class UniFiNetAPI():
                 case 'a':
                     payload = {'cmd': 'adopt',
                                       'mac': kwargs.get('mac')}
-                    
                 case 'r':
                     payload = {'cmd': 'restart',
                                       'mac': kwargs.get('mac')}
-                    
                 case 'f':
                     payload = {'cmd': 'force-provision',
                                       'mac': kwargs.get('mac')}
-                    
                 case 'p':
                     payload = {'cmd': 'power-cycle',
                                       'mac': kwargs.get('mac'),
                                       'port_idx': kwargs.get('port_idx')}
-                    
                 case 's':
                     payload = {'cmd': 'speedtest',
                                       'mac': kwargs.get('mac')}
@@ -1073,7 +1069,6 @@ class UniFiNetAPI():
                     payload = {'cmd': 'upgrade',
                                       'mac': kwargs.get('mac')}
                 case 'U':
-                    
                     if url.strip() == '':
                         print('Enter the URL for the firmware to update to.')
                     else:

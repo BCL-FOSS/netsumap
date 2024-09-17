@@ -1,36 +1,30 @@
 package com.bcl.netifidash.util;
 
-import com.codename1.components.ToastBar;
+import com.codename1.components.SliderBridge;
 import com.codename1.io.*;
-import com.codename1.io.rest.Response;
-import com.codename1.io.rest.Rest;
 import com.codename1.ui.Dialog;
-import com.codename1.util.OnComplete;
-import com.google.gson.Gson;
-
+import com.codename1.ui.Slider;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class BackendUtil {
 
     public BackendUtil (){}
 
-    public void connect(String nd_ip, String nd_port, String ip, String port, String user, String pass){
+    public void connect(String nd_ip, String nd_port, String ip, String port, String user, String pass, Slider prBar){
         //  Block of code to try
         String baseURL = "http://"+nd_ip+":"+nd_port+"/login";
 
-        makePostRequest(baseURL, port, ip, user, pass);
+        makePostRequest(baseURL, port, ip, user, pass, prBar);
 
     }
 
-    public void makePostRequest(String url, String port, String ip, String username, String password) {
+    public void makePostRequest(String url, String port, String ip, String username, String password, Slider progBar) {
 
         try {
 
@@ -39,15 +33,16 @@ public class BackendUtil {
                 @Override
                 protected void readResponse(InputStream input) throws IOException {
                     super.readResponse(input);
-                    Dialog.show("UniFi Connection Status", input.toString(), "OK", null);
+                    Dialog.show("UniFi Connection Status", "Connected", "OK", null);
                 }
 
                 @Override
                 protected void handleErrorResponseCode(int code, String message) {
                     // Handle error here
-                    Dialog.show("Error", "Error code: " + code + "\nMessage: " + message, "OK", null);
+                    Dialog.show("UniFi Connection Error", "Error code: " + code + "\nMessage: " + message, "OK", null);
                 }
             };
+            SliderBridge.bindProgress(request, progBar);
 
             request.setUrl(url);
             request.setPost(true); // Indicates this is a POST request
@@ -76,7 +71,6 @@ public class BackendUtil {
 
                 Map<String,Object> result = new JSONParser().parseJSON(new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8"));
 
-
                 Dialog.show("UniFi Connection Success", result.toString(), "OK", null);
 
             }
@@ -104,11 +98,4 @@ public class BackendUtil {
         jsonBuilder.append("}");
         return jsonBuilder.toString();
     }
-
-
-
-
-
-
-
 }

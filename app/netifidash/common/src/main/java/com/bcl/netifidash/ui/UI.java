@@ -52,9 +52,11 @@ public class UI {
         TextField controllerPort = new TextField("Controller Port");
         TextField userName = new TextField("Controller Username");
         TextField passWord = new TextField("Controller Password");
+        Slider progress = new Slider();
+
 
         ubiquipyConnect.addActionListener(e -> this.backendUtil.connect(ndIP.getText(), ndPort.getText(), controllerIP.getText(), controllerPort.getText(),
-                userName.getText(), passWord.getText()));
+                userName.getText(), passWord.getText(), progress));
 
         setup.add(ndIP);
         setup.add(ndPort);
@@ -63,6 +65,7 @@ public class UI {
         setup.add(userName);
         setup.add(passWord);
         setup.add(ubiquipyConnect);
+        setup.add(progress);
 
         return setup;
     }

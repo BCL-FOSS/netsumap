@@ -1,12 +1,20 @@
 package com.bcl.netifidash.util;
 
 import com.codename1.components.ToastBar;
+import com.codename1.io.*;
 import com.codename1.io.rest.Response;
 import com.codename1.io.rest.Rest;
 import com.codename1.ui.Dialog;
+import com.codename1.util.OnComplete;
 import com.google.gson.Gson;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,68 +23,92 @@ public class BackendUtil {
     public BackendUtil (){}
 
     public void connect(String nd_ip, String nd_port, String ip, String port, String user, String pass){
+        //  Block of code to try
+        String baseURL = "http://"+nd_ip+":"+nd_port+"/login";
+
+        makePostRequest(baseURL, port, ip, user, pass);
+
+    }
+
+    public void makePostRequest(String url, String port, String ip, String username, String password) {
 
         try {
-            //  Block of code to try
-            String baseURL = "http://"+nd_ip+":"+nd_port;
 
-            Map<String, String> json = new LinkedHashMap<>();
-            json.put("port", port);
-            json.put("ip", ip);
-            json.put("username", user);
-            json.put("password", pass);
+            // Create a ConnectionRequest for a POST method
+            ConnectionRequest request = new ConnectionRequest() {
+                @Override
+                protected void readResponse(InputStream input) throws IOException {
+                    super.readResponse(input);
+                    Dialog.show("UniFi Connection Status", input.toString(), "OK", null);
+                }
 
-            //System.out.println(json.toString());
+                @Override
+                protected void handleErrorResponseCode(int code, String message) {
+                    // Handle error here
+                    Dialog.show("Error", "Error code: " + code + "\nMessage: " + message, "OK", null);
+                }
+            };
 
-            Response<String> result = Rest.post(baseURL+"/login").jsonContent()
-                    .body(json.toString())
-                    .getAsString();
+            request.setUrl(url);
+            request.setPost(true); // Indicates this is a POST request
+            request.setContentType("application/json");
 
-            if(result.getResponseCode() == 200) {
-                Dialog.show("UniFi Connection Successful", result.getResponseData(), "OK", null);
+            // Prepare the JSON body
+            Map<String, Object> jsonBody = new HashMap<>();
+            jsonBody.put("port", port);
+            jsonBody.put("ip", ip);
+            jsonBody.put("username", username);
+            jsonBody.put("password", password);
+
+            // Convert the map to JSON string
+            String json = toJson(jsonBody);
+
+            // Set the request body
+            request.setRequestBody(json);
+
+            // Add request headers if necessary (e.g., Authorization)
+            request.addRequestHeader("Accept", "application/json");
+
+            // Send the request
+            NetworkManager.getInstance().addToQueueAndWait(request);
+
+            if(request.getResponseCode() == 200){
+
+                Map<String,Object> result = new JSONParser().parseJSON(new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8"));
 
 
-            } else {
-                Dialog.show("UniFi Connection Failed", result.getResponseData(), "OK", null);
+                Dialog.show("UniFi Connection Success", result.toString(), "OK", null);
 
             }
 
+        } catch (Exception e) {
+
+            Dialog.show("Error", "Error code: " + e.toString(), "OK", null);
+
+            throw new RuntimeException(e);
         }
-        catch(Exception e) {
-            //  Block of code to handle errors
-
-            Dialog.show("UniFi Connection Error", e.toString(), "OK", null);
-
-
-            System.out.println(e.toString());
-        }
-
 
     }
 
-    public void auth(){
-
-        Response<Map> result = Rest.post("http://107.191.44.222:25000/unifi_webhook").
-                contentType("application/json").body("{\"unifi_alarm\" : \"from_mobile_app\"}")
-                .getAsJsonMap();
-
-
-        if(result.getResponseData() != null) {
-            String error = (String)result.getResponseData().get("error_message");
-            if(error != null) {
-                ToastBar.showErrorMessage(error);
+    // Utility function to convert a map to a JSON string
+    private String toJson(Map<String, Object> map) {
+        StringBuilder jsonBuilder = new StringBuilder("{");
+        boolean first = true;
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            if (!first) {
+                jsonBuilder.append(",");
             }
-        } else {
-            ToastBar.showErrorMessage("Error connecting to Backend API: " + result.getResponseCode());
+            jsonBuilder.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
+            first = false;
         }
-
+        jsonBuilder.append("}");
+        return jsonBuilder.toString();
     }
 
-    public void wsConnection(){
 
 
 
 
 
-    }
+
 }

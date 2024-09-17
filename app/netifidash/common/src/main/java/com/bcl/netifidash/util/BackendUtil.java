@@ -73,7 +73,11 @@ public class BackendUtil {
 
                 Dialog.show("UniFi Connection Success", result.toString(), "OK", null);
 
+            } else {
+                Dialog.show("UniFi Connection Failure", "Error with account credentials, controller hostname or port", "OK", null);
+
             }
+
 
         } catch (Exception e) {
 

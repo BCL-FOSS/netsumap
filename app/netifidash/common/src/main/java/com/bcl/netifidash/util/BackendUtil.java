@@ -67,6 +67,13 @@ public class BackendUtil {
 
                 Map<String,Object> result = new JSONParser().parseJSON(new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8"));
 
+                for(Map.Entry<String, Object> entry: result.entrySet()) {
+
+                    System.out.println(entry.getKey());
+                    System.out.println(entry.getValue());
+                    System.out.println(result.get(entry.getKey()));
+                }
+
                 Dialog.show("UniFi Connection Success", result.toString(), "OK", null);
 
             } else {

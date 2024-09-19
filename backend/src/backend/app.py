@@ -54,10 +54,11 @@ async def authentication():
         print(db_upload)
     
         db_query_value = await db.get_profile(key=profile_value['id'])
-        print(db_query_value)
+        #print(db_query_value)
 
-        return {"Auth_Status" : "Success",
-                "Profile_Data" : db_query_value}
+        return db_query_value
+                ##{"Auth_Status" : "Success",
+                ##"Profile_Data" : db_query_value}
 
     except TypeError as error:
         return {'TypeError' :  str(error)}

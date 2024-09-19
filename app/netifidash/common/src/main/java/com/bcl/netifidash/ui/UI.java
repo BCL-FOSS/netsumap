@@ -15,18 +15,13 @@ public class UI {
     }
 
     public void splashScreen(){
-
         String isConfigured = Preferences.get("is_configured", "");
         Form main = new Form("", BoxLayout.y());
-        Form initSetup = new Form("", BoxLayout.y());
-
         String configCheck = "SET";
-
         TextArea name = new TextArea();
         name.setText("Welcome to NetiFiDash");
         main.add(name);
         main.show();
-
 
         if (isConfigured.equalsIgnoreCase(configCheck)) {
             new UITimer(() -> {
@@ -38,9 +33,7 @@ public class UI {
                 Form initApp = setup();
                 initApp.show();
             }).schedule(3000, false, main);
-
         }
-
     }
 
     public Form setup(){
@@ -53,7 +46,6 @@ public class UI {
         TextField userName = new TextField("Controller Username");
         TextField passWord = new TextField("Controller Password");
         Slider progress = new Slider();
-
 
         ubiquipyConnect.addActionListener(e -> this.backendUtil.connect(ndIP.getText(), ndPort.getText(), controllerIP.getText(), controllerPort.getText(),
                 userName.getText(), passWord.getText(), progress));
@@ -103,11 +95,9 @@ public class UI {
         Form usrDev = new Form("Client Devices", BoxLayout.y());
         setMenu(usrDev);
         usrDev.show();
-
     }
 
     public void setMenu(Form form){
-
         form.getToolbar().addMaterialCommandToSideMenu("Home",
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> home().show());
         form.getToolbar().addMaterialCommandToSideMenu("Dashboard",
@@ -116,6 +106,5 @@ public class UI {
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> net_dev_mgmt());
         form.getToolbar().addMaterialCommandToSideMenu("Client Devices",
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> client_mgmt());
-
     }
 }

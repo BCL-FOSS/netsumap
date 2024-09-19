@@ -4,6 +4,7 @@ import com.codename1.components.SliderBridge;
 import com.codename1.io.*;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Slider;
+import com.codename1.util.AsyncResource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class BackendUtil {
             request.addRequestHeader("Accept", "application/json");
 
             // Send the request
-            NetworkManager.getInstance().addToQueueAndWait(request);
+            NetworkManager.getInstance().addToQueueAsync(request);
 
             if(request.getResponseCode() == 200){
 

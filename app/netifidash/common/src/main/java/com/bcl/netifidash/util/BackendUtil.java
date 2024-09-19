@@ -62,24 +62,35 @@ public class BackendUtil {
             request.addRequestHeader("Accept", "application/json");
 
             // Send the request
-            NetworkManager.getInstance().addToQueueAsync(request);
+            AsyncResource<ConnectionRequest> connectionRequestAsyncResource = NetworkManager.getInstance().addToQueueAsync(request);
 
-            if(request.getResponseCode() == 200){
+            connectionRequestAsyncResource.await();
 
-                Map<String,Object> result = new JSONParser().parseJSON(new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8"));
+            if(connectionRequestAsyncResource.isDone()){
+                ConnectionRequest connectionRequest = connectionRequestAsyncResource.get();
 
-                for(Map.Entry<String, Object> entry: result.entrySet()) {
+                if(connectionRequest.getResponseCode() == 200){
 
-                    System.out.println(entry.getKey());
-                    System.out.println(entry.getValue());
-                    System.out.println(result.get(entry.getKey()));
+                    Map<String,Object> result = new JSONParser().parseJSON(new InputStreamReader(new ByteArrayInputStream(request.getResponseData()), "UTF-8"));
+
+                    for(Map.Entry<String, Object> entry: result.entrySet()) {
+
+                        System.out.println(entry.getKey());
+                        System.out.println(entry.getValue());
+                        System.out.println(result.get(entry.getKey()));
+                    }
+
+                    Dialog.show("UniFi Connection Success", result.toString(), "OK", null);
+
+                } else {
+                    Dialog.show("UniFi Connection Failure", "Error with account credentials, controller hostname or port", "OK", null);
                 }
 
-                Dialog.show("UniFi Connection Success", result.toString(), "OK", null);
 
-            } else {
-                Dialog.show("UniFi Connection Failure", "Error with account credentials, controller hostname or port", "OK", null);
+
             }
+
+
         } catch (Exception e) {
 
             Dialog.show("Error", "Error code: " + e.toString(), "OK", null);

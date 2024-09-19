@@ -19,15 +19,11 @@ public class BackendUtil {
     public void connect(String nd_ip, String nd_port, String ip, String port, String user, String pass, Slider prBar){
         //  Block of code to try
         String baseURL = "http://"+nd_ip+":"+nd_port+"/login";
-
-        makePostRequest(baseURL, port, ip, user, pass, prBar);
-
+        makeAuthRequest(baseURL, port, ip, user, pass, prBar);
     }
 
-    public void makePostRequest(String url, String port, String ip, String username, String password, Slider progBar) {
-
+    public void makeAuthRequest(String url, String port, String ip, String username, String password, Slider progBar) {
         try {
-
             // Create a ConnectionRequest for a POST method
             ConnectionRequest request = new ConnectionRequest() {
                 @Override
@@ -75,17 +71,13 @@ public class BackendUtil {
 
             } else {
                 Dialog.show("UniFi Connection Failure", "Error with account credentials, controller hostname or port", "OK", null);
-
             }
-
-
         } catch (Exception e) {
 
             Dialog.show("Error", "Error code: " + e.toString(), "OK", null);
 
             throw new RuntimeException(e);
         }
-
     }
 
     // Utility function to convert a map to a JSON string

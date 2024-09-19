@@ -57,17 +57,14 @@ async def authentication():
         #print(db_query_value)
 
         return db_query_value
-                ##{"Auth_Status" : "Success",
-                ##"Profile_Data" : db_query_value}
+                #{"Auth_Status" : "Success",
+                #"Profile_Data" : db_query_value}
 
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
-    finally:
-        await ubnt_profile.ubiquipy_client_session.close()
     
-
 @app.post("/logout")    
 async def signout():
     try:

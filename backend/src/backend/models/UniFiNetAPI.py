@@ -92,6 +92,7 @@ class UniFiNetAPI():
                 return {"error": str(error)}
             finally:
                 response.close()
+                self.ubiquipy_client_session.close()
             
     async def authenticate(self):
 
@@ -135,6 +136,8 @@ class UniFiNetAPI():
             except Exception as error:
                 response.close()
                 return {"error": str(error)}
+            finally:
+                self.ubiquipy_client_session.close()
 
     async def sign_out(self):
 

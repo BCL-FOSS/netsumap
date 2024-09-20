@@ -4,14 +4,10 @@ from init_app import app
 import websocket
 from websocket import create_connection
 from models.UniFiNetAPI import UniFiNetAPI
-from models.util_models.PDF import PDF
-from models.util_models.Utility import Utility
 from models.util_models.RedisDB import RedisDB
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
 
 db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
-
 
 @app.get("/")
 async def index():
@@ -59,11 +55,12 @@ async def authentication():
         return db_query_value
                 #{"Auth_Status" : "Success",
                 #"Profile_Data" : db_query_value}
-
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
+    except asyncio.CancelledError as can_error:
+        return {'Exception' :  str(can_error)}
     
 @app.post("/logout")    
 async def signout():
@@ -183,5 +180,6 @@ def activate_websocket_connection():
 
 def run() -> None:
     app.run()
+
 
     

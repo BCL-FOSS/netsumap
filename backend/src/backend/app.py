@@ -89,9 +89,6 @@ async def signout():
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
-    finally:
-        await ubnt_profile.ubiquipy_client_session.close()
-    
 
 @app.post("/ubnt_stats")
 async def get_health_data():

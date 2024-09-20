@@ -92,7 +92,6 @@ class UniFiNetAPI():
                 return {"error": str(error)}
             finally:
                 response.close()
-                await self.ubiquipy_client_session.close()
             
     async def authenticate(self):
 
@@ -136,8 +135,6 @@ class UniFiNetAPI():
             except Exception as error:
                 response.close()
                 return {"error": str(error)}
-            finally:
-                await self.ubiquipy_client_session.close()
 
     async def sign_out(self):
 
@@ -149,6 +146,8 @@ class UniFiNetAPI():
         payload={"":""} 
         
         response = await self.make_async_request(url=url, payload=payload, cmd='p')
+
+        self.ubiquipy_client_session.close()
 
         return response
             

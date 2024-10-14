@@ -4,6 +4,8 @@ import com.codename1.components.SliderBridge;
 import com.codename1.io.*;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Slider;
+import com.codename1.ui.*;
+import com.bcl.netifidash.ui.UI;
 import com.codename1.util.AsyncResource;
 
 import java.io.ByteArrayInputStream;
@@ -74,6 +76,9 @@ public class BackendUtil {
                     }
                 }
                 Dialog.show("UniFi Connection Success", result.toString(), "OK", null);
+                //Form home = new UI().home();
+                //home.show();
+                
             } else {
                 Dialog.show("UniFi Connection Failure", "Error with account credentials, controller hostname or port", "OK", null);
             }

@@ -1,20 +1,7 @@
-# NetiFi Dash #
+# net-con.ai #
 
-## Self-hosted NOC Dashboard, DPI Threat Analysis & Admin Tool for Ubiquiti UniFi ##
-### EXPERIMENTAL, WILL GO INTO PRODUCTION SOON ###
-
-* [UbiquiPy Repo](https://github.com/BCL-FOSS/UbiquiPy-UniFi-Automation)
-* [Learn more about UbiquiPy here](https://www.baughcl.com/ubiquipy.html) 
-* Quart for asynchronous usage
-* Caddy reverse proxy(s) for SSL/TLS
-* Websocket for realtime alerts
-* Webhooks for UniFi events, alarms and DPI data
-* Flexibility of single service or microservice(s) deployment
-
-## Upcoming Features ##
-* Frontend with Bootstrap + Jinja2 Templates
-* DPI analysis with AI
-* NOC Dashboard 
+## Threat Management & Network Automation Platform ##
+### EXPERIMENTAL ###
 
 ### Poetry Init ###
 

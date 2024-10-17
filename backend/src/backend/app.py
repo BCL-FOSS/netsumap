@@ -42,14 +42,12 @@ async def prediction():
         if data_value:
             print('Data coroutine complete')
             json_data = json.dumps(data_value)
-            data = json.loads(json_data)
-            print(data)
-
-            input_data = jsonify(data)
+            #data = json.loads(json_data)
+            print(json_data)
 
             #preprocess_loop = asyncio.new_event_loop()
 
-            X_input = await preprocess_input(input_data)#preprocess_loop.run_until_complete(preprocess_input(data))
+            X_input = await preprocess_input(json_data=json_data)#preprocess_loop.run_until_complete(preprocess_input(data))
 
             predictions = model.predict(X_input)
 

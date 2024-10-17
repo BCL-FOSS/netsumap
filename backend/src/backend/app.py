@@ -46,7 +46,9 @@ async def prediction():
             json_data = json.dumps(data_value)
             data = json.loads(json_data)
             data_loop.close()
+            print(data)
 
+            """
             preprocess_loop = asyncio.new_event_loop()
 
             X_input = preprocess_loop.run_until_complete(preprocess_input(data))
@@ -65,11 +67,14 @@ async def prediction():
 
         preprocess_loop.close()
         K.clear_session()
+            """
+
+            
         
         # Return predictions as JSON response
         return jsonify({
             "status": "success",
-            "predictions": response_data
+            "predictions": data
         })
     except Exception as e:
         return {'Error' : e}

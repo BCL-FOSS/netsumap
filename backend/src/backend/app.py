@@ -45,9 +45,11 @@ async def prediction():
             data = json.loads(json_data)
             print(data)
 
+            input_data = jsonify(data)
+
             #preprocess_loop = asyncio.new_event_loop()
 
-            X_input = await preprocess_input(data)#preprocess_loop.run_until_complete(preprocess_input(data))
+            X_input = await preprocess_input(input_data)#preprocess_loop.run_until_complete(preprocess_input(data))
 
             predictions = model.predict(X_input)
 

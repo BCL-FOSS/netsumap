@@ -37,7 +37,7 @@ async def handle_internal_error(e):
 async def prediction():
     try:
         data_loop = asyncio.new_event_loop()
-        preprocess_loop = asyncio.new_event_loop()
+        
 
         data_value = data_loop.run_until_complete(request.get_json())
 
@@ -46,6 +46,8 @@ async def prediction():
             json_data = json.dumps(data_value)
             data = json.loads(json_data)
             data_loop.close()
+
+            preprocess_loop = asyncio.new_event_loop()
 
             X_input = preprocess_loop.run_until_complete(preprocess_input(data))
 

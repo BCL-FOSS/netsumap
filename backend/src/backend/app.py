@@ -39,7 +39,7 @@ async def prediction():
         data_loop = asyncio.new_event_loop()
         
 
-        data_value = data_loop.run_until_complete(request.get_json())
+        data_value = await request.get_json()#data_loop.run_until_complete(request.get_json())
 
         if data_value:
             print('Data coroutine complete')

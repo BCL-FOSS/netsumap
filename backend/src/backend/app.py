@@ -36,22 +36,18 @@ async def handle_internal_error(e):
 @app.post("/threat_analysis")
 async def prediction():
     try:
-        data_loop = asyncio.new_event_loop()
         
-
-        data_value = await request.get_json()#data_loop.run_until_complete(request.get_json())
+        data_value = await request.get_json()
 
         if data_value:
             print('Data coroutine complete')
             json_data = json.dumps(data_value)
             data = json.loads(json_data)
-            data_loop.close()
             print(data)
 
-            """
-            preprocess_loop = asyncio.new_event_loop()
+            #preprocess_loop = asyncio.new_event_loop()
 
-            X_input = preprocess_loop.run_until_complete(preprocess_input(data))
+            X_input = await preprocess_input(data)#preprocess_loop.run_until_complete(preprocess_input(data))
 
             predictions = model.predict(X_input)
 
@@ -65,16 +61,12 @@ async def prediction():
                     'predicted_class': int(predicted_classes[i])  # Convert class label to integer for JSON response
                 })
 
-        preprocess_loop.close()
         K.clear_session()
-            """
 
-            
-        
         # Return predictions as JSON response
         return jsonify({
             "status": "success",
-            "predictions": data
+            "predictions": response_data
         })
     except Exception as e:
         return {'Error' : e}

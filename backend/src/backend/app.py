@@ -2,7 +2,7 @@ from quart import request, render_template, jsonify
 import json
 from init_app import app
 from models.UniFiNetAPI import UniFiNetAPI
-from models.util_models.RedisDB import RedisDB
+#from models.util_models.RedisDB import RedisDB
 import numpy as np
 import asyncio
 import pandas as pd

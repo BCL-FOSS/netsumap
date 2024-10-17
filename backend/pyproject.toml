@@ -9,7 +9,6 @@ packages = [{include = "backend", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 quart = "^0.19.6"
-websockets = "^12.0"
 hypercorn = "^0.17.3"
 websocket-client = "^1.8.0"
 quart-auth = "^0.10.1"
@@ -23,6 +22,15 @@ grequests = "^0.7.0"
 redis = {extras = ["hiredis"], version = "^5.0.8"}
 asyncio-redis = "^0.16.0"
 asyncio = "^3.4.3"
+pandas = "^2.2.3"
+numpy = "^2.1.2"
+matplotlib = "^3.9.2"
+seaborn = "^0.13.2"
+scikit-learn = "^1.5.2"
+jupyter = "^1.1.1"
+ipykernel = "^6.29.5"
+nbconvert = {extras = ["webpdf"], version = "^7.16.4"}
+pyppeteer = "^2.0.0"
 
 [tool.poetry.scripts]
 start = "backend:run"

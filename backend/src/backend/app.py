@@ -1,13 +1,18 @@
 from quart import request, render_template, jsonify
 import json
 from init_app import app
-import websocket
-from websocket import create_connection
 from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.RedisDB import RedisDB
+import numpy as np
 import asyncio
+import pandas as pd
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+from sklearn.preprocessing import StandardScaler
 
-db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
+#db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
+
+model = load_model(app.config['MODEL'])
 
 @app.get("/")
 async def index():
@@ -25,155 +30,58 @@ async def page_not_found():
 @app.errorhandler(500)
 async def handle_internal_error(e):
     return jsonify({"error": "Internal server error"}), 500
-
-@app.post("/login")
-async def authentication():
+    
+@app.post("/threat_analysis")
+async def prediction():
     try:
-        loop = asyncio.new_event_loop()
-        
-        data_value = loop.run_until_complete(request.get_json())
+        data_loop = asyncio.new_event_loop()
+        preprocess_loop = asyncio.new_event_loop()
+
+        data_value = data_loop.run_until_complete(request.get_json())
 
         if data_value:
             print('Data coroutine complete')
             json_data = json.dumps(data_value)
             data = json.loads(json_data)
-            
-            #print(data)    
+            data_loop.close()
 
-        loop.close()        
-            
-        ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
+            X_input = preprocess_loop.run_until_complete(preprocess_input(data))
 
-        profile_value = await ubnt_profile.authenticate()
+            predictions = model.predict(X_input)
 
-        db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
-        print(db_upload)
-    
-        db_query_value = await db.get_profile(key=profile_value['id'])
-        #print(db_query_value)
+            # Convert predictions to binary classes (benign, malicious, outlier)
+            predicted_classes = np.argmax(predictions, axis=1)
 
-        return db_query_value
-                #{"Auth_Status" : "Success",
-                #"Profile_Data" : db_query_value}
-    except TypeError as error:
-        return {'TypeError' :  str(error)}
-    except Exception as e:
-        return {'Exception' :  str(e)}
-    except asyncio.CancelledError as can_error:
-        return {'Exception' :  str(can_error)}
-    
-@app.post("/logout")    
-async def signout():
-    try:
-        loop = asyncio.new_event_loop()
-        
-        data_value = loop.run_until_complete(request.get_json())
+            response_data = []
+            for i, row in enumerate(json_data):
+                response_data.append({
+                    **row,
+                    'predicted_class': int(predicted_classes[i])  # Convert class label to integer for JSON response
+                })
 
-        if data_value:
-            print('Data coroutine complete')
-            json_data = json.dumps(data_value)
-            data = json.loads(json_data)  
-            #print(data)    
+        preprocess_loop.close()
 
-        loop.close()   
-        
-        db_query_value = await db.get_profile(key=data['id'])
-
-        ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
-        ubnt_profile.token = db_query_value['token']
-        ubnt_profile.id = db_query_value['id']
-        status = await ubnt_profile.sign_out()
-
-        return status
-    except TypeError as error:
-        return {'TypeError' :  str(error)}
-    except Exception as e:
-        return {'Exception' :  str(e)}
-
-@app.post("/ubnt_stats")
-async def get_health_data():
-    try:
-        loop = asyncio.new_event_loop()
-        
-        data_value = loop.run_until_complete(request.get_json())
-
-        if data_value:
-            print('Data coroutine complete')
-            json_data = json.dumps(data_value)
-            data = json.loads(json_data)
-            
-            print(data)    
-
-        loop.close()   
-        
-        db_query_value = await db.get_profile(key=data['id'])
-
-        ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
-        ubnt_profile.token = db_query_value['token']
-        ubnt_profile.id = db_query_value['id']
-        health_data = await ubnt_profile.controller_health_data()
-
-        return health_data['data']
-    except TypeError as error:
-        return {'TypeError' :  str(error)}
-    except Exception as e:
-        return {'Exception' :  str(e)}
-    
-@app.post("/ubnt_info")
-async def get_sysinfo():
-    try:
-        loop = asyncio.new_event_loop()
-        
-        data_value = loop.run_until_complete(request.get_json())
-
-        if data_value:
-            print('Data coroutine complete')
-            json_data = json.dumps(data_value)
-            data = json.loads(json_data)
-            
-            print(data)    
-
-        loop.close()   
-        
-        db_query_value = await db.get_profile(key=data['id'])
-
-        ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
-        ubnt_profile.token = db_query_value['token']
-        ubnt_profile.id = db_query_value['id']
-        sys_info = await ubnt_profile.get_sysinfo()
-
-        return sys_info
-    except TypeError as error:
-        return {'TypeError' :  str(error)}
-    except Exception as e:
-        return {'Exception' :  str(e)}
-    
-@app.post("/ubnt_webhook")
-async def webhook():
-    try:
-        data = await request.get_json()
-        if data:
-            data = json.dumps(data)
-            #unifi_event = {
-            #    "message": str(data)
-            #}
-            ws = activate_websocket_connection()
-            await ws.send(str(data))
-        else:
-            raise Exception('Ensure JSON message is attached to the request')
+        # Return predictions as JSON response
+        return jsonify({
+            "status": "success",
+            "predictions": response_data
+        })
     except Exception as e:
         return {'Error' : e}
-    finally:
-        return {'try_catch_end' : 'Check the frontend UI'}
 
-def activate_websocket_connection():
-    try:
-        websocket.enableTrace = True
-        ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
-        return ws
-    except Exception as e:
-        return {"Websocket Connection Error" : "Please verify the websocket server is online and accessible",
-                "Error Message" : str(e)}
+def preprocess_input(json_data):
+    # Convert JSON data into a DataFrame
+    df = pd.DataFrame(json_data)
+
+    # Scale the relevant features before running predictions
+    features = ['avg_ipt', 'bytes_in', 'bytes_out', 'dest_ip',	'entropy', 'num_pkts_out', 'num_pkts_in', 'proto', 'src_ip', 'time_end', 'time_start', 'total_entropy', 'duration'] 
+    df_cleaned = df[features].fillna(0)  # Fill missing values
+
+    # Scale the data
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(df_cleaned)
+
+    return X_scaled
 
 def run() -> None:
     app.run()

@@ -41,7 +41,8 @@ async def prediction():
 
         if data_value:
             print('Data coroutine complete')
-            json_data = json.dumps(data_value)
+
+            json_data = dict(data_value) #json.dumps(data_value)
             #data = json.loads(json_data)
             print(json_data)
 
@@ -73,7 +74,7 @@ async def prediction():
 
 def preprocess_input(json_data):
     # Convert JSON data into a DataFrame
-    df = pd.DataFrame(json_data)
+    df = pd.DataFrame.from_dict(json_data)
 
     # Scale the relevant features before running predictions
     features = ['avg_ipt', 'bytes_in', 'bytes_out', 'dest_ip',	'entropy', 'num_pkts_out', 'num_pkts_in', 'proto', 'src_ip', 'time_end', 'time_start', 'total_entropy', 'duration'] 

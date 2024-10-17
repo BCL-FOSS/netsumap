@@ -8,10 +8,12 @@ import asyncio
 import pandas as pd
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+from tensorflow.keras import backend as K
 from sklearn.preprocessing import StandardScaler
+import gc
 
 #db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
-
+K.clear_session()
 model = load_model(app.config['MODEL'])
 
 @app.get("/")
@@ -60,7 +62,8 @@ async def prediction():
                 })
 
         preprocess_loop.close()
-
+        K.clear_session()
+        
         # Return predictions as JSON response
         return jsonify({
             "status": "success",

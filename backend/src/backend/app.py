@@ -46,7 +46,7 @@ async def prediction():
 
             print(str(json_data))
 
-            X_input = await preprocess_input(json_data=data_value)#preprocess_loop.run_until_complete(preprocess_input(data))
+            X_input = preprocess_input(json_data=data_value)#preprocess_loop.run_until_complete(preprocess_input(data))
 
             predictions = model.predict(X_input)
 

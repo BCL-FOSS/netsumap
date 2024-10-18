@@ -64,12 +64,16 @@ async def prediction():
             
             """
 
+            prediction = predicted_classes.tolist()
+
+            inference_value = json.dumps(prediction)
+
         K.clear_session()
 
         # Return predictions as JSON response
         return jsonify({
             "status": "success",
-            "predictions": predicted_classes
+            "predictions": inference_value
         })
     except Exception as e:
          return jsonify({

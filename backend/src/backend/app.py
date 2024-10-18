@@ -67,10 +67,10 @@ async def prediction():
         K.clear_session()
 
         # Return predictions as JSON response
-        return {
+        return jsonify({
             "status": "success",
             "predictions": predicted_classes
-        }
+        })
     except Exception as e:
          return jsonify({
             'status': 'error',

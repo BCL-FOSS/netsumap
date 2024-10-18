@@ -42,6 +42,10 @@ async def prediction():
         if data_value:
             print('Data coroutine complete')
 
+            json_data = dict(data_value)
+
+            print(str(json_data))
+
 
             X_input = await preprocess_input(json_data=data_value)#preprocess_loop.run_until_complete(preprocess_input(data))
 

@@ -42,7 +42,7 @@ async def prediction():
         if data_value:
             print('Data coroutine complete')
 
-            json_data = list(data_value)
+            json_data = dict(data_value)
 
             print(str(json_data))
 

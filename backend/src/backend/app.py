@@ -37,7 +37,7 @@ async def handle_internal_error(e):
 async def prediction():
     try:
         
-        data_value = await request.json()
+        data_value = await request.get_json()
 
         if data_value:
             print('Data coroutine complete')

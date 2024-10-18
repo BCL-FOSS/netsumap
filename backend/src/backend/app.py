@@ -78,7 +78,7 @@ def preprocess_input(json_data):
     df = pd.DataFrame([json_data])
 
     # Scale the relevant features before running predictions
-    features = ['avg_ipt', 'bytes_in', 'bytes_out', 'dest_ip',	'entropy', 'num_pkts_out', 'num_pkts_in', 'proto', 'src_ip', 'time_end', 'time_start', 'total_entropy', 'duration'] 
+    features = ['avg_ipt', 'bytes_in', 'bytes_out', 'dest_ip',	'entropy', 'num_pkts_out', 'num_pkts_in', 'proto', 'src_ip', 'time_end', 'time_start', 'total_entropy', 'duration', 'src_port', 'dest_port'] 
     df_cleaned = df[features].fillna(0)  # Fill missing values
 
     # Scale the data

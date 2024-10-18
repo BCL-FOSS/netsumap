@@ -37,18 +37,13 @@ async def handle_internal_error(e):
 async def prediction():
     try:
         
-        data_value = await request.get_json()
+        data_value = await request.json()
 
         if data_value:
             print('Data coroutine complete')
 
-            json_data = dict(data_value) #json.dumps(data_value)
-            #data = json.loads(json_data)
-            print(json_data)
 
-            #preprocess_loop = asyncio.new_event_loop()
-
-            X_input = await preprocess_input(json_data=json_data)#preprocess_loop.run_until_complete(preprocess_input(data))
+            X_input = await preprocess_input(json_data=data_value)#preprocess_loop.run_until_complete(preprocess_input(data))
 
             predictions = model.predict(X_input)
 
@@ -56,7 +51,7 @@ async def prediction():
             predicted_classes = np.argmax(predictions, axis=1)
 
             response_data = []
-            for i, row in enumerate(json_data):
+            for i, row in enumerate(data_value):
                 response_data.append({
                     **row,
                     'predicted_class': int(predicted_classes[i])  # Convert class label to integer for JSON response

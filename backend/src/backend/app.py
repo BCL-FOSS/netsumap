@@ -75,7 +75,7 @@ async def prediction():
 
 def preprocess_input(json_data):
     # Convert JSON data into a DataFrame
-    df = pd.DataFrame(json_data, index=[0])
+    df = tf.data.Dataset.from_tensor_slices(json_data) #pd.DataFrame(json_data, index=[0])
 
     # Scale the relevant features before running predictions
     features = ['avg_ipt', 'bytes_in', 'bytes_out', 'dest_ip',	'entropy', 'num_pkts_out', 'num_pkts_in', 'proto', 'src_ip', 'time_end', 'time_start', 'total_entropy', 'duration'] 

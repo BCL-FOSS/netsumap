@@ -4,7 +4,7 @@
 ### EXPERIMENTAL ###
 
 ### What is this?
-Quart app using an internally developed Keras model trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV files and the /threat_analysis endpoint.
+Quart app using an internally developed Keras model trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV files and the /threat_analysis endpoint. The prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
 
 Current Integrations:
 - Ubiquiti UniFi
@@ -45,7 +45,6 @@ Upcoming Integrations 👀:
     sudo apt-get install redis
 
     ```
-
 5.  Install necessary dependencies
     ```bash
     sudo apt-get install pandoc

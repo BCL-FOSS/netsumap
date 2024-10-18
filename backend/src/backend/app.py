@@ -53,20 +53,24 @@ async def prediction():
             # Convert predictions to binary classes (benign, malicious, outlier)
             predicted_classes = np.argmax(predictions, axis=1)
 
+            """
+
             response_data = []
             for i, row in enumerate(data_value):
                 response_data.append({
                     **row,
                     'predicted_class': int(predicted_classes[i])  # Convert class label to integer for JSON response
                 })
+            
+            """
 
         K.clear_session()
 
         # Return predictions as JSON response
-        return jsonify({
+        return {
             "status": "success",
-            "predictions": response_data
-        })
+            "predictions": predicted_classes
+        }
     except Exception as e:
          return jsonify({
             'status': 'error',

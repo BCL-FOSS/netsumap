@@ -46,7 +46,6 @@ async def prediction():
 
             print(str(json_data))
 
-
             X_input = await preprocess_input(json_data=data_value)#preprocess_loop.run_until_complete(preprocess_input(data))
 
             predictions = model.predict(X_input)
@@ -69,7 +68,10 @@ async def prediction():
             "predictions": response_data
         })
     except Exception as e:
-        return {'Error' : e}
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
 
 def preprocess_input(json_data):
     # Convert JSON data into a DataFrame

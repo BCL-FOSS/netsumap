@@ -4,15 +4,19 @@
 ### EXPERIMENTAL ###
 
 ### What is this?
-Quart app using an internally developed Keras model trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV files and the /threat_analysis endpoint. The prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
+Quart app using an internally developed neural network trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV files via the 
+/file_analysis endpoint and JSON via the /threat_analysis endpoint. The prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
+
+The neural network has initially been trained on data captured with the [Cisco Mercury](https://github.com/cisco/mercury) network metadata analysis tool. Traffic was generated in a simulated environment with a vulnerable VM hosting several applications, and a Kali Linux VM simulating various attacks. As further research is conducted, the simulation environment will become more complex to match the ever changing landscape of cybersecurity threats and improve the quality of the data used for training, improving the effectiveness of the model.
 
 Current Integrations:
-- Ubiquiti UniFi
+- Ubiquiti UniFi Network
 
 Upcoming Integrations 👀:
 - Cisco Meraki
 - Sonicwall
 - HPE Aruba
+- NETCONF/YANG configuration(s) generation based on pcap analysis results for wider integration with more complex systems. 
 
 ### What's Inside?
 
@@ -35,7 +39,7 @@ Upcoming Integrations 👀:
     ```python
     pip3 install tensorflow[and-cuda]
     ``` 
-4. Install Redis DB
+4. Install Redis DB (only necessary if using the mobile app and Ubiquiti UniFi Network integration)
     ```bash
     sudo apt-get install lsb-release curl gpg
     curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
@@ -45,21 +49,23 @@ Upcoming Integrations 👀:
     sudo apt-get install redis
 
     ```
-5.  Install necessary dependencies
+5.  Install necessary libraries 
+    ```python
+    pip3 install quart pandas numpy matplotlib seaborn scikit-learn ipykernel asyncio-redis redis Werkzeug flask_cors
+    ``` 
+6. Install optional Python libraries (for data visualization)
+    ```python
+    pip3 install fpdf2 jupyter ipykernel nbconvert pyppeteer nbconvert[webpdf] 
+    ``` 
+7. 
+6. Install Optional dependencies (for data visualization)
     ```bash
     sudo apt-get install pandoc
     sudo apt-get install texlive-xetex texlive-fonts-recommended texlive-plain-generic
     sudo apt-get install libatk1.0-0 libatk-bridge2.0-0 libcups2 libxkbcommon0 libatspi2.0-0 libxcomposite1 libxdamage1 libxrandr2 libpango-1.0-0 libasound2
-
-    ```
-6. Install necessary libraries
-    ```python
-    pip3 install quart pandas numpy matplotlib seaborn scikit-learn fpdf2 jupyter ipykernel nbconvert pyppeteer nbconvert[webpdf] asyncio-redis redis
-    ``` 
-7. Install necessary dependencies for libraries
-    ```bash
     playwright install chromium
     sudo playwright install-deps
+
     ```
 8. Start App
     ```bash

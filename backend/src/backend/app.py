@@ -10,11 +10,19 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras import backend as K
 from sklearn.preprocessing import StandardScaler
+from werkzeug.utils import secure_filename
+from werkzeug.exceptions import RequestEntityTooLarge
+from flask_cors import CORS
+import os
 
 # init Redis DB connection
 #db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
 
 K.clear_session() # Clears GPU resources before loading model
+
+# Allowed files extensions for /file_analysis 
+ALLOWED_EXTENSIONS = set(['csv'])
+
 
 # Load model defined in config file
 model = load_model(app.config['MODEL'])  
@@ -35,27 +43,89 @@ async def page_not_found():
 @app.errorhandler(500)
 async def handle_internal_error(e):
     return jsonify({"error": "Internal server error"}), 500
+
+@app.post("/file_analysis")
+async def file_prediction():
+    try:
+        if request.method == 'POST':
+            file = request.files.getlist('files')
+            filename = ""
+            analysis_results = []
+            for f in file:
+                #print(f.filename)
+                filename = secure_filename(f.filename)
+                #print(allowedFile(filename))
+                if allowedFile(filename):
+                    f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    X_inference, original_data = preprocess_file_for_inference(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                    predictions = model.predict(X_inference)
+
+                    # Prediction -> binary conversion (benign, malicious, outlier)
+                    predicted_classes = np.argmax(predictions, axis=1)
+
+                    """
+                        if data_value['user_id']:
+                        db_query_value = await db.get_profile(key=data_value['user_id'])
+                        ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
+                        ubnt_profile.token = db_query_value['token']
+                        ubnt_profile.id = db_query_value['id']
+                        command = await ubnt_profile.mgr_devices()
+            
+                    """
+
+                    # Response conversion to JSON
+                    prediction = predicted_classes.tolist()
+                    inference_value = json.dumps(prediction)
+
+                    analysis_results.append(inference_value)
+
+                else:
+                    return jsonify({'message': 'File type not allowed'}), 400
+                
+            inference_values = json.dumps(analysis_results)    
+            K.clear_session()
+
+            return jsonify({
+            "status": "success",
+            "predictions": inference_values
+            })
+        else:
+            return jsonify({"status": "Request failed, upload pcap metadata for analysis."})
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+    except RequestEntityTooLarge as large_request:
+        return jsonify({
+            'status': 'Upload File Size Exceeds %s' % app.config['MAX_CONTENT_LENGTH'],
+            'message': str(large_request)
+        }), 500
+
+
     
 @app.post("/threat_analysis")
 async def prediction():
     try:
+        if request.method == 'POST':
         
-        data_value = await request.get_json()
+            data_value = await request.get_json()
 
-        if data_value['packet_data']:
+            if data_value['packet_data']:
 
-            json_data = dict(data_value)
+                json_data = dict(data_value)
 
-            # JSON preprocessing for prediction
-            X_input = preprocess_input(json_data=data_value['packet_data'])
+                # JSON preprocessing for prediction
+                X_input = preprocess_input(json_data=data_value['packet_data'])
 
-            # Model determines if packet is malicious, benign or outlier
-            predictions = model.predict(X_input)
+                # Model determines if packet is malicious, benign or outlier
+                predictions = model.predict(X_input)
 
-            # Prediction -> binary conversion (benign, malicious, outlier)
-            predicted_classes = np.argmax(predictions, axis=1)
+                # Prediction -> binary conversion (benign, malicious, outlier)
+                predicted_classes = np.argmax(predictions, axis=1)
 
-            """
+                """
                 if data_value['user_id']:
                 db_query_value = await db.get_profile(key=data_value['user_id'])
                 ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
@@ -63,20 +133,24 @@ async def prediction():
                 ubnt_profile.id = db_query_value['id']
                 command = await ubnt_profile.mgr_devices()
             
-            """
+                """
 
-            # Response conversion to JSON
-            prediction = predicted_classes.tolist()
-            inference_value = json.dumps(prediction)
+                # Response conversion to JSON
+                prediction = predicted_classes.tolist()
+                inference_value = json.dumps(prediction)
+            else:
+                return jsonify({"Error": "Packet data missing for threat assessment"})
+
+            K.clear_session()
+
+            return jsonify({
+                "status": "success",
+                "predictions": inference_value
+            })
         else:
-            return jsonify({"Error": "Packet data missing for threat assessment"})
+            return jsonify({"Error": "Submit POST request with packet metadata in JSON format"})
 
-        K.clear_session()
-
-        return jsonify({
-            "status": "success",
-            "predictions": inference_value
-        })
+        
     
     except Exception as e:
          return jsonify({
@@ -158,6 +232,32 @@ def preprocess_input(json_data):
     X_scaled = scaler.fit_transform(df_cleaned)
 
     return X_scaled
+
+# Function to preprocess the data for inference
+def preprocess_file_for_inference(file_path):
+    # Load the data
+    data = pd.read_csv(file_path)
+
+    # Drop rows with missing values in relevant columns (src_port, dest_port)
+    data_cleaned = data.dropna(subset=['src_port', 'dest_port'])
+
+    # Retain the original data for analysis after predictions
+    original_data = data_cleaned.copy()
+
+    # Drop the label column if present (in this case, for inference)
+    if 'label' in data_cleaned.columns:
+        data_cleaned = data_cleaned.drop(columns=['label'])
+
+    # Scale the numerical features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(data_cleaned)
+
+    return X_scaled, original_data
+
+def allowedFile(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def run() -> None:
     app.run()

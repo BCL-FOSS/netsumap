@@ -10,3 +10,6 @@ REDIS_DB_PORT=6379
 REDIS_USER=""
 REDIS_PASSWORD=""
 
+# Generate secret key for encryption
+SECRET_KEY = ""
+

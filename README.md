@@ -4,7 +4,7 @@
 ### EXPERIMENTAL 👨🏽‍💻 🔬 
 
 <p align="center">
-  <img width="500" height="600" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netconai.png?raw=true">
+  <img width="250" height="400" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netconai.png?raw=true">
 </p>
 
 

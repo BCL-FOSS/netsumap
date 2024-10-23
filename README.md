@@ -1,13 +1,18 @@
 # net-con.ai
 ## Threat Management & Network Automation Platform ##
 
-### EXPERIMENTAL ###
+### EXPERIMENTAL 👨🏽‍💻 🔬 
+
+![netconai logo](https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netconai.png?raw=true)
+
 
 ### What is this?
-Quart app using an internally developed neural network trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV files via the 
+Quart app using an internally developed neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV files via the 
 /file_analysis endpoint and JSON via the /threat_analysis endpoint. The prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
 
-The neural network was initially trained on data captured with the [Cisco Mercury](https://github.com/cisco/mercury) network metadata analysis tool. Traffic was generated in a simulated environment with a vulnerable VM hosting several applications, and a Kali Linux VM simulating various attacks. As further research is conducted, the simulation environment will become more complex to match the ever changing landscape of cybersecurity threats and improve the quality of the data used for training, therfore improving the effectiveness of the model.
+The NN was initially trained on data captured with the [Cisco Mercury](https://github.com/cisco/mercury) network metadata analysis tool. Traffic was generated in a simulated environment with a vulnerable VM hosting several applications, and a Kali Linux VM simulating various attacks. As further research is conducted, the simulation environment will become more complex to match the ever changing landscape of cybersecurity threats and improve the quality of the data used for training, therfore improving the effectiveness of the model.
+
+[I'm on Hugging Face](https://huggingface.co/bclai) *NN model will be published soon
 
 Current Integrations:
 - Ubiquiti UniFi Network

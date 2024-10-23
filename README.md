@@ -3,10 +3,8 @@
 
 ### EXPERIMENTAL 👨🏽‍💻 🔬 
 
-![netconai logo](https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netconai.png?raw=true)
-
 <p align="center">
-  <img width="460" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netconai.png?raw=true">
+  <img width="500" height="600" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netconai.png?raw=true">
 </p>
 
 

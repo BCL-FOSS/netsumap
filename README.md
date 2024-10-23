@@ -5,6 +5,10 @@
 
 ![netconai logo](https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netconai.png?raw=true)
 
+<p align="center">
+  <img width="460" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netconai.png?raw=true">
+</p>
+
 
 ### What is this?
 Quart app using an internally developed neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV files via the 

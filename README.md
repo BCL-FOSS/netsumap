@@ -28,11 +28,11 @@ Upcoming Integrations 👀:
 ### What's Inside?
 
 - 🐍 Python 
-- 🧠 AI
+- 🧠 Machine Learning
 - 📱 Mobile App for network status monitoring
 
 ### How would I use this?
-There are two ways you can use this product, either as a traffic analysis tool for your network, or as a platform to start automating network management functions with AI. 
+There are two ways you can use this product, either as a traffic analysis tool for your network, or as a platform to start automating network management functions with ML. 
 
 ### Getting Started
 

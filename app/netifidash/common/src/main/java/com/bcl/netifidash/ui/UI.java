@@ -39,8 +39,8 @@ public class UI {
     public Form setup(){
         Form setup = new Form("Setup", BoxLayout.y());
         Button ubiquipyConnect = new Button("Connect");
-        TextField ndIP = new TextField("NetiFi Node Hostname/IP");
-        TextField ndPort = new TextField("NetiFi Node Port");
+        TextField ndIP = new TextField("net-con.ai Node Hostname/IP");
+        TextField ndPort = new TextField("net-con.ai Node Port");
         TextField controllerIP = new TextField("Controller Hostname/IP");
         TextField controllerPort = new TextField("Controller Port");
         TextField userName = new TextField("Controller Username");
@@ -102,9 +102,9 @@ public class UI {
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> home().show());
         form.getToolbar().addMaterialCommandToSideMenu("Dashboard",
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> nocDash());
-        form.getToolbar().addMaterialCommandToSideMenu("Network Devices",
+        form.getToolbar().addMaterialCommandToSideMenu("Network Status",
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> net_dev_mgmt());
-        form.getToolbar().addMaterialCommandToSideMenu("Client Devices",
+        form.getToolbar().addMaterialCommandToSideMenu("",
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> client_mgmt());
     }
 }

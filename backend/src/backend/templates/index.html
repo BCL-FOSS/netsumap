@@ -7,17 +7,23 @@
           <title>{% block title %} NetiFiDash Home {% endblock %}</title>
   
           <div class="jumbotron text-center">
-            <h1>NetifiDash</h1> 
-            <h2>NOC Dashboard, AI Powered Threat Monitoring & Network Automation for Ubiiquiti UniFi</h2>
+            <h1>netsumap 🔥🗺️</h1> 
+            <h2>
+              Threat Management & Network Automation Platform
+            </h2>
           </div>
 
           <!-- Container (About Section) -->
           <div id="about" class="container-fluid">
             <div class="row">
               <div class="col-sm-12 text-center">
-                <h2>Why NetifiDash?</h2><br>
+                <h2>What is this?</h2><br>
                 <h4></h4><br>
-                <p>Built on top of UbiquiPy, the UniFi Automation Framework, NetifiDash provides Network Administrators and System Administrator greater visibility into UniFi Network deploymnt</p>
+                <p>
+                  Quart app using a neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV, JSON and live capture from a specified interface (*currently in development). The prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs.
+
+                  The NN was initially trained on data captured with the Cisco Mercury network metadata analysis tool. Traffic was generated in a simulated environment with a vulnerable VMs hosting several applications, and a Kali Linux VM simulating various attacks. As further research is conducted, the simulation environment will become more complex to match the ever changing landscape of cybersecurity threats and improve the quality of the data used for training.
+                </p>
               </div>
             </div>
           </div>
@@ -29,19 +35,30 @@
             <br>
             <div class="row">
               <div class="col-sm-6">
-                <h4>Current Features</h4>
+                <h4>Current Integration 👀</h4>
                 <ul class="list-group">
-                  <li class="list-group-item">Realtime Alerts Event & System Alerts</li>
-                  <li class="list-group-item">Full access to UniFi management & automation features via UbiquiPy integration</li>
+                  <li class="list-group-item">Ubiquiti UniFi Network</li>
                 </ul>
       
               </div>
               <div class="col-sm-6">
-                <h4>Upcoming Features</h4>
+                <h4>Upcoming Integrations</h4>
                 <ul class="list-group">
-                  <li class="list-group-item">AI powered Threat Monitoring</li>
-                  <li class="list-group-item">Full NOC Dashboard</li>
-                  <li class="list-group-item">SSO with Ubiqui Accounts</li>
+                  <li class="list-group-item">
+                    Live packet capture analysis
+                  </li>
+                  <li class="list-group-item">
+                    Cisco Meraki
+                  </li>
+                  <li class="list-group-item">
+                    Sonicwall
+                  </li>
+                  <li class="list-group-item">
+                    HPE Aruba
+                  </li>
+                  <li class="list-group-item">
+                    NETCONF/YANG configuration(s) generation based on pcap analysis results for wider integration with more complex systems.
+                  </li>
                 </ul>
               </div>
             </div>

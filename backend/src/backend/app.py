@@ -52,12 +52,16 @@ async def file_prediction():
             filename = ""
             analysis_results = []
             for f in file:
+                if 'csv_file' not in f:
+                    return jsonify({"error": "No file part in the request"}), 400
+                
                 #print(f.filename)
                 filename = secure_filename(f.filename)
                 #print(allowedFile(filename))
                 if allowedFile(filename):
-                    f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    X_inference, original_data = preprocess_file_for_inference(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    f.save(file_path)
+                    X_inference, original_data = preprocess_file_for_inference(file_path=file_path)
 
                     predictions = model.predict(X_inference)
 

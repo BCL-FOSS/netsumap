@@ -61,7 +61,7 @@ There are two ways you can use this product, either as a traffic analysis tool f
     ```
 5.  Install necessary libraries 
     ```python
-    pip3 install quart pandas numpy matplotlib seaborn scikit-learn ipykernel asyncio-redis redis Werkzeug flask_cors nest_asyncio
+    pip3 install quart pandas numpy matplotlib seaborn scikit-learn ipykernel asyncio-redis redis Werkzeug nest_asyncio Flask-Cors
     ``` 
 6. Install optional Python libraries (for data visualization)
     ```python

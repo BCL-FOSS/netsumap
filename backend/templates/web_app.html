@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<title>{% block title %} NetiFiDash NOC Web App {% endblock %}</title>
+<title>{% block title %} netsumap Dashboard {% endblock %}</title>
 
 <div class="container">
   <div class="row">
@@ -46,7 +46,13 @@
                   </form>
                 </div>
               </div>
-              <div class="col-4"></div>
+              <div class="col-4">
+                <h2 class="text-center">Connect to Websocket</h2>
+                <form onsubmit="return setwsName(event)">
+                  <input type="text" name="message" minlength="1" />
+                  <button type="submit">Connect</button>
+                </form>
+              </div>
       
             </div>
           </div>

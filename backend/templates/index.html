@@ -5,11 +5,10 @@
       <div class="row">
         <div class="col-12">
           <title>{% block title %} NetiFiDash Home {% endblock %}</title>
-  
           <div class="jumbotron text-center">
-            <h1>netsumap 🔥🗺️</h1> 
+            <h1>netsumap</h1> 
             <h2>
-              Threat Management & Network Automation Platform
+              Threat Management & Network Automation
             </h2>
           </div>
 
@@ -17,12 +16,15 @@
           <div id="about" class="container-fluid">
             <div class="row">
               <div class="col-sm-12 text-center">
-                <h2>What is this?</h2><br>
-                <h4></h4><br>
+                <h2>What is this?</h2>
+                <br>
                 <p>
-                  Quart app using a neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV, JSON and live capture from a specified interface (*currently in development). The prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs.
+                  Quart app using a neural network (NN) trained to classify network traffic metadata as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV, JSON and live capture from specified interface (*currently in development). Prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
 
-                  The NN was initially trained on data captured with the Cisco Mercury network metadata analysis tool. Traffic was generated in a simulated environment with a vulnerable VMs hosting several applications, and a Kali Linux VM simulating various attacks. As further research is conducted, the simulation environment will become more complex to match the ever changing landscape of cybersecurity threats and improve the quality of the data used for training.
+                  Training was conducted using traffic captured using <span><a href="https://github.com/cisco/mercury">Cisco Mercury</a></span>from two sources:
+                  - Honey pot hosted & managed by Baugh Consulting & Lab L.L.C.
+                  - Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally.
+                  <span><a href="https://huggingface.co/bclai">Access model on Hugging Face 🤗</a></span>
                 </p>
               </div>
             </div>
@@ -30,19 +32,17 @@
 
           <!-- Container (Services Section) -->
           <div id="services" class="container-fluid text-center">
-            <h2>Current Features</h2>
-            <p>Currently Under Development</p>
+            <h2>Automation for any network</h2>
             <br>
             <div class="row">
               <div class="col-sm-6">
-                <h4>Current Integration 👀</h4>
+                <h4>Current Integrations</h4>
                 <ul class="list-group">
                   <li class="list-group-item">Ubiquiti UniFi Network</li>
                 </ul>
-      
               </div>
               <div class="col-sm-6">
-                <h4>Upcoming Integrations</h4>
+                <h4>Upcoming Integrations 👀</h4>
                 <ul class="list-group">
                   <li class="list-group-item">
                     Live packet capture analysis

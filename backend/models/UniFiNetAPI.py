@@ -1,4 +1,3 @@
-import os,os.path
 import aiohttp
 import uuid
 
@@ -87,8 +86,10 @@ class UniFiNetAPI():
                                 return {"message": "Site DPI stat retrieval failed", "status_code": response.status}
                     
             except aiohttp.ClientError as e:
+                response.close()
                 return {"error": str(e), "status_code": 500}
             except Exception as error:
+                response.close()
                 return {"error": str(error)}
             finally:
                 response.close()

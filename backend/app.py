@@ -14,6 +14,11 @@ from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 from flask_cors import CORS
 import os
+import websocket
+from websocket import create_connection
+
+websocket.enableTrace = True
+ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
 
 # init Redis DB connection
 #db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
@@ -22,7 +27,6 @@ K.clear_session() # Clears GPU resources before loading model
 
 # Allowed files extensions for /file_analysis 
 ALLOWED_EXTENSIONS = set(['csv'])
-
 
 # Load model defined in config file
 model = load_model(app.config['MODEL'])  
@@ -34,7 +38,6 @@ async def index():
 @app.get("/app")
 async def app_main():
     return await render_template("web_app.html")
-
 
 @app.errorhandler(404)
 async def page_not_found():
@@ -153,8 +156,6 @@ async def prediction():
             })
         else:
             return jsonify({"Error": "Submit POST request with packet metadata in JSON format"})
-
-        
     
     except Exception as e:
          return jsonify({
@@ -222,6 +223,23 @@ async def signout():
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
+    
+@app.post("/ws_webhook")
+async def webhook():
+    try:
+        data = await request.get_json()
+        if data:
+            msg = json.dumps(data)
+            #unifi_event = {
+            #    "message": str(msg)
+            #}
+            await ws.send(str(msg))
+        else:
+            raise Exception('Ensure JSON message is attached to the request')
+    except Exception as e:
+        return {'Error' : e}
+    finally:
+        return {'try_catch_end' : 'Check the frontend UI'}
 
 def preprocess_input(json_data):
     # JSON -> Pandas DataFrame 

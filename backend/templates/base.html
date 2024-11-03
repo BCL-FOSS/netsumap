@@ -238,7 +238,8 @@
 
     <script type="text/javascript">
       try {
-        const ws = new WebSocket(`ws://149.28.249.89:30000/`);
+        const wsname = '';
+        const ws = new WebSocket(wsname);
         const error_display = document.getElementById("error_display");
         error_display.innerHTML="";
       
@@ -290,6 +291,16 @@
         error_display.innerHTML = "Error: " + error;
         
       }
+
+      function setwsName() {
+        const message = (new FormData(event.target)).get("message");
+        if (message) {
+          wsname = message;
+        }
+
+        event.target.reset();
+        return false;
+      }
       
       
       function send(event) {
@@ -297,6 +308,7 @@
         if (message) {
           ws.send(message);
         }
+
         event.target.reset();
         return false;
       }

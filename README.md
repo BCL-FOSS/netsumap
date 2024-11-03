@@ -31,10 +31,10 @@ Upcoming Integrations 👀:
 - 🧠 Machine Learning
 
 ### How would I use this?
-:
-- 👨🏽‍💻 traffic analysis tool for your network
+netsumap can be utilized in the following usecases:
+- 👨🏽‍💻 traffic metadata analysis tool
 - 🤖 network automation framework
-- 📱 self hosted network status monitoring & management solution complete with mobile app (*currently in development)
+- 📱 self hosted molbile solution for network status monitoring & management (*currently in development)
 
 ### Getting Started
 

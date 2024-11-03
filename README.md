@@ -1,26 +1,18 @@
-# netsumap 🔥🗺️
+# netsumap
 ## Threat Management & Network Automation Platform ##
 
-### EXPERIMENTAL 👨🏽‍💻 🔬 
+### EXPERIMENTAL 🔬 
 
 <p align="center">
   <img width="300" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netsumapicon.png?raw=true">
 </p>
 
-
 ### What is this?
-Quart app using a neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via:
-- pcap files converted to CSV
-- JSON 
-- live capture from specified interface (*currently in development)
-
-Prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
+Quart app using a neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV, JSON and live capture from specified interface (*currently in development). Prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
 
 Training was conducted using traffic captured using the [Cisco Mercury](https://github.com/cisco/mercury) network metadata analysis tool from two sources:
 - Honey pot hosted & managed by Baugh Consulting & Lab L.L.C.
 - Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally. This allows for fine tuning of the data the model is trained on, increasing it's usability in various threat mitigation automation use cases.
-
-As further research is conducted, the environments used for telemetry collection will become more complex to match the ever changing landscape of cybersecurity threats and improve the quality of the data used for training.
 
 [Hugging Face Model Repo](https://huggingface.co/bclai) *NN model will be published soon
 
@@ -36,19 +28,22 @@ Upcoming Integrations 👀:
 
 ### What's Inside?
 
-- 🐍 Python 
-- 🧠 Machine Learning
-- 📱 Mobile App for network status monitoring
+🐍 Python 
+🧠 Machine Learning
 
 ### How would I use this?
-There are two ways you can use this product, either as a traffic analysis tool for your network, or as a platform to start automating network management functions with ML. 
+There are three ways you can use this:
+👨🏽‍💻 traffic analysis tool for your network
+🤖 a platform to start automating network management functions
+📱 self hosted network status monitoring solution complete with mobile app (Android only)
 
 ### Getting Started
 
 #### Recommended Environment
 - Ubuntu 22.04 LTS
 - 1/12 GPU Minimum
-- 4 GB GPU Mem. Minimum
+- 4 GB GPU Memory Minimum
+- 8 GB RAM Minimum
 
 #### Backend Environment Setup
 

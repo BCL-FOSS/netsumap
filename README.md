@@ -1,7 +1,6 @@
 # netsumap
 ## Threat Management & Network Automation ##
 ### EXPERIMENTAL 🔬 
-
 <p align="center">
   <img width="300" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netsumapicon.png?raw=true">
 </p>
@@ -22,25 +21,25 @@ netsumap can be utilized in the following usecases:
 - 🤖 network automation
 - 📱 self hosted mobile network status monitoring & management (*currently in development)
 
-### Current Integrations
+#### Current Integrations
 - Ubiquiti UniFi Network
 
-### Upcoming Integrations 👀
+#### Upcoming Integrations 👀
 - Live packet capture analysis
 - Cisco Meraki
 - Sonicwall
 - HPE Aruba
 - NETCONF/YANG configuration(s) generation
 
-### Getting Started
+## Getting Started
 
-#### Recommended Environment
+### Recommended Environment
 - Ubuntu 22.04 LTS
 - 1/12 GPU Minimum
 - 4 GB GPU Memory Minimum
 - 8 GB RAM Minimum
 
-#### Backend Environment Setup
+### Backend Environment Setup
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
 
@@ -81,7 +80,7 @@ netsumap can be utilized in the following usecases:
     hypercorn app:app --bind '0.0.0.0:25000'
 ``` 
 
-#### Websocket Environment Setup
+### Websocket Environment Setup
 ```bash
     git clone 
     cd netsumap/socket/

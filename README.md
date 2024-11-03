@@ -10,9 +10,9 @@
 
 ### What is this?
 Quart app using a neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via:
-- pcap files converted to CSV, 
-- JSON and 
-- live capture from a specified interface (*currently in development). 
+- pcap files converted to CSV
+- JSON 
+- live capture from specified interface (*currently in development)
 
 Prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
 

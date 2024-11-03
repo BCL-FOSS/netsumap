@@ -27,15 +27,14 @@ Upcoming Integrations 👀:
 - NETCONF/YANG configuration(s) generation based on pcap analysis results for wider integration with more complex systems. 
 
 ### What's Inside?
-
-🐍 Python 
-🧠 Machine Learning
+- 🐍 Python 
+- 🧠 Machine Learning
 
 ### How would I use this?
-There are three ways you can use this:
-👨🏽‍💻 traffic analysis tool for your network
-🤖 a platform to start automating network management functions
-📱 self hosted network status monitoring solution complete with mobile app (Android only)
+:
+- 👨🏽‍💻 traffic analysis tool for your network
+- 🤖 network automation framework
+- 📱 self hosted network status monitoring & management solution complete with mobile app (*currently in development)
 
 ### Getting Started
 

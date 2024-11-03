@@ -9,9 +9,18 @@
 
 
 ### What is this?
-Quart app using a neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV, JSON and live capture from a specified interface (*currently in development). The prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
+Quart app using a neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via:
+- pcap files converted to CSV, 
+- JSON and 
+- live capture from a specified interface (*currently in development). 
 
-The NN was initially trained on data captured with the [Cisco Mercury](https://github.com/cisco/mercury) network metadata analysis tool. Traffic was generated in a simulated environment with a vulnerable VMs hosting several applications, and a Kali Linux VM simulating various attacks. As further research is conducted, the simulation environment will become more complex to match the ever changing landscape of cybersecurity threats and improve the quality of the data used for training.
+Prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
+
+Training was conducted using traffic captured using the [Cisco Mercury](https://github.com/cisco/mercury) network metadata analysis tool from two sources:
+- Honey pot hosted & managed by Baugh Consulting & Lab L.L.C.
+- Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally. This allows for fine tuning of the data the model is trained on, increasing it's usability in various threat mitigation automation use cases.
+
+As further research is conducted, the environments used for telemetry collection will become more complex to match the ever changing landscape of cybersecurity threats and improve the quality of the data used for training.
 
 [Hugging Face Model Repo](https://huggingface.co/bclai) *NN model will be published soon
 
@@ -43,14 +52,20 @@ There are two ways you can use this product, either as a traffic analysis tool f
 
 #### Backend Environment Setup
 
-1. Install CUDA Driver (if necessary)
+1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
-3. Install Tensorflow GPU version
-    ```python
-    pip3 install tensorflow[and-cuda]
-    ``` 
-4. Install Redis DB (only necessary if using the mobile app and Ubiquiti UniFi Network integration)
-    ```bash
+
+3. Install Nvidia CUDA Compiler
+```python
+    pip install nvidia-pyindex
+    pip install nvidia-cuda-nvcc
+```
+4. Install Docker
+```bash
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+``` 
+5. Install Redis DB
+```bash
     sudo apt-get install lsb-release curl gpg
     curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
     sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
@@ -58,41 +73,41 @@ There are two ways you can use this product, either as a traffic analysis tool f
     sudo apt-get update
     sudo apt-get install redis
 
-    ```
-5.  Install necessary libraries 
-    ```python
-    pip3 install quart pandas numpy matplotlib seaborn scikit-learn ipykernel asyncio-redis redis Werkzeug nest_asyncio Flask-Cors
-    ``` 
-6. Install optional Python libraries (for data visualization)
-    ```python
-    pip3 install fpdf2 jupyter ipykernel nbconvert pyppeteer nbconvert[webpdf] 
-    ``` 
-7. Install Optional dependencies (for data visualization)
-    ```bash
-    sudo apt-get install pandoc
-    sudo apt-get install texlive-xetex texlive-fonts-recommended texlive-plain-generic
-    sudo apt-get install libatk1.0-0 libatk-bridge2.0-0 libcups2 libxkbcommon0 libatspi2.0-0 libxcomposite1 libxdamage1 libxrandr2 libpango-1.0-0 libasound2
-    playwright install chromium
-    sudo playwright install-deps
-
-    ```
+```
+5. Build custom docker image 
+```bash
+    cd /Docker
+    sudo docker build -t netsumap-tensorflow .
+```
+6. Run custom Docker Image
+```bash
+    sudo docker run --gpus all --name netsumap -d -it -v $(pwd):$(pwd) -w $(pwd) docker.io/library/netsumap-tensorflow
+```
+7. Access shell for netsumap container
+```bash
+    sudo docker exec -it netsumap bash
+```
 8. Start App
-    ```bash
-    cd net-con.ai/backend/src/backend/
-
+```bash
     hypercorn app:app --bind '0.0.0.0:25000'
-    ``` 
+``` 
 
 #### Websocket Environment Setup
-* git clone 
-* cd net-con.ai/socket/
-* apt install python3.12-venv
-* python3 -m venv .venv 
-* . .venv/bin/activate
-* pip install poetry 
-* poetry install
-* cd socket/src/socket/
-* hypercorn app:app --bind '0.0.0.0:30000'
+
+```bash
+    git clone 
+    cd netsumap/socket/
+    apt install python3.12-venv
+    python3 -m venv .venv 
+    . .venv/bin/activate
+    pip install poetry 
+    poetry install
+    cd socket/src/socket/
+    hypercorn app:app --bind '0.0.0.0:30000'
+```
+
+
+
 
 
 

@@ -1,6 +1,5 @@
 # netsumap
-## Threat Management & Network Automation Platform ##
-
+## Threat Management & Network Automation ##
 ### EXPERIMENTAL 🔬 
 
 <p align="center">
@@ -8,33 +7,30 @@
 </p>
 
 ### What is this?
-Quart app using a neural network (NN) trained to classify IP packets as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV, JSON and live capture from specified interface (*currently in development). Prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
+Quart app using a neural network (NN) trained to classify network traffic metadata as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV, JSON and live capture from specified interface (*currently in development). Prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
 
-Training was conducted using traffic captured using the [Cisco Mercury](https://github.com/cisco/mercury) network metadata analysis tool from two sources:
+Training was conducted using traffic captured using [Cisco Mercury](https://github.com/cisco/mercury)from two sources:
 - Honey pot hosted & managed by Baugh Consulting & Lab L.L.C.
-- Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally. This allows for fine tuning of the data the model is trained on, increasing it's usability in various threat mitigation automation use cases.
+- Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally.
 
 [Hugging Face Model Repo](https://huggingface.co/bclai) *NN model will be published soon
 
-Current Integrations:
+### How would I use this?
+netsumap can be utilized in the following usecases:
+- 👨🏽‍💻 traffic metadata analysis
+- 💥 attack pattern identification 
+- 🤖 network automation
+- 📱 self hosted mobile network status monitoring & management (*currently in development)
+
+### Current Integrations
 - Ubiquiti UniFi Network
 
-Upcoming Integrations 👀:
+### Upcoming Integrations 👀
 - Live packet capture analysis
 - Cisco Meraki
 - Sonicwall
 - HPE Aruba
-- NETCONF/YANG configuration(s) generation based on pcap analysis results for wider integration with more complex systems. 
-
-### What's Inside?
-- 🐍 Python 
-- 🧠 Machine Learning
-
-### How would I use this?
-netsumap can be utilized in the following usecases:
-- 👨🏽‍💻 traffic metadata analysis tool
-- 🤖 network automation framework
-- 📱 self hosted molbile solution for network status monitoring & management (*currently in development)
+- NETCONF/YANG configuration(s) generation
 
 ### Getting Started
 
@@ -45,7 +41,6 @@ netsumap can be utilized in the following usecases:
 - 8 GB RAM Minimum
 
 #### Backend Environment Setup
-
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
 
@@ -87,7 +82,6 @@ netsumap can be utilized in the following usecases:
 ``` 
 
 #### Websocket Environment Setup
-
 ```bash
     git clone 
     cd netsumap/socket/

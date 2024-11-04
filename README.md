@@ -80,18 +80,7 @@ netsumap can be utilized in the following usecases:
     hypercorn app:app --bind '0.0.0.0:25000'
 ``` 
 
-### Websocket Environment Setup
-```bash
-    git clone 
-    cd netsumap/socket/
-    apt install python3.12-venv
-    python3 -m venv .venv 
-    . .venv/bin/activate
-    pip install poetry 
-    poetry install
-    cd socket/src/socket/
-    hypercorn app:app --bind '0.0.0.0:30000'
-```
+
 
 
 

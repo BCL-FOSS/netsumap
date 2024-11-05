@@ -242,6 +242,7 @@
         const ws = new WebSocket(wsname);
         const error_display = document.getElementById("error_display");
         error_display.innerHTML="";
+        
       
         ws.addEventListener('message', function (event) {
           json = JSON.parse(event.data);
@@ -293,11 +294,14 @@
       }
 
       function setwsName() {
+        const ws_name_display = document.getElementById("ws_name_display");
         const message = (new FormData(event.target)).get("message");
+
         if (message) {
           wsname = message;
         }
 
+        ws_name_display.innerHTML= wsname
         event.target.reset();
         return false;
       }

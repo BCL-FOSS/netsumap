@@ -10,7 +10,10 @@
 
       <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="inference-tab" data-bs-toggle="tab" data-bs-target="#inference" type="button" role="tab" aria-controls="inference" aria-selected="false">Packet Data Analysis</button>
+          <button class="nav-link" id="ws-tab" data-bs-toggle="tab" data-bs-target="#ws" type="button" role="tab" aria-controls="ws" aria-selected="false">Websocket Configuration</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="inference-tab" data-bs-toggle="tab" data-bs-target="#inference" type="button" role="tab" aria-controls="inference" aria-selected="false">Network Metadata Analysis</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="event-tab" data-bs-toggle="tab" data-bs-target="#event" type="button" role="tab" aria-controls="event" aria-selected="true">Network Events</button>
@@ -27,6 +30,29 @@
 
       </ul>
       <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="ws" role="tabpanel" aria-labelledby="ws-tab">
+          <div class="container">
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4">
+                <h2>Persistent WebSocket Connection</h2>
+                <form onsubmit="event.preventDefault(); connectWebSocket();">
+                    <div class="form-group">
+                        <label for="wsUrl">WebSocket Server URL:</label>
+                        <input type="text" class="form-control" id="wsUrl" placeholder="ws://example.com/socket" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Connect</button>
+                    <button type="button" class="btn btn-danger ml-2" onclick="closeWebSocket()">Disconnect</button>
+                </form>
+                <div class="mt-4">
+                    <h4>Status: <span id="status" class="font-weight-bold">Not connected</span></h4>
+                    <div id="messages" class="mt-3"></div>
+                </div>
+              </div>
+              <div class="col-4"></div>
+            </div>
+          </div>
+        </div>
         <div class="tab-pane fade show active" id="inference" role="tabpanel" aria-labelledby="inference-tab">
           <div class="container">
             <div class="row">
@@ -46,20 +72,7 @@
                   </form>
                 </div>
               </div>
-              <div class="col-4">
-                <h2 class="text-center">Connect to Websocket</h2>
-                <form onsubmit="return setwsName(event)">
-                  <input type="text" name="message" minlength="1" />
-                  <button type="submit">Connect</button>
-                </form>
-                <p id="ws_name_display"></p>
-              </div>
-              <div class="col-4">
-                <h2 class="text-center">App Process Error Msgs</h2>
-                <p id="status_display"></p>
-                <p id="error_msg_display"></p>
-              </div>
-      
+              <div class="col-4"></div>
             </div>
           </div>
         </div>

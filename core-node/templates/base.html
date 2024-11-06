@@ -237,90 +237,100 @@
     -->
 
     <script type="text/javascript">
-      
-      try {
-        let configStatus=false;
+      let ws;
 
-        while(configStatus){
+      function connectWebSocket() {
+            // Retrieve the URL from the input field
+            const wsUrl = document.getElementById('wsUrl').value;
+            
+            
+            // Display an error if URL is empty
+            if (!wsUrl) {
+                alert("Please enter a WebSocket server URL.");
+                return;
+            }
 
-          let ws_name_display = document.getElementById("ws_name_display");
-          let status_display = document.getElementById("status_display");
-          let err_display = document.getElementById("error_msg_display");
-          let error_display = document.getElementById("error_display");
-          let ws;
+            // Initialize WebSocket
+            ws = new WebSocket(wsUrl);
 
-          status_display.innerHTML='Enter Websocket IP/Hostname:Port'
+            // Define event listeners for WebSocket
+            ws.onopen = () => {
+                console.log("Connected to WebSocket server.");
+                document.getElementById('status').innerText = "Connected";
+                document.getElementById('status').classList.add("text-success");
+            };
 
-          if(ws_name_display.innerHTML){
-            ws = new WebSocket('ws://'+ws_name_display.innerHTML);
-            configStatus=true;
-          }  
+            ws.onmessage = (event) => {
+                console.log("Message from server:", event.data);
+                document.getElementById('messages').innerHTML += `<p>${event.data}</p>`;
+                json = JSON.parse(event.data);
+                if ("unifi_event" in json){
 
-        }
-        
-        if(!ws === undefined || !ws === null){
-
-              ws.addEventListener('message', function (event) {
-              json = JSON.parse(event.data);
-              if ("unifi_event" in json)
-              {
-                const li = document.createElement("li");
-                const li_2 = document.createElement("li");
-                li.appendChild(document.createTextNode(json.unifi_event));
-                li_2.appendChild(document.createTextNode('message'));
-                document.getElementById("events_list").appendChild(li);
-                document.getElementById("events_list").appendChild(li_2);
-        
-              } else if ("unifi_alarm" in json) 
-              {
-                const li = document.createElement("li");
-                const li_2 = document.createElement("li");
-                li.appendChild(document.createTextNode(json.unifi_alarm));
-                li_2.appendChild(document.createTextNode('message'));
-                document.getElementById("alarms_list").appendChild(li);
-                document.getElementById("alarms_list").appendChild(li_2);
-        
-              } else if ("site_dpi" in json) 
-              {
-                const li = document.createElement("li");
-                const li_2 = document.createElement("li");
-                li.appendChild(document.createTextNode(json.site_dpi));
-                li_2.appendChild(document.createTextNode('message'));
-                document.getElementById("sites_list").appendChild(li);
-                document.getElementById("sites_list").appendChild(li_2);
-        
-              } else if ("sta_dpi" in json) 
-              {
-                const li = document.createElement("li");
-                const li_2 = document.createElement("li");
-                li.appendChild(document.createTextNode(json.sta_dpi));
-                li_2.appendChild(document.createTextNode('message'));
-                document.getElementById("clients_list").appendChild(li);
-                document.getElementById("clients_list").appendChild(li_2);
-        
-              }
+                  const li = document.createElement("li");
+                  const li_2 = document.createElement("li");
+                  li.appendChild(document.createTextNode(json.unifi_event));
+                  li_2.appendChild(document.createTextNode('message'));
+                  document.getElementById("events_list").appendChild(li);
+                  document.getElementById("events_list").appendChild(li_2);
           
-              });
-          } else {
-            status_display.innerHTML='Enter Websocket IP/Hostname:Port'
-          } 
-      } catch (error) {
-        err_display.innerHTML = "Error: " + error;
+                } 
+
+                if ("unifi_alarm" in json){
+
+                  const li = document.createElement("li");
+                  const li_2 = document.createElement("li");
+                  li.appendChild(document.createTextNode(json.unifi_alarm));
+                  li_2.appendChild(document.createTextNode('message'));
+                  document.getElementById("alarms_list").appendChild(li);
+                  document.getElementById("alarms_list").appendChild(li_2);
+          
+                } 
+                
+                if ("site_dpi" in json){
+
+                  const li = document.createElement("li");
+                  const li_2 = document.createElement("li");
+                  li.appendChild(document.createTextNode(json.site_dpi));
+                  li_2.appendChild(document.createTextNode('message'));
+                  document.getElementById("sites_list").appendChild(li);
+                  document.getElementById("sites_list").appendChild(li_2);
+          
+                } 
+                
+                if ("sta_dpi" in json){
+
+                  const li = document.createElement("li");
+                  const li_2 = document.createElement("li");
+                  li.appendChild(document.createTextNode(json.sta_dpi));
+                  li_2.appendChild(document.createTextNode('message'));
+                  document.getElementById("clients_list").appendChild(li);
+                  document.getElementById("clients_list").appendChild(li_2);
+          
+                }
+          
+            };
+
+            ws.onerror = (error) => {
+                console.error("WebSocket error:", error);
+                document.getElementById('status').innerText = "Error";
+                document.getElementById('status').classList.add("text-danger");
+            };
+
+            ws.onclose = () => {
+                console.log("WebSocket connection closed.");
+                document.getElementById('status').innerText = "Disconnected";
+                document.getElementById('status').classList.remove("text-success", "text-danger");
+            };
       }
 
-      function setwsName() {
-        const ws_name_display = document.getElementById("ws_name_display");
-        const message = (new FormData(event.target)).get("message");
-
-        if (message) {
-          const wsname = message;
-        }
-
-        ws_name_display.innerHTML= wsname
-        event.target.reset();
-        return false;
-      }
-      
+      function closeWebSocket() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.close();
+                document.getElementById('status').innerText = "Disconnected by User";
+            } else {
+                alert("WebSocket is not open or already closed.");
+            }
+      }  
       
       function send(event) {
         const message = (new FormData(event.target)).get("message");

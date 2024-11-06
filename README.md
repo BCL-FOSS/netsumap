@@ -6,10 +6,10 @@
 </p>
 
 ### What is this?
-Quart app leveraging a neural network (NN) to identify patterns of an attack in progress within a network. Predicitons are used to automate security breach responses within REST API enabled network infrastructure.
+Quart app leveraging a neural network (NN) to identify patterns of an attack in LAN, WAN & cloud environments. Predicitons are used to automate security breach responses within REST API enabled network infrastructure.
 
 Data captured from: 
-- Honey pot hosted & managed by Baugh Consulting & Lab L.L.C.
+- Honey pot(s) hosted & managed by Baugh Consulting & Lab L.L.C.
 - Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally.
 
 [Hugging Face Model Repo](https://huggingface.co/bclai) *NN model will be published soon

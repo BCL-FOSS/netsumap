@@ -17,7 +17,10 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 sudo docker build -t netsumap-tensorflow .
 
-sudo docker run --gpus all --name netsumap -d -it -v $(pwd):$(pwd) -w $(pwd) docker.io/library/netsumap-tensorflow
+sudo docker network create nmp-net
 
-sudo docker exec -it netsumap bash -c 'hypercorn app:app --bind 0.0.0.0:25000'
+sudo docker run --gpus all --name netsumap --network nmp-net \
+  --publish 25000:2500 -d -it -v $(pwd):$(pwd) -w $(pwd) docker.io/library/netsumap-tensorflow
+
+sudo docker exec -it netsumap bash -c 'hypercorn app:app --bind 0.0.0.0:2500'
 

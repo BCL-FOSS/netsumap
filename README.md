@@ -39,7 +39,7 @@ netsumap can be utilized in the following usecases:
 - 4 GB GPU Memory Minimum
 - 8 GB RAM Minimum
 
-### Backend Environment Setup
+### Core Configuration
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
 
@@ -48,11 +48,15 @@ netsumap can be utilized in the following usecases:
     pip install nvidia-pyindex
     pip install nvidia-cuda-nvcc
 ```
-4. Install Docker
+4. Open port 25000
 ```bash
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-``` 
-5. Install Redis DB
+    sudo ufw allow 25000
+```
+5. Run startup script 
+```bash
+    sudo ./netsumap_init.sh
+```
+5. Install Redis DB (optional depending on if the mobile app is being utilized)
 ```bash
     sudo apt-get install lsb-release curl gpg
     curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
@@ -62,23 +66,7 @@ netsumap can be utilized in the following usecases:
     sudo apt-get install redis
 
 ```
-5. Build custom docker image 
-```bash
-    cd /Docker
-    sudo docker build -t netsumap-tensorflow .
-```
-6. Run custom Docker Image
-```bash
-    sudo docker run --gpus all --name netsumap -d -it -v $(pwd):$(pwd) -w $(pwd) docker.io/library/netsumap-tensorflow
-```
-7. Access shell for netsumap container
-```bash
-    sudo docker exec -it netsumap bash
-```
-8. Start App
-```bash
-    hypercorn app:app --bind '0.0.0.0:25000'
-``` 
+
 
 
 

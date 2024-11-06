@@ -42,17 +42,11 @@ netsumap can be utilized in the following usecases:
 ### Core Configuration
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
-
-3. Install Nvidia CUDA Compiler
-```python
-    pip install nvidia-pyindex
-    pip install nvidia-cuda-nvcc
-```
-4. Open port 25000
+3. Open port 25000
 ```bash
     sudo ufw allow 25000
 ```
-5. Run startup script 
+4. Run startup script 
 ```bash
     sudo ./netsumap_init.sh
 ```

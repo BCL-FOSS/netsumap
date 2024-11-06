@@ -237,60 +237,76 @@
     -->
 
     <script type="text/javascript">
-      try {
-        const wsname = '';
-        const ws = new WebSocket(wsname);
-        const error_display = document.getElementById("error_display");
-        error_display.innerHTML="";
-        
       
-        ws.addEventListener('message', function (event) {
-          json = JSON.parse(event.data);
-          if ("unifi_event" in json)
-          {
-            const li = document.createElement("li");
-            const li_2 = document.createElement("li");
-            li.appendChild(document.createTextNode(json.unifi_event));
-            li_2.appendChild(document.createTextNode('message'));
-            document.getElementById("events_list").appendChild(li);
-            document.getElementById("events_list").appendChild(li_2);
-    
-          } else if ("unifi_alarm" in json) 
-          {
-            const li = document.createElement("li");
-            const li_2 = document.createElement("li");
-            li.appendChild(document.createTextNode(json.unifi_alarm));
-            li_2.appendChild(document.createTextNode('message'));
-            document.getElementById("alarms_list").appendChild(li);
-            document.getElementById("alarms_list").appendChild(li_2);
-    
-          } else if ("site_dpi" in json) 
-          {
-            const li = document.createElement("li");
-            const li_2 = document.createElement("li");
-            li.appendChild(document.createTextNode(json.site_dpi));
-            li_2.appendChild(document.createTextNode('message'));
-            document.getElementById("sites_list").appendChild(li);
-            document.getElementById("sites_list").appendChild(li_2);
-    
-          } else if ("sta_dpi" in json) 
-          {
-            const li = document.createElement("li");
-            const li_2 = document.createElement("li");
-            li.appendChild(document.createTextNode(json.sta_dpi));
-            li_2.appendChild(document.createTextNode('message'));
-            document.getElementById("clients_list").appendChild(li);
-            document.getElementById("clients_list").appendChild(li_2);
-    
-          }
+      try {
+        const configStatus=false;
+
+        while(configStatus){
+
+          const ws_name_display = document.getElementById("ws_name_display");
+          const status_display = document.getElementById("status_display");
+          const err_display = document.getElementById("error_msg_display");
+          const ws = null;
+
+          status_display.innerHTML='Enter Websocket IP/Hostname:Port'
+
+          if(ws_name_display.innerHTML){
+            ws = new WebSocket('ws://'+ws_name_display.innerHTML);
+            configStatus=true;
+          }  
+
+        }
+
+        const error_display = document.getElementById("error_display");
+        
+        if(ws){
+
+              ws.addEventListener('message', function (event) {
+              json = JSON.parse(event.data);
+              if ("unifi_event" in json)
+              {
+                const li = document.createElement("li");
+                const li_2 = document.createElement("li");
+                li.appendChild(document.createTextNode(json.unifi_event));
+                li_2.appendChild(document.createTextNode('message'));
+                document.getElementById("events_list").appendChild(li);
+                document.getElementById("events_list").appendChild(li_2);
+        
+              } else if ("unifi_alarm" in json) 
+              {
+                const li = document.createElement("li");
+                const li_2 = document.createElement("li");
+                li.appendChild(document.createTextNode(json.unifi_alarm));
+                li_2.appendChild(document.createTextNode('message'));
+                document.getElementById("alarms_list").appendChild(li);
+                document.getElementById("alarms_list").appendChild(li_2);
+        
+              } else if ("site_dpi" in json) 
+              {
+                const li = document.createElement("li");
+                const li_2 = document.createElement("li");
+                li.appendChild(document.createTextNode(json.site_dpi));
+                li_2.appendChild(document.createTextNode('message'));
+                document.getElementById("sites_list").appendChild(li);
+                document.getElementById("sites_list").appendChild(li_2);
+        
+              } else if ("sta_dpi" in json) 
+              {
+                const li = document.createElement("li");
+                const li_2 = document.createElement("li");
+                li.appendChild(document.createTextNode(json.sta_dpi));
+                li_2.appendChild(document.createTextNode('message'));
+                document.getElementById("clients_list").appendChild(li);
+                document.getElementById("clients_list").appendChild(li_2);
+        
+              }
           
-        });
-    
-        
+              });
+          } else {
+            status_display.innerHTML='Enter Websocket IP/Hostname:Port'
+          } 
       } catch (error) {
-    
-        error_display.innerHTML = "Error: " + error;
-        
+        err_display.innerHTML = "Error: " + error;
       }
 
       function setwsName() {
@@ -298,7 +314,7 @@
         const message = (new FormData(event.target)).get("message");
 
         if (message) {
-          wsname = message;
+          const wsname = message;
         }
 
         ws_name_display.innerHTML= wsname

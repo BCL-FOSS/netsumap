@@ -1,6 +1,8 @@
 package com.bcl.netsumap;
 
 import static com.codename1.ui.CN.*;
+
+import com.bcl.netsumap.ui.UI;
 import com.codename1.system.Lifecycle;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.*;
@@ -15,17 +17,9 @@ import com.codename1.ui.util.Resources;
 public class NetsuMap extends Lifecycle {
     @Override
     public void runApp() {
-        Form hi = new Form("Hi World", BoxLayout.y());
-        Button helloButton = new Button("Hello World");
-        hi.add(helloButton);
-        helloButton.addActionListener(e -> hello());
-        hi.getToolbar().addMaterialCommandToSideMenu("Hello Command",
-        FontImage.MATERIAL_CHECK, 4, e -> hello());
-        hi.show();
-    }
-
-    private void hello() {
-        Dialog.show("Hello Codename One", "Welcome to Codename One", "OK", null);
+        Toolbar.setGlobalToolbar(true);
+        UI ui = new UI();
+        ui.splashScreen();
     }
 
 }

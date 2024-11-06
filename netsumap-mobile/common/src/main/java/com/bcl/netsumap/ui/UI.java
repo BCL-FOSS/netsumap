@@ -1,10 +1,10 @@
-package com.bcl.netifidash.ui;
+package com.bcl.netsumap.ui;
 
 import com.codename1.io.Preferences;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.util.UITimer;
-import com.bcl.netifidash.util.BackendUtil;
+import com.bcl.netsumap.util.BackendUtil;
 
 public class UI {
 
@@ -19,7 +19,7 @@ public class UI {
         Form main = new Form("", BoxLayout.y());
         String configCheck = "SET";
         TextArea name = new TextArea();
-        name.setText("Welcome to NetiFiDash");
+        name.setText("Welcome to netsumap Mobile");
         main.add(name);
         main.show();
 
@@ -38,16 +38,16 @@ public class UI {
 
     public Form setup(){
         Form setup = new Form("Setup", BoxLayout.y());
-        Button ubiquipyConnect = new Button("Connect");
-        TextField ndIP = new TextField("net-con.ai Node Hostname/IP");
-        TextField ndPort = new TextField("net-con.ai Node Port");
+        Button netsumapConnect = new Button("Connect");
+        TextField ndIP = new TextField("core Hostname/IP");
+        TextField ndPort = new TextField("core Port");
         TextField controllerIP = new TextField("Controller Hostname/IP");
         TextField controllerPort = new TextField("Controller Port");
         TextField userName = new TextField("Controller Username");
         TextField passWord = new TextField("Controller Password");
         Slider progress = new Slider();
 
-        ubiquipyConnect.addActionListener(e -> this.backendUtil.connect(ndIP.getText(), ndPort.getText(), controllerIP.getText(), controllerPort.getText(),
+        netsumapConnect.addActionListener(e -> this.backendUtil.connect(ndIP.getText(), ndPort.getText(), controllerIP.getText(), controllerPort.getText(),
                 userName.getText(), passWord.getText(), progress));
 
         setup.add(ndIP);
@@ -56,7 +56,7 @@ public class UI {
         setup.add(controllerPort);
         setup.add(userName);
         setup.add(passWord);
-        setup.add(ubiquipyConnect);
+        setup.add(netsumapConnect);
         setup.add(progress);
 
         return setup;
@@ -108,3 +108,4 @@ public class UI {
                 FontImage.MATERIAL_CHECK_CIRCLE_OUTLINE, 6, e -> client_mgmt());
     }
 }
+

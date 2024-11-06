@@ -10,10 +10,5 @@
         <module name="netsumap-common" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="netsumap" target="8" />
-      <module name="netsumap-common" target="1.8" />
-      <module name="netsumap-javase" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -264,7 +264,7 @@
                 console.log("Message from server:", event.data);
                 document.getElementById('messages').innerHTML += `<p>${event.data}</p>`;
                 json = JSON.parse(event.data);
-                if ("unifi_event" in json){
+                if ("net_evt" in json){
 
                   const li = document.createElement("li");
                   const li_2 = document.createElement("li");
@@ -275,7 +275,7 @@
           
                 } 
 
-                if ("unifi_alarm" in json){
+                if ("net_alm" in json){
 
                   const li = document.createElement("li");
                   const li_2 = document.createElement("li");

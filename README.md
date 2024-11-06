@@ -26,7 +26,6 @@ Data captured from:
 - Live packet capture + analysis
 
 #### Upcoming Integrations 👀
-- 
 - Cisco Meraki
 - Sonicwall
 - HPE Aruba

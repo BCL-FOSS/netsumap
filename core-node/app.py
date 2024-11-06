@@ -29,8 +29,8 @@ K.clear_session() # Clears GPU resources before loading model
 ALLOWED_EXTENSIONS = set(['csv'])
 
 # Load model defined in config file
-if app.config['MODEL']:
-    model = load_model(app.config['MODEL'])  
+
+#model = load_model(app.config['MODEL'])  
 
 @app.get("/")
 async def index():

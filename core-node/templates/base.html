@@ -239,13 +239,14 @@
     <script type="text/javascript">
       
       try {
-        const configStatus=false;
+        let configStatus=false;
 
         while(configStatus){
 
-          const ws_name_display = document.getElementById("ws_name_display");
-          const status_display = document.getElementById("status_display");
-          const err_display = document.getElementById("error_msg_display");
+          let ws_name_display = document.getElementById("ws_name_display");
+          let status_display = document.getElementById("status_display");
+          let err_display = document.getElementById("error_msg_display");
+          let error_display = document.getElementById("error_display");
           let ws;
 
           status_display.innerHTML='Enter Websocket IP/Hostname:Port'
@@ -256,8 +257,6 @@
           }  
 
         }
-
-        const error_display = document.getElementById("error_display");
         
         if(!ws === undefined || !ws === null){
 

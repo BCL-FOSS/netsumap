@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Stop image
-sudo docker stop netsumap-tensorflow
-sudo docker rm netsumap-tensorflow
+sudo docker stop netsumap
+sudo docker rm netsumap
 
 # Restart image
 sudo docker run --gpus all --name netsumap -d -it -v $(pwd):$(pwd) -w $(pwd) docker.io/library/netsumap-tensorflow

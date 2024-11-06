@@ -17,8 +17,8 @@ import os
 import websocket
 from websocket import create_connection
 
-websocket.enableTrace = True
-ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
+# websocket.enableTrace = True
+# ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
 
 # init Redis DB connection
 #db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
@@ -227,13 +227,14 @@ async def signout():
 @app.post("/ws_webhook")
 async def webhook():
     try:
+        
         data = await request.get_json()
         if data:
             msg = json.dumps(data)
             #unifi_event = {
             #    "message": str(msg)
             #}
-            await ws.send(str(msg))
+            #await ws.send(str(msg))
         else:
             raise Exception('Ensure JSON message is attached to the request')
     except Exception as e:

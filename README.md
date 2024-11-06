@@ -6,26 +6,27 @@
 </p>
 
 ### What is this?
-Quart app using a neural network (NN) trained to classify network traffic metadata as benign, outlier or malicious. Packet data is ingested via pcap files converted to CSV, JSON and live capture from specified interface (*currently in development). Prediction results are used to automate security breach responses within REST API enabled network infrastructure commonly utilized by SMBs. 
+Quart app leveraging a neural network (NN) to identify patterns of an attack in progress within a network. Predicitons are used to automate security breach responses within REST API enabled network infrastructure.
 
-Training was conducted using traffic captured using [Cisco Mercury](https://github.com/cisco/mercury)from two sources:
+Data captured from: 
 - Honey pot hosted & managed by Baugh Consulting & Lab L.L.C.
 - Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally.
 
 [Hugging Face Model Repo](https://huggingface.co/bclai) *NN model will be published soon
 
-### How would I use this?
-netsumap can be utilized in the following usecases:
+### Use Cases
 - 👨🏽‍💻 traffic metadata analysis
 - 💥 attack pattern identification 
 - 🤖 network automation
-- 📱 self hosted mobile network status monitoring & management (*currently in development)
+- 📱 self hosted netadmin mobile app (*currently in development)
 
 #### Current Integrations
 - Ubiquiti UniFi Network
+- JSON, CSV network metadata analysis
+- Live packet capture + analysis
 
 #### Upcoming Integrations 👀
-- Live packet capture analysis
+- 
 - Cisco Meraki
 - Sonicwall
 - HPE Aruba

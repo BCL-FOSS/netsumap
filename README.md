@@ -33,11 +33,11 @@ Data captured from:
 
 ## Getting Started
 
-### Recommended Environment
+### Recommended Minimum Environment
 - Ubuntu 22.04 LTS
-- 1/12 GPU Minimum
-- 4 GB GPU Memory Minimum
-- 8 GB RAM Minimum
+- 1/12 GPU 
+- 4 GB GPU Memory 
+- 8 GB RAM
 
 ### Core Configuration
 1. Install CUDA Driver
@@ -46,11 +46,16 @@ Data captured from:
 ```bash
     sudo ufw allow 25000
 ```
-4. Run startup script 
+4. Install CUDA Compiler  
+```python
+    pip install nvidia-pyindex 
+    pip install nvidia-cuda-nvcc
+```
+5. Run startup script 
 ```bash
     sudo ./netsumap_init.sh
 ```
-5. Install Redis DB (optional depending on if the mobile app is being utilized)
+6. Install Redis DB (optional depending on if the mobile app is being utilized)
 ```bash
     sudo apt-get install lsb-release curl gpg
     curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg

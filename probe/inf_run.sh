@@ -4,8 +4,7 @@
 # run example:
 # 	./inf_run.sh
 
-VENV_DIR="venv"
-. $VENV_DIR/bin/activate
+. .venv/bin/activate
 echo "Virtual environment activated."
 
 # Prompt user for the Python script directory

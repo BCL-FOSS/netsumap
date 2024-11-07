@@ -81,7 +81,7 @@ To restart netsumap
 
     # probe parameters require the core-node URL & the # of packets to capture for analysis. Example:
 
-    http://0.0.0.0:25000 50
+    http://0.0.0.0:25000 50 ws://1.1.1.1:30000/
 ```
 
 Run pcap session for instant analysis

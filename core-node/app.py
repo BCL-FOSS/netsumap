@@ -162,7 +162,7 @@ async def probe_removal():
 
             probe_to_rm = json.dumps(data_value)
 
-            if probe_to_rm['confirm'] is 'y':
+            if probe_to_rm['confirm'] == 'y':
                 print(probe_to_rm['id'])
 
         return probe_to_rm #status

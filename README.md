@@ -70,10 +70,11 @@ To restart netsumap
     sudo apt update -y
     sudo apt upgrade -y
 
-    sudo apt install -y python3.12-venv
-    python3.12 -m venv venv
-    . venv/bin/activate
-    pip install scapy requests
+    sudo apt install python3.12-venv -y
+    python3 -m venv .venv
+    . .venv/bin/activate
+    pip install websocket-client requests
+    sudo apt-get install python3-scapy
 ```
 2. Initialize the probe, will create a cronjob which runs packet capture every 5 minutes (can be adjusted)
 ```bash
@@ -94,14 +95,7 @@ Run pcap session for instant analysis
 ```bash
     sudo ufw allow 30000
 ``` 
-2. Setup venv
-```bash
-    sudo apt install python3.12-venv -y
-    python3 -m venv .venv
-    . .venv/bin/activate
-    pip install websocket-client requests scapy
-```
-3. Run setup script
+2. Run setup script
 ```bash
     sudo ./ws_init.sh
 ``` 

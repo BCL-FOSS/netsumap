@@ -9,10 +9,6 @@ import json
 import requests
 import sqlite3
 import uuid
-import websocket
-
-websocket.enableTrace(True)
-ws = None
 
 sql_db = sqlite3.connect('netsuprobe.db')
 db_cur = sql_db.cursor()
@@ -52,7 +48,7 @@ def make_request(url='', payload={'':''}):
             print("Error occurred during request:", str(e))
             return None
         
-def net_scan(url='', count=10, ws=None):
+def net_scan(url='', count=10):
     host_interfaces = socket.if_nameindex()
     counter=0
     inf_to_scan = []
@@ -76,13 +72,7 @@ def net_scan(url='', count=10, ws=None):
         core_url = url+"/netmetadata"
         payload = json.dumps(packet_data)
         make_request(url=core_url, payload=payload)
-        try:
-            ws.send(payload)
-            ws.close()
-        except Exception as e:
-            print(e)
         
-    
     hostname = socket.gethostname()
     IPAddr = socket.gethostbyname(hostname)
 
@@ -115,17 +105,7 @@ def register(url=''):
     else:
         pass
 
-def main(url='', count=0, ws_url=''):
-
-    if ws_url == '':
-         print("Enter WS URL. Closing...")
-         return
-    
-    ws=websocket.create_connection(ws_url)
-
-    if ws is None:
-         print('Verify websocket is running.')
-         return
+def main(url='', count=0):
 
     if table_verify:
         print('Config DB creation successful.')
@@ -136,13 +116,13 @@ def main(url='', count=0, ws_url=''):
     
     register(url=url)
     
-    net_scan(url=url, count=count, ws=ws)
+    net_scan(url=url, count=count)
     
 if __name__ == "__main__":
     url = sys.argv[1]
     pcap_count = int(sys.argv[2])
     ws_url= sys.argv[3]
-    main(url=url, count=pcap_count, ws_url=ws_url)
+    main(url=url, count=pcap_count)
 
 
     

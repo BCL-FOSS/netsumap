@@ -133,13 +133,15 @@ async def probe_registration():
         if data_value:
             new_probe = json.dumps(data_value)
 
+            print(new_probe)
+
             db_upload = await db.upload_profile(user_id=new_probe['id'], user_data=new_probe['probe_data'])
             #print(db_upload)
         
             db_query_value = await db.get_profile(key=new_probe['id'])
             #print(db_query_value)
 
-        return jsonify({"Auth_Status" : "Success",
+        return jsonify({"Registration Status" : "Success",
                 "Profile_Data" : db_query_value})
     except TypeError as error:
         return {'TypeError' :  str(error)}

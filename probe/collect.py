@@ -14,10 +14,10 @@ sql_db = sqlite3.connect('netsuprobe.db')
 db_cur = sql_db.cursor()
 table_name = 'probe-config'
 id_row = 'id'
-cfg_row = 'config_status'
+cfg_row = 'config-status'
 ip_row = 'ip'
-db_cur.execute("CREATE TABLE %s(%s, %s, %s)" % (table_name, id_row, cfg_row, ip_row)) 
-table = db_cur.execute("SELECT %s FROM sqlite_master") % table_name
+db_cur.execute("CREATE TABLE probe-config(id, config-status, ip)") 
+table = db_cur.execute("SELECT probe-config FROM sqlite_master")
 table_verify = table.fetchone()
 
 def gen_id():
@@ -73,29 +73,28 @@ def net_scan(url='', count=10):
         payload = json.dumps(packet_data)
         make_request(url=core_url, payload=payload)
         
-    hostname = socket.gethostname()
-    IPAddr = socket.gethostbyname(hostname)
-
-    print("Your Computer Name is:" + hostname)
-    print("Your Computer IP Address is:" + IPAddr)
 
 def register(url=''):
-    prof_check = db_cur.execute("SELECT %s FROM %s" % (id_row, table_name)) 
+    prof_check = db_cur.execute("SELECT id FROM probe-config") 
     if prof_check is None:
         probe_id = gen_id()
         config_status = True
 
-        db_cur.execute("""
-            INSERT INTO %s VALUES
-                (%s, %s, %s) 
-            """ % (table_name, probe_id, config_status, ip_row)) 
+        hostname = socket.gethostname()
+        ip_addr = socket.gethostbyname(hostname)
+
+        print("Your Computer Name is:" + hostname)
+        print("Your Computer IP Address is:" + ip_addr)
+
+        db_cur.execute("INSERT INTO probe-config (probe_id, config_status, ip_addr) VALUES (?,?,?)", (probe_id, config_status, ip_addr)) 
         sql_db.commit()
 
         register_url = url+'/register'
 
         probe_obj = {
              "id": probe_id,
-             "probe_data":""
+             "probe_data":{"hst_nm": hostname,
+                           "ip": ip_addr}
         }
 
         probe_json = json.dumps(probe_obj)

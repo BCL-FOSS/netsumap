@@ -14,8 +14,6 @@ from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 from flask_cors import CORS
 import os
-import websocket
-from websocket import create_connection
 
 # websocket.enableTrace = True
 # ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
@@ -48,7 +46,7 @@ async def page_not_found():
 async def handle_internal_error(e):
     return jsonify({"error": "Internal server error"}), 500
 
-@app.post("/file_analysis")
+@app.post("/csv_inference")
 async def file_prediction():
     try:
         if request.method == 'POST':
@@ -67,11 +65,6 @@ async def file_prediction():
                     f.save(file_path)
                     X_inference, original_data = preprocess_file_for_inference(file_path=file_path)
 
-                    predictions = model.predict(X_inference)
-
-                    # Prediction -> binary conversion (benign, malicious, outlier)
-                    predicted_classes = np.argmax(predictions, axis=1)
-
                     """
                         if data_value['user_id']:
                         db_query_value = await db.get_profile(key=data_value['user_id'])
@@ -81,10 +74,8 @@ async def file_prediction():
                         command = await ubnt_profile.mgr_devices()
             
                     """
-
-                    # Response conversion to JSON
-                    prediction = predicted_classes.tolist()
-                    inference_value = json.dumps(prediction)
+                    
+                    inference_value = predict(processed_input=X_inference)
 
                     analysis_results.append(inference_value)
 
@@ -111,9 +102,7 @@ async def file_prediction():
             'message': str(large_request)
         }), 500
 
-
-    
-@app.post("/threat_analysis")
+@app.post("/json_inference")
 async def prediction():
     try:
         if request.method == 'POST':
@@ -127,12 +116,6 @@ async def prediction():
                 # JSON preprocessing for prediction
                 X_input = preprocess_input(json_data=data_value['packet_data'])
 
-                # Model determines if packet is malicious, benign or outlier
-                predictions = model.predict(X_input)
-
-                # Prediction -> binary conversion (benign, malicious, outlier)
-                predicted_classes = np.argmax(predictions, axis=1)
-
                 """
                 if data_value['user_id']:
                 db_query_value = await db.get_profile(key=data_value['user_id'])
@@ -144,7 +127,7 @@ async def prediction():
                 """
 
                 # Response conversion to JSON
-                prediction = predicted_classes.tolist()
+                prediction = predict(processed_input=X_input)
                 inference_value = json.dumps(prediction)
             else:
                 return jsonify({"Error": "Packet data missing for threat assessment"})
@@ -225,17 +208,17 @@ async def signout():
     except Exception as e:
         return {'Exception' :  str(e)}
     
-@app.post("/ws_webhook")
+@app.post("/netmetadata")
 async def webhook():
     try:
-        
         data = await request.get_json()
         if data:
             msg = json.dumps(data)
-            #unifi_event = {
-            #    "message": str(msg)
-            #}
-            #await ws.send(str(msg))
+
+            evt_data = json.loads(msg)
+
+            print(evt_data)
+
         else:
             raise Exception('Ensure JSON message is attached to the request')
     except Exception as e:
@@ -277,6 +260,18 @@ def preprocess_file_for_inference(file_path):
     X_scaled = scaler.fit_transform(data_cleaned)
 
     return X_scaled, original_data
+
+def predict(processed_input=None):
+    # Model determines if packet is malicious, benign or outlier
+    predictions = model.predict(processed_input)
+
+    # Prediction -> binary conversion (benign, malicious, outlier)
+    predicted_classes = np.argmax(predictions, axis=1)
+
+    # Response conversion to JSON
+    prediction = predicted_classes.tolist()
+    inference_value = json.dumps(prediction)
+    return inference_value
 
 def allowedFile(filename):
     return '.' in filename and \

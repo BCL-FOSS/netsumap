@@ -7,6 +7,25 @@ import socket
 import sys
 import json
 import requests
+import sqlite3
+import uuid
+
+sql_db = sqlite3.connect('netsuprobe.db')
+db_cur = sql_db.cursor()
+table_name = 'probe-config'
+id_row = 'id'
+cfg_row = 'config_status'
+db_cur.execute("CREATE TABLE %s(%s, %s)") % (table_name, id_row, cfg_row)
+table = db_cur.execute("SELECT name FROM sqlite_master")
+table_verify = table.fetchone()
+
+def gen_id():
+        try:
+            id = uuid.uuid4()
+        except Exception as e:
+            return print("ID Gen Failed")
+                   
+        return str(id)
 
 def make_request(url='', payload={'':''}):
 
@@ -46,19 +65,56 @@ def net_scan(url='', count=10):
     for cap in pcaps:
         
         packet_data = {
+             
             "net_evt": cap.show(dump=True)
         }
 
         payload = json.dumps(packet_data)
         make_request(url=url, payload=payload)
-       
+
+def register(url=''):
+    prof_check = db_cur.execute("SELECT %s FROM %s") % (id_row, table_name)
+    if prof_check is None:
+        probe_id = gen_id()
+        config_status = True
+
+        db_cur.execute("""
+            INSERT INTO %s VALUES
+                (%s, %s)
+            """) % (table_name, probe_id, config_status)
+        sql_db.commit()
+
+        register_url = url+'/register'
+
+        probe_obj = {
+             "id": "",
+             "probe_data":""
+        }
+
+        probe_json = json.dumps(probe_obj)
+
+        make_request(url=register_url,payload=probe_json)
+
+    else:
+        pass
 
 def main(url='', count=0):
+    if table_verify:
+        print('Config DB creation successful.')
+        pass
+    else:
+        print('Config DB creation failed.')
+        return
+    
+    register(url=url)
+    
     net_scan(url=url, count=count)
     
 if __name__ == "__main__":
     url = sys.argv[1]
     pcap_count = int(sys.argv[2])
+    register()
+
     main(url=url, count=pcap_count)
 
 

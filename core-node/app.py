@@ -15,11 +15,8 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from flask_cors import CORS
 import os
 
-# websocket.enableTrace = True
-# ws=create_connection(app.config['WEBSOCKET_ADDRESS'])
-
 # init Redis DB connection
-#db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
+db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
 
 K.clear_session() # Clears GPU resources before loading model
 
@@ -28,7 +25,7 @@ ALLOWED_EXTENSIONS = set(['csv'])
 
 # Load model defined in config file
 
-#model = load_model(app.config['MODEL'])  
+# model = load_model(app.config['MODEL'])  
 
 @app.get("/")
 async def index():
@@ -147,28 +144,17 @@ async def prediction():
             'message': str(e)
         }), 500
     
-@app.post("/login")
-async def authentication():
+@app.post("/register")
+async def registration():
     try:
-        loop = asyncio.new_event_loop()
-        
-        data_value = loop.run_until_complete(request.get_json())
+        data_value = await request.get_json()
 
-        if data_value:
-            print('Data coroutine complete')
-            json_data = json.dumps(data_value)
-            data = json.loads(json_data)     
+        new_probe = json.dumps(data_value)
 
-        loop.close() 
-            
-        ubnt_profile = UniFiNetAPI(controller_ip=data['ip'], controller_port=data['port'], username=data['username'], password=data['password'])
-
-        profile_value = await ubnt_profile.authenticate()
-
-        #db_upload = await db.upload_profile(user_id=profile_value['id'], user_data=profile_value)
+        db_upload = await db.upload_profile(user_id=new_probe['id'], user_data=new_probe['probe_data'])
         #print(db_upload)
     
-        #db_query_value = await db.get_profile(key=profile_value['id'])
+        db_query_value = await db.get_profile(key=new_probe['id'])
         #print(db_query_value)
 
         return jsonify({"Auth_Status" : "Success",

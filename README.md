@@ -94,7 +94,14 @@ Run pcap session for instant analysis
 ```bash
     sudo ufw allow 30000
 ``` 
-2. Run setup script
+2. Setup venv
+```bash
+    sudo apt install python3.12-venv -y
+    python3 -m venv .venv
+    . .venv/bin/activate
+    pip install websocket-client requests scapy
+```
+3. Run setup script
 ```bash
     sudo ./ws_init.sh
 ``` 

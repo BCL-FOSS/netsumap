@@ -4,11 +4,6 @@
 # run example:
 # 	./inf_init.sh
 
-sudo apt install python3.12-venv -y
-python3 -m venv .venv
-. .venv/bin/activate
-pip install websocket-client requests scapy
-
 # Prompt user for the Python script directory
 read -p "Enter the full path to your Python script: " PYTHON_SCRIPT
 

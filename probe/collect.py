@@ -12,12 +12,8 @@ import uuid
 
 sql_db = sqlite3.connect('netsuprobe.db')
 db_cur = sql_db.cursor()
-table_name = 'probe-config'
-id_row = 'id'
-cfg_row = 'config-status'
-ip_row = 'ip'
-db_cur.execute("CREATE TABLE probe-config(id, config-status, ip)") 
-table = db_cur.execute("SELECT probe-config FROM sqlite_master")
+db_cur.execute("CREATE TABLE probe_config(id, config_status, ip)") 
+table = db_cur.execute("SELECT probe_config FROM sqlite_master")
 table_verify = table.fetchone()
 
 def gen_id():
@@ -75,7 +71,7 @@ def net_scan(url='', count=10):
         
 
 def register(url=''):
-    prof_check = db_cur.execute("SELECT id FROM probe-config") 
+    prof_check = db_cur.execute("SELECT id FROM probe_config") 
     if prof_check is None:
         probe_id = gen_id()
         config_status = True
@@ -86,7 +82,7 @@ def register(url=''):
         print("Your Computer Name is:" + hostname)
         print("Your Computer IP Address is:" + ip_addr)
 
-        db_cur.execute("INSERT INTO probe-config (probe_id, config_status, ip_addr) VALUES (?,?,?)", (probe_id, config_status, ip_addr)) 
+        db_cur.execute("INSERT INTO probe_config (probe_id, config_status, ip_addr) VALUES (?,?,?)", (probe_id, config_status, ip_addr)) 
         sql_db.commit()
 
         register_url = url+'/register'

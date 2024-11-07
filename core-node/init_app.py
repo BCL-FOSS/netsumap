@@ -11,6 +11,8 @@ else:
     UPLOAD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'Uploads'))
 
 app = Quart(__name__)
+CORS(app)
+
 app.secret_key = app.config['SECRET_KEY']
 app.config.from_object("config")
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1000 * 1000  # 500 MB

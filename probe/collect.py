@@ -16,7 +16,7 @@ table_name = 'probe-config'
 id_row = 'id'
 cfg_row = 'config_status'
 ip_row = 'ip'
-db_cur.execute("CREATE TABLE %s(%s, %s, %s)") % (table_name, id_row, cfg_row, ip_row)
+db_cur.execute("CREATE TABLE %s(%s, %s, %s)" % (table_name, id_row, cfg_row, ip_row)) 
 table = db_cur.execute("SELECT %s FROM sqlite_master") % table_name
 table_verify = table.fetchone()
 
@@ -80,15 +80,15 @@ def net_scan(url='', count=10):
     print("Your Computer IP Address is:" + IPAddr)
 
 def register(url=''):
-    prof_check = db_cur.execute("SELECT %s FROM %s") % (id_row, table_name)
+    prof_check = db_cur.execute("SELECT %s FROM %s" % (id_row, table_name)) 
     if prof_check is None:
         probe_id = gen_id()
         config_status = True
 
         db_cur.execute("""
             INSERT INTO %s VALUES
-                (%s, %s, %s)
-            """) % (table_name, probe_id, config_status, ip)
+                (%s, %s, %s) 
+            """ % (table_name, probe_id, config_status, ip_row)) 
         sql_db.commit()
 
         register_url = url+'/register'

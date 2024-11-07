@@ -89,6 +89,20 @@ Run pcap session for instant analysis
     sudo ./inf_run.sh
 ```
 
+### Websocket Configuration
+1. Open Port 30000
+```bash
+    sudo ufw allow 30000
+``` 
+2. Run setup script
+```bash
+    sudo ./ws_init.sh
+``` 
+Restart websocket
+```bash
+    sudo ./ws_restart.sh
+```
+
 
 
 

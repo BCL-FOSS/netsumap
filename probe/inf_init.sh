@@ -14,10 +14,11 @@ if [ ! -f "$PYTHON_SCRIPT" ]; then
 fi
 
 # Prompt user for additional parameters
-echo "PARAM FORMAT: collect.py nmp_ip  pcap_count" 
-echo "PARAM FORMAT Ex.: collect.py http://0.0.0.0:30000 150" 
+echo "PARAM FORMAT: collect.py nmp_ip  pcap_count ws" 
+echo "PARAM FORMAT Ex.: collect.py http://0.0.0.0:25000 150 ws://1.1.1.1:30000" 
 echo "nmp_ip (netsumap-core IP/Hostname:Port)" 
-echo "pcap_count (Num packets to capture per run)" \n
+echo "pcap_count (Num packets to capture per run)"
+echo "ws (Websocket server)" \n
 read -p "Enter Parameters: " SCRIPT_PARAMS
 
 # Construct the cron job command

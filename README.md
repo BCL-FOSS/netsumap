@@ -8,7 +8,7 @@
 ### What is this?
 Quart app leveraging a neural network (NN) to identify patterns of an attack in LAN, WAN & cloud environments. Predicitons are used to automate security breach responses within REST API enabled network infrastructure.
 
-A single core-node manages deployed net-scanners, which periodically send relevant traffic metadata gathered from specified ports back to the core for preprocessing and inference. 
+A single core-node manages deployed probes, which periodically send relevant traffic metadata gathered from specified interfaces back to the core for preprocessing and inference. 
 
 Model training data captured from: 
 - Honey pot(s) hosted & managed by Baugh Consulting & Lab L.L.C.

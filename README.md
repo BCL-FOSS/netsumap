@@ -20,7 +20,6 @@ Model training data captured from:
 - 👨🏽‍💻 traffic metadata analysis
 - 💥 attack pattern identification 
 - 🤖 network automation
-- 📱 self hosted netadmin mobile app (*currently in development)
 
 #### Current Integrations
 - Ubiquiti UniFi Network

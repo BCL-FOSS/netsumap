@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Stop Hypercorn process
+sudo killall hypercorn
+
 # Stop image
 sudo docker network disconnect nmp-net netsumap
 sudo docker stop netsumap

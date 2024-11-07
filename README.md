@@ -57,6 +57,12 @@ Model training data captured from:
 ```bash
     sudo ./netsumap_init.sh
 ```
+6. Visit the dashboard at core-server-ip:25000/ to get started.
+
+To restart netsumap 
+```bash
+    sudo ./netsumap_restart.sh
+```
 
 ### Network Probe Configuration
 1. Setup environment
@@ -73,14 +79,13 @@ Model training data captured from:
 ```bash
     sudo ./inf_init.sh
 
-    # probe parameters require the core-node /netmetadata endpoint URL followed by the # of packets to capture for analysis. Example:
+    # probe parameters require the core-node URL & the # of packets to capture for analysis. Example:
 
-    http://0.0.0.0:30000/netmetadata 50
+    http://0.0.0.0:25000 50
 ```
 
 Run pcap session for instant analysis
 ```bash
-    
     sudo ./inf_run.sh
 ```
 

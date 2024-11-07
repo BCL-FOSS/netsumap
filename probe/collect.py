@@ -68,8 +68,9 @@ def net_scan(url='', count=10):
             "net_evt": cap.show(dump=True)
         }
 
+        core_url = url+"/netmetadata"
         payload = json.dumps(packet_data)
-        make_request(url=url, payload=payload)
+        make_request(url=core_url, payload=payload)
 
 def register(url=''):
     prof_check = db_cur.execute("SELECT %s FROM %s") % (id_row, table_name)

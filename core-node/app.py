@@ -12,16 +12,10 @@ from tensorflow.keras import backend as K
 from sklearn.preprocessing import StandardScaler
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
-from flask_cors import CORS
 import os
-from models.util_models.broker import Broker
-import websocket
 
 # init Redis DB connection
 db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT']) 
-
-# Websocket Broker
-broker = Broker()
 
 if db is None:
     print('Verify Redis DB is installed and/or running') 

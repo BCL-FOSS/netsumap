@@ -11,7 +11,6 @@ else:
     UPLOAD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'Uploads'))
 
 app = Quart(__name__)
-CORS(app, resources={r"/ws": {"origins": "*"}})
 
 app.secret_key = app.config['SECRET_KEY']
 app.config.from_object("config")

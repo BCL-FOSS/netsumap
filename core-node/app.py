@@ -189,32 +189,6 @@ async def probe_webhook():
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
 
-@app.websocket("/ws")
-async def ws() -> None:
-    try:
-        task = asyncio.ensure_future(_receive())
-        async for message in broker.subscribe():
-            await websocket.send(message)
-    except Exception as e:
-        await websocket.accept()
-        await websocket.close(1000)
-        raise e
-    except asyncio.CancelledError:
-        # Handle disconnection here
-        await websocket.accept()
-        await websocket.close(1000)
-        raise Exception(asyncio.CancelledError)
-    finally:
-        task.cancel()
-        await task
-        await websocket.accept()
-        await websocket.close(1000)
-
-async def _receive() -> None:
-    while True:
-        message = await websocket.receive()
-        await broker.publish(message)
-
 def preprocess_input(json_data):
     # JSON -> Pandas DataFrame 
     df = pd.DataFrame([json_data])

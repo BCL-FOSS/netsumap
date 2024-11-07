@@ -1,4 +1,4 @@
-from quart import request, render_template, jsonify
+from quart import request, render_template, jsonify, websocket
 import json
 from init_app import app
 from models.UniFiNetAPI import UniFiNetAPI
@@ -14,9 +14,14 @@ from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 from flask_cors import CORS
 import os
+from models.util_models.broker import Broker
+import websocket
 
 # init Redis DB connection
 db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT']) 
+
+# Websocket Broker
+broker = Broker()
 
 if db is None:
     print('Verify Redis DB is installed and/or running') 
@@ -184,6 +189,32 @@ async def probe_webhook():
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
 
+@app.websocket("/ws")
+async def ws() -> None:
+    try:
+        task = asyncio.ensure_future(_receive())
+        async for message in broker.subscribe():
+            await websocket.send(message)
+    except Exception as e:
+        await websocket.accept()
+        await websocket.close(1000)
+        raise e
+    except asyncio.CancelledError:
+        # Handle disconnection here
+        await websocket.accept()
+        await websocket.close(1000)
+        raise Exception(asyncio.CancelledError)
+    finally:
+        task.cancel()
+        await task
+        await websocket.accept()
+        await websocket.close(1000)
+
+async def _receive() -> None:
+    while True:
+        message = await websocket.receive()
+        await broker.publish(message)
+
 def preprocess_input(json_data):
     # JSON -> Pandas DataFrame 
     df = pd.DataFrame([json_data])
@@ -234,7 +265,6 @@ def predict(processed_input=None):
 def allowedFile(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 def run() -> None:
     app.run()

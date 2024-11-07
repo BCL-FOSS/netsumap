@@ -1,4 +1,4 @@
-from quart import request, render_template, jsonify, websocket
+from quart import request, render_template, jsonify
 import json
 from init_app import app
 from models.UniFiNetAPI import UniFiNetAPI

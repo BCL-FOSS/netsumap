@@ -243,13 +243,14 @@
             // Retrieve the URL from the input field
             const wsUrl = document.getElementById('wsUrl').value;
             
-            
             // Display an error if URL is empty
             if (!wsUrl) {
                 alert("Please enter a WebSocket server URL.");
                 return;
             }
 
+            localStorage.setItem('ws_url', wsUrl);
+            
             // Initialize WebSocket
             ws = new WebSocket(wsUrl);
 
@@ -264,60 +265,53 @@
                 console.log("Message from server:", event.data);
                 document.getElementById('messages').innerHTML += `<p>${event.data}</p>`;
                 json = JSON.parse(event.data);
-                if ("net_evt" in json){
-
-                  const li = document.createElement("li");
-                  const li_2 = document.createElement("li");
-                  li.appendChild(document.createTextNode(json.unifi_event));
-                  li_2.appendChild(document.createTextNode('message'));
-                  document.getElementById("events_list").appendChild(li);
-                  document.getElementById("events_list").appendChild(li_2);
-          
-                } 
-
-                if ("net_alm" in json){
-
-                  const li = document.createElement("li");
-                  const li_2 = document.createElement("li");
-                  li.appendChild(document.createTextNode(json.unifi_alarm));
-                  li_2.appendChild(document.createTextNode('message'));
-                  document.getElementById("alarms_list").appendChild(li);
-                  document.getElementById("alarms_list").appendChild(li_2);
-          
-                } 
-                
-                if ("site_dpi" in json){
-
-                  const li = document.createElement("li");
-                  const li_2 = document.createElement("li");
-                  li.appendChild(document.createTextNode(json.site_dpi));
-                  li_2.appendChild(document.createTextNode('message'));
-                  document.getElementById("sites_list").appendChild(li);
-                  document.getElementById("sites_list").appendChild(li_2);
-          
-                } 
-                
-                if ("sta_dpi" in json){
-
-                  const li = document.createElement("li");
-                  const li_2 = document.createElement("li");
-                  li.appendChild(document.createTextNode(json.sta_dpi));
-                  li_2.appendChild(document.createTextNode('message'));
-                  document.getElementById("clients_list").appendChild(li);
-                  document.getElementById("clients_list").appendChild(li_2);
-          
-                }
-          
+              
+                var obj = JSON.parse(event.data, function (key, value) {
+                  switch(key) {
+                    case 'net_evt':
+                      const evt_li = document.createElement("li");
+                      const evt_li_2 = document.createElement("li");
+                      evt_li.appendChild(document.createTextNode(json.net_evt));
+                      evt_li_2.appendChild(document.createTextNode('message'));
+                      document.getElementById("events_list").appendChild(evt_li);
+                      document.getElementById("events_list").appendChild(evt_li_2);
+                      break;
+                    case 'net_alm':
+                      const alm_li = document.createElement("li");
+                      const alm_li_2 = document.createElement("li");
+                      alm_li.appendChild(document.createTextNode(json.net_alm));
+                      alm_li_2.appendChild(document.createTextNode('message'));
+                      document.getElementById("alarms_list").appendChild(alm_li);
+                      document.getElementById("alarms_list").appendChild(alm_li_2);
+                      break;
+                    case 'org_obj':
+                      const org_li = document.createElement("li");
+                      const org_li_2 = document.createElement("li");
+                      org_li.appendChild(document.createTextNode(json.org_obj));
+                      org_li_2.appendChild(document.createTextNode('message'));
+                      document.getElementById("sites_list").appendChild(org_li);
+                      document.getElementById("sites_list").appendChild(org_li_2);
+                    case 'sta_obj':
+                      const sta_li = document.createElement("li");
+                      const sta_li_2 = document.createElement("li");
+                      sta_li.appendChild(document.createTextNode(json.sta_obj));
+                      sta_li_2.appendChild(document.createTextNode('message'));
+                      document.getElementById("clients_list").appendChild(sta_li);
+                      document.getElementById("clients_list").appendChild(sta_li_2);
+                  }
+                });
             };
 
             ws.onerror = (error) => {
                 console.error("WebSocket error:", error);
+                localStorage.removeItem('ws_url');
                 document.getElementById('status').innerText = "Error";
                 document.getElementById('status').classList.add("text-danger");
             };
 
             ws.onclose = () => {
                 console.log("WebSocket connection closed.");
+                localStorage.removeItem('ws_url');
                 document.getElementById('status').innerText = "Disconnected";
                 document.getElementById('status').classList.remove("text-success", "text-danger");
             };
@@ -325,7 +319,9 @@
 
       function closeWebSocket() {
             if (ws && ws.readyState === WebSocket.OPEN) {
+
                 ws.close();
+                localStorage.removeItem('ws_url');
                 document.getElementById('status').innerText = "Disconnected by User";
             } else {
                 alert("WebSocket is not open or already closed.");

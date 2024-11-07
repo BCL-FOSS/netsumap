@@ -9,10 +9,11 @@ VENV_DIR="venv"
 echo "Virtual environment activated."
 
 # Prompt user for the Python script directory
-echo "PARAM FORMAT: collect.py nmp_ip  pcap_count" 
-echo "PARAM FORMAT Ex.: collect.py http://0.0.0.0:30000 150" 
-echo "nmp_ip (netsumap-core IP/Hostname:Port)" 
-echo "pcap_count (Num packets to capture per run)" \n
+echo "PARAM FORMAT: collect.py nmp_ip  pcap_count ws" 
+echo "PARAM FORMAT Ex.: collect.py http://0.0.0.0:25000 150 ws://1.1.1.1:30000" 
+echo "nmp_ip (netsumap-core)" 
+echo "pcap_count (Num packets to capture per run)"
+echo "ws (Websocket server)" \n
 
 read -p "Enter script params: " INF_PARAMS
 

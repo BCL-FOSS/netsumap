@@ -8,7 +8,9 @@
 ### What is this?
 Quart app leveraging a neural network (NN) to identify patterns of an attack in LAN, WAN & cloud environments. Predicitons are used to automate security breach responses within REST API enabled network infrastructure.
 
-Data captured from: 
+A single core-node manages deployed net-scanners, which periodically send relevant traffic metadata gathered from specified ports back to the core for preprocessing and inference. 
+
+Model training data captured from: 
 - Honey pot(s) hosted & managed by Baugh Consulting & Lab L.L.C.
 - Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally.
 
@@ -33,13 +35,14 @@ Data captured from:
 
 ## Getting Started
 
-### Recommended Minimum Environment
+### Core Configuration
+
+#### Recommended Minimum Environment
 - Ubuntu 22.04 LTS
 - 1/12 GPU 
 - 4 GB GPU Memory 
 - 8 GB RAM
 
-### Core Configuration
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
 3. Open port 25000
@@ -63,6 +66,32 @@ Data captured from:
     echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
     sudo apt-get update
     sudo apt-get install redis
+```
+
+### Network Probe Configuration
+1. Setup environment
+```bash
+    sudo apt update -y
+    sudo apt upgrade -y
+
+    sudo apt install -y python3.12-venv
+    python3.12 -m venv venv
+    . venv/bin/activate
+    pip install scapy requests
+```
+2. Initialize the probe, will create a cronjob which runs packet capture every 5 minutes (can be adjusted)
+```bash
+    sudo ./inf_init.sh
+
+    # probe parameters require the core-node /netmetadata endpoint URL followed by the # of packets to capture for analysis. Example:
+
+    http://0.0.0.0:30000/netmetadata 50
+```
+
+Run pcap session for instant analysis
+```bash
+    
+    sudo ./inf_run.sh
 ```
 
 

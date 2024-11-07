@@ -19,7 +19,8 @@ db_cur = sql_db.cursor()
 table_name = 'probe-config'
 id_row = 'id'
 cfg_row = 'config_status'
-db_cur.execute("CREATE TABLE %s(%s, %s)") % (table_name, id_row, cfg_row)
+ip_row = 'ip'
+db_cur.execute("CREATE TABLE %s(%s, %s, %s)") % (table_name, id_row, cfg_row, ip_row)
 table = db_cur.execute("SELECT %s FROM sqlite_master") % table_name
 table_verify = table.fetchone()
 
@@ -81,6 +82,12 @@ def net_scan(url='', count=10, ws=None):
         except Exception as e:
             print(e)
         
+    
+    hostname = socket.gethostname()
+    IPAddr = socket.gethostbyname(hostname)
+
+    print("Your Computer Name is:" + hostname)
+    print("Your Computer IP Address is:" + IPAddr)
 
 def register(url=''):
     prof_check = db_cur.execute("SELECT %s FROM %s") % (id_row, table_name)
@@ -90,8 +97,8 @@ def register(url=''):
 
         db_cur.execute("""
             INSERT INTO %s VALUES
-                (%s, %s)
-            """) % (table_name, probe_id, config_status)
+                (%s, %s, %s)
+            """) % (table_name, probe_id, config_status, ip)
         sql_db.commit()
 
         register_url = url+'/register'

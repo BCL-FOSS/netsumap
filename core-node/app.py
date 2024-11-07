@@ -16,7 +16,10 @@ from flask_cors import CORS
 import os
 
 # init Redis DB connection
-db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT'])  
+db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT']) 
+
+if db is None:
+    print('Verify Redis DB is installed and/or running') 
 
 K.clear_session() # Clears GPU resources before loading model
 
@@ -61,16 +64,6 @@ async def file_prediction():
                     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                     f.save(file_path)
                     X_inference, original_data = preprocess_file_for_inference(file_path=file_path)
-
-                    """
-                        if data_value['user_id']:
-                        db_query_value = await db.get_profile(key=data_value['user_id'])
-                        ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
-                        ubnt_profile.token = db_query_value['token']
-                        ubnt_profile.id = db_query_value['id']
-                        command = await ubnt_profile.mgr_devices()
-            
-                    """
                     
                     inference_value = predict(processed_input=X_inference)
 
@@ -100,7 +93,7 @@ async def file_prediction():
         }), 500
 
 @app.post("/json_inference")
-async def prediction():
+async def rest_prediction():
     try:
         if request.method == 'POST':
         
@@ -112,16 +105,6 @@ async def prediction():
 
                 # JSON preprocessing for prediction
                 X_input = preprocess_input(json_data=data_value['packet_data'])
-
-                """
-                if data_value['user_id']:
-                db_query_value = await db.get_profile(key=data_value['user_id'])
-                ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
-                ubnt_profile.token = db_query_value['token']
-                ubnt_profile.id = db_query_value['id']
-                command = await ubnt_profile.mgr_devices()
-            
-                """
 
                 # Response conversion to JSON
                 prediction = predict(processed_input=X_input)
@@ -145,20 +128,20 @@ async def prediction():
         }), 500
     
 @app.post("/register")
-async def registration():
+async def probe_registration():
     try:
         data_value = await request.get_json()
+        if data_value:
+            new_probe = json.dumps(data_value)
 
-        new_probe = json.dumps(data_value)
-
-        db_upload = await db.upload_profile(user_id=new_probe['id'], user_data=new_probe['probe_data'])
-        #print(db_upload)
-    
-        db_query_value = await db.get_profile(key=new_probe['id'])
-        #print(db_query_value)
+            db_upload = await db.upload_profile(user_id=new_probe['id'], user_data=new_probe['probe_data'])
+            #print(db_upload)
+        
+            db_query_value = await db.get_profile(key=new_probe['id'])
+            #print(db_query_value)
 
         return jsonify({"Auth_Status" : "Success",
-                "Profile_Data" : profile_value})
+                "Profile_Data" : db_query_value})
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:
@@ -166,36 +149,25 @@ async def registration():
     except asyncio.CancelledError as can_error:
         return {'Exception' :  str(can_error)}
     
-@app.post("/logout")    
-async def signout():
+@app.post("/rmprobe")    
+async def probe_removal():
     try:
-        loop = asyncio.new_event_loop()
-        
-        data_value = loop.run_until_complete(request.get_json())
-
+        data_value = await request.get_json()
         if data_value:
-            print('Data coroutine complete')
-            json_data = json.dumps(data_value)
-            data = json.loads(json_data)  
-            #print(data)    
 
-        loop.close()   
-        
-        #db_query_value = await db.get_profile(key=data['id'])
+            probe_to_rm = json.dumps(data_value)
 
-        #ubnt_profile = UniFiNetAPI(controller_ip=db_query_value['url'], controller_port=db_query_value['port'], username=db_query_value['username'], password=data['password'])
-        #ubnt_profile.token = db_query_value['token']
-        #ubnt_profile.id = db_query_value['id']
-        #status = await ubnt_profile.sign_out()
+            if probe_to_rm['confirm'] is 'y':
+                print(probe_to_rm['id'])
 
-        return data_value #status
+        return probe_to_rm #status
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:
         return {'Exception' :  str(e)}
     
 @app.post("/netmetadata")
-async def webhook():
+async def probe_webhook():
     try:
         data = await request.get_json()
         if data:

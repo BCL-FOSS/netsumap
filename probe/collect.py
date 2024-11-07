@@ -16,15 +16,14 @@ table_name = 'probe-config'
 id_row = 'id'
 cfg_row = 'config_status'
 db_cur.execute("CREATE TABLE %s(%s, %s)") % (table_name, id_row, cfg_row)
-table = db_cur.execute("SELECT name FROM sqlite_master")
+table = db_cur.execute("SELECT %s FROM sqlite_master") % table_name
 table_verify = table.fetchone()
 
 def gen_id():
         try:
             id = uuid.uuid4()
         except Exception as e:
-            return print("ID Gen Failed")
-                   
+            return print("ID Gen Failed")   
         return str(id)
 
 def make_request(url='', payload={'':''}):
@@ -87,7 +86,7 @@ def register(url=''):
         register_url = url+'/register'
 
         probe_obj = {
-             "id": "",
+             "id": probe_id,
              "probe_data":""
         }
 
@@ -113,8 +112,6 @@ def main(url='', count=0):
 if __name__ == "__main__":
     url = sys.argv[1]
     pcap_count = int(sys.argv[2])
-    register()
-
     main(url=url, count=pcap_count)
 
 

@@ -11,7 +11,7 @@ sudo apt-get upgrade -y
 sudo apt-get install python3-scapy -y
 
 scriptdir= $(pwd)
-scriptfile= "collect.py"
+scriptfile= "inf_run.sh"
 findscript= $scriptdir$scriptfile
 # Check if script exists
 if [ ! -f $findscript]; then

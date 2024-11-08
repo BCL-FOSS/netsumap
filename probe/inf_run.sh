@@ -20,6 +20,8 @@ echo "pcap_count (Num packets to capture per run)"\n
 
 read -p "Enter script params: " INF_PARAMS
 
+# Start venv
 . .venv/bin/activate 
 
+# Run collector.py
 /usr/bin/python3 $findscript $INF_PARAMS

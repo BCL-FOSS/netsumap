@@ -83,7 +83,8 @@ def net_scan(url='', count=10):
     print("Probe Server IP:" + ip_addr)
         
 def register(url=''):
-
+    conn = sqlite3.connect('probe.db')
+    cur = conn.cursor()
     probe_status = cur.execute("SELECT status FROM pbdata")
 
     if probe_status is None:

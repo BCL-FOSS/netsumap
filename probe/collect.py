@@ -73,6 +73,12 @@ def net_scan(url='', count=10):
         core_url = url+"/netmetadata"
         payload = json.dumps(packet_data)
         make_request(url=core_url, payload=payload)
+
+    hostname = socket.gethostname()
+    ip_addr = socket.gethostbyname(hostname)
+
+    print("Hostname of probe server:" + hostname)
+    print("Probe Server IP:" + ip_addr)
         
 def register(url=''):
 

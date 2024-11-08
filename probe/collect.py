@@ -22,6 +22,8 @@ if os.path.exists('probe.db') == False:
     if res.fetchone() is None:
         print('Failed to create table in db ')
         USE_DB=False
+else:
+     print("Probe DB already exists")
     
 def gen_id():
         try:

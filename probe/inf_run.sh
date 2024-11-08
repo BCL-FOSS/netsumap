@@ -7,4 +7,4 @@
 # Start venv
 . .venv/bin/activate 
 
-/usr/bin/python3 collect.py $1" $2"
+/usr/bin/python3 collect.py $1 $2

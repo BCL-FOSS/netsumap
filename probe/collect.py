@@ -10,17 +10,19 @@ import requests
 import uuid
 import sqlite3
 import time
+import os
 
 USE_DB=True
 
-conn = sqlite3.connect('probe.db')
-cur = conn.cursor()
-cur.execute("CREATE TABLE pbdata(id, status, host_ip, core_ip)")
-res = cur.execute("SELECT name FROM sqlite_master")
-if res.fetchone() is None:
-    print('Failed to create table in db ')
-    USE_DB=False
-
+if os.path.exists('probe.db') == False:
+    conn = sqlite3.connect('probe.db')
+    cur = conn.cursor()
+    cur.execute("CREATE TABLE pbdata(id, status, host_ip, core_ip)")
+    res = cur.execute("SELECT name FROM sqlite_master")
+    if res.fetchone() is None:
+        print('Failed to create table in db ')
+        USE_DB=False
+    
 def gen_id():
         try:
             id = uuid.uuid4()

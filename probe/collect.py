@@ -11,6 +11,7 @@ import uuid
 import sqlite3
 import time
 import os
+import urllib.request
 
 USE_DB=True
 
@@ -78,11 +79,8 @@ def net_scan(url='', count=10):
         payload = json.dumps(packet_data)
         make_request(url=core_url, payload=payload)
 
-    hostname = socket.gethostname()
-    ip_addr = socket.gethostbyname(hostname)
-
-    print("Hostname of probe server:" + hostname)
-    print("Probe Server IP:" + ip_addr)
+    external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
+    print(external_ip)
         
 def register(url=''):
     conn = sqlite3.connect('probe.db')
@@ -95,18 +93,12 @@ def register(url=''):
         probe_id = gen_id()
         config_status = True
 
-        hostname = socket.gethostname()
-        ip_addr = socket.gethostbyname(hostname)
-
-        print("Hostname of probe server:" + hostname)
-        print("Probe Server IP:" + ip_addr)
-
         register_url = url+'/register'
 
         probe_obj = {
                 "id": probe_id,
-                "probe_data":{"hst_nm": hostname,
-                            "ip": ip_addr}
+                "probe_data":{"hst_nm": "",
+                            "ip": ""}
             }
 
         probe_json = json.dumps(probe_obj)

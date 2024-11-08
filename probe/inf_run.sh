@@ -4,13 +4,22 @@
 # run example:
 # 	./inf_run.sh
 
+scriptdir= $(pwd)
+scriptfile= "collect.py"
+findscript= $scriptdir$scriptfile
+# Check if script exists
+if [ ! -f $findscript]; then
+    echo "Error: File does not exist"
+    exit 1
+fi
+
 # Prompt user for the Python script directory
-echo "PARAM FORMAT: collect.py nmp_ip  pcap_count ws" 
-echo "PARAM FORMAT Ex.: collect.py http://0.0.0.0:25000 150 ws://1.1.1.1:30000" 
-echo "nmp_ip (netsumap-core)" 
-echo "pcap_count (Num packets to capture per run)"
-echo "ws (Websocket server)" \n
+echo "PARAM FORMAT Ex.:http://0.0.0.0:25000 150" 
+echo "nmp_ip (netsumap-core IP/Hostname:Port)" 
+echo "pcap_count (Num packets to capture per run)"\n
 
 read -p "Enter script params: " INF_PARAMS
 
-/usr/bin/python3 collect.py $INF_PARAMS
+. .venv/bin/activate 
+
+/usr/bin/python3 $findscript $INF_PARAMS

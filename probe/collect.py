@@ -7,20 +7,25 @@ import socket
 import sys
 import json
 import requests
-import sqlite3
 import uuid
+import sqlite3
+import time
 
-sql_db = sqlite3.connect('netsuprobe.db')
-db_cur = sql_db.cursor()
-db_cur.execute("CREATE TABLE probe_config(id, config_status, ip)") 
-table = db_cur.execute("SELECT probe_config FROM sqlite_master")
-table_verify = table.fetchone()
+USE_DB=True
+
+conn = sqlite3.connect('probe.db')
+cur = conn.cursor()
+cur.execute("CREATE TABLE pbdata(id, status, host_ip, core_ip)")
+res = cur.execute("SELECT name FROM sqlite_master")
+if res.fetchone() is None:
+    print('Failed to create table in db ')
+    USE_DB=False
 
 def gen_id():
         try:
             id = uuid.uuid4()
         except Exception as e:
-            return print("ID Gen Failed")   
+            return print("Probe ID Gen Failed")   
         return str(id)
 
 def make_request(url='', payload={'':''}):
@@ -49,7 +54,7 @@ def net_scan(url='', count=10):
     counter=0
     inf_to_scan = []
     for index, inf in host_interfaces:
-        #ignores first 3 interfaces returned in output. irrelevant to scan.
+        #ignores first 3 interfaces returned in output. skipped interfaces irrelevant to scan.
         if counter != 3:
             counter+=1
         else:
@@ -69,54 +74,50 @@ def net_scan(url='', count=10):
         payload = json.dumps(packet_data)
         make_request(url=core_url, payload=payload)
         
-
 def register(url=''):
-    prof_check = db_cur.execute("SELECT id FROM probe_config") 
-    if prof_check is None:
+
+    probe_status = cur.execute("SELECT status FROM pbdata")
+
+    if probe_status is None:
+        print('Performing initial configuration of netsumap probe...')
+        time.sleep(1.5)
         probe_id = gen_id()
         config_status = True
 
         hostname = socket.gethostname()
         ip_addr = socket.gethostbyname(hostname)
 
-        print("Your Computer Name is:" + hostname)
-        print("Your Computer IP Address is:" + ip_addr)
-
-        db_cur.execute("INSERT INTO probe_config (probe_id, config_status, ip_addr) VALUES (?,?,?)", (probe_id, config_status, ip_addr)) 
-        sql_db.commit()
+        print("Hostname of probe server:" + hostname)
+        print("Probe Server IP:" + ip_addr)
 
         register_url = url+'/register'
 
         probe_obj = {
-             "id": probe_id,
-             "probe_data":{"hst_nm": hostname,
-                           "ip": ip_addr}
-        }
+                "id": probe_id,
+                "probe_data":{"hst_nm": hostname,
+                            "ip": ip_addr}
+            }
 
         probe_json = json.dumps(probe_obj)
 
         make_request(url=register_url,payload=probe_json)
 
+        if USE_DB == True:
+            cur.execute("INSERT INTO pbdata (probe_id, config_status, ip_addr, url) VALUES (?, ?, ?)", (probe_id, config_status, ip_addr, url))
+            conn.commit()
+
+        print('Probe configuration complete')
     else:
-        pass
+         print('Probe already configured')
+         pass
 
 def main(url='', count=0):
-
-    if table_verify:
-        print('Config DB creation successful.')
-        pass
-    else:
-        print('Config DB creation failed.')
-        return
-    
     register(url=url)
-    
     net_scan(url=url, count=count)
     
 if __name__ == "__main__":
     url = sys.argv[1]
     pcap_count = int(sys.argv[2])
-    ws_url= sys.argv[3]
     main(url=url, count=pcap_count)
 
 

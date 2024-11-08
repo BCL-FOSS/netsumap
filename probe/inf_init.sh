@@ -4,25 +4,34 @@
 # run example:
 # 	./inf_init.sh
 
-# Prompt user for the Python script directory
-read -p "Enter the full path to your Python script: " PYTHON_SCRIPT
+sudo apt-get update -y
+sudo apt-get upgrade -y
 
-# Check if the file exists
-if [ ! -f "$PYTHON_SCRIPT" ]; then
-    echo "Error: File does not exist at $PYTHON_SCRIPT"
+# Install Scapy from ubuntu repos
+sudo apt-get install python3-scapy -y
+
+scriptdir= $(pwd)
+scriptfile= "collect.py"
+findscript= $scriptdir$scriptfile
+# Check if script exists
+if [ ! -f $findscript]; then
+    echo "Error: File does not exist"
     exit 1
 fi
 
+sudo apt install python3.12-venv -y
+python3 -m venv .venv
+. .venv/bin/activate
+pip install requests
+
 # Prompt user for additional parameters
-echo "PARAM FORMAT: collect.py nmp_ip  pcap_count ws" 
-echo "PARAM FORMAT Ex.: collect.py http://0.0.0.0:25000 150 ws://1.1.1.1:30000" 
+echo "PARAM FORMAT Ex.:http://0.0.0.0:25000 150" 
 echo "nmp_ip (netsumap-core IP/Hostname:Port)" 
-echo "pcap_count (Num packets to capture per run)"
-echo "ws (Websocket server)" \n
+echo "pcap_count (Num packets to capture per run)"\n
 read -p "Enter Parameters: " SCRIPT_PARAMS
 
 # Construct the cron job command
-CRON_JOB="*/5 * * * * /usr/bin/python3 $PYTHON_SCRIPT $SCRIPT_PARAMS"
+CRON_JOB="*/5 * * * * /usr/bin/python3 $findscript $SCRIPT_PARAMS"
 
 # Check if the cron job already exists
 (crontab -l | grep -F "$CRON_JOB") > /dev/null 2>&1

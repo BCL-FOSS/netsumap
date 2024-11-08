@@ -65,43 +65,18 @@ To restart netsumap
 ```
 
 ### Network Probe Configuration
-1. Setup environment
-```bash
-    sudo apt update -y
-    sudo apt upgrade -y
-
-    sudo apt install python3.12-venv -y
-    python3 -m venv .venv
-    . .venv/bin/activate
-    pip install websocket-client requests
-    sudo apt-get install python3-scapy
-```
-2. Initialize the probe, will create a cronjob which runs packet capture every 5 minutes (can be adjusted)
+1. Initialize the probe, will create a cronjob which runs packet capture every 5 minutes (can be adjusted)
 ```bash
     sudo ./inf_init.sh
 
     # probe parameters require the core-node URL & the # of packets to capture for analysis. Example:
 
-    http://0.0.0.0:25000 50 ws://1.1.1.1:30000/
+    http://0.0.0.0:25000 50
 ```
 
-Run pcap session for instant analysis
+Run pcap session for instant analysis (same parameters as init script)
 ```bash
     sudo ./inf_run.sh
-```
-
-### Websocket Configuration
-1. Open Port 30000
-```bash
-    sudo ufw allow 30000
-``` 
-2. Run setup script
-```bash
-    sudo ./ws_init.sh
-``` 
-Restart websocket
-```bash
-    sudo ./ws_restart.sh
 ```
 
 

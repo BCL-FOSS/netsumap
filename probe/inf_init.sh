@@ -15,7 +15,7 @@ script="$dot/inf_run.sh"
 
 echo $script
 # Check if script exists
-if [ ! -f $script]; then
+if [ ! -f $script ]; then
     echo "Error: File does not exist"
     exit 1
 fi

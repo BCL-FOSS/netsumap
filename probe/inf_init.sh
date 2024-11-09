@@ -10,12 +10,12 @@ sudo apt-get upgrade -y
 # Install Scapy from ubuntu repos
 sudo apt-get install python3-scapy -y
 
-scriptdir= $(pwd)
-scriptfile= "inf_run.sh"
-findscript= $scriptdir$scriptfile
-echo $findscript
+script= $(pwd)
+script+= "/inf_run.sh"
+
+echo $script
 # Check if script exists
-if [ ! -f $findscript]; then
+if [ ! -f $script]; then
     echo "Error: File does not exist"
     exit 1
 fi

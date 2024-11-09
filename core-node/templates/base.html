@@ -7,7 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">-->  
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">  
+
     <style>
       body {
         font: 400 15px Lato, sans-serif;
@@ -187,8 +190,6 @@
         }
       }
       </style>
-
-    
   </head>
   <body id="myPage">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -206,7 +207,6 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('app_main') }}">Try NetiFiDash For Yourself</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link" href="https://www.baughcl.com/">About Baugh Consulting & Lab L.L.C.</a>
             </li>
@@ -223,12 +223,11 @@
       </a>
       <p>Developed by Baugh Consulting & Lab L.L.C. </p>
     </footer>
-
-    
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>-->
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
@@ -237,108 +236,58 @@
     -->
 
     <script type="text/javascript">
-      let ws;
+      document.getElementById('loadDataButton').addEventListener('click', async function() {
+            // Fetch data from the server
+            const response = await fetch('/allprobes');
+            const data = await response.json();
 
-      switch(key) {
-                    case 'net_evt':
-                      const evt_li = document.createElement("li");
-                      const evt_li_2 = document.createElement("li");
-                      evt_li.appendChild(document.createTextNode(json.net_evt));
-                      evt_li_2.appendChild(document.createTextNode('message'));
-                      document.getElementById("events_list").appendChild(evt_li);
-                      document.getElementById("events_list").appendChild(evt_li_2);
-                      break;
-                    case 'net_alm':
-                      const alm_li = document.createElement("li");
-                      const alm_li_2 = document.createElement("li");
-                      alm_li.appendChild(document.createTextNode(json.net_alm));
-                      alm_li_2.appendChild(document.createTextNode('message'));
-                      document.getElementById("alarms_list").appendChild(alm_li);
-                      document.getElementById("alarms_list").appendChild(alm_li_2);
-                      break;
-                    case 'org_obj':
-                      const org_li = document.createElement("li");
-                      const org_li_2 = document.createElement("li");
-                      org_li.appendChild(document.createTextNode(json.org_obj));
-                      org_li_2.appendChild(document.createTextNode('message'));
-                      document.getElementById("sites_list").appendChild(org_li);
-                      document.getElementById("sites_list").appendChild(org_li_2);
-                    case 'sta_obj':
-                      const sta_li = document.createElement("li");
-                      const sta_li_2 = document.createElement("li");
-                      sta_li.appendChild(document.createTextNode(json.sta_obj));
-                      sta_li_2.appendChild(document.createTextNode('message'));
-                      document.getElementById("clients_list").appendChild(sta_li);
-                      document.getElementById("clients_list").appendChild(sta_li_2);
-                  }
+            // Update table
+            const tableBody = document.querySelector('#dataTable tbody');
+            tableBody.innerHTML = '';
+            for (probe in data){
 
-      function connectWebSocket() {
-            // Retrieve the URL from the input field
-            const wsUrl = document.getElementById('wsUrl').value;
+              probe.forEach(item => {
+                const row = document.createElement('tr');
+                localStorage.setItem(item.hst_nm, item.id)
+                row.innerHTML = `<td>${item.hst_nm}</td><td>${item.ip}</td><td><button onclick="" class="btn btn-primary">Connection Check</button></td>`;
+                tableBody.appendChild(row);
+              });
+
+            }
             
-            // Display an error if URL is empty
-            if (!wsUrl) {
-                alert("Please enter a WebSocket server URL.");
-                return;
+
+            // Prepare data for Chart.js
+            const labels = data.map(item => item.category);
+            const values = data.map(item => item.value);
+
+            // Destroy any existing chart instance
+            if (window.dataChart) {
+                window.dataChart.destroy();
             }
 
-            localStorage.setItem('ws_url', wsUrl);
-            
-            // Initialize WebSocket
-            ws = new WebSocket(wsUrl);
-
-            // Define event listeners for WebSocket
-            ws.onopen = () => {
-                console.log("Connected to WebSocket server.");
-                document.getElementById('status').innerText = "Connected";
-                document.getElementById('status').classList.add("text-success");
-            };
-
-            ws.onmessage = (event) => {
-                console.log("Message from server:", event.data);
-                document.getElementById('messages').innerHTML += `<p>${event.data}</p>`;
-                json = JSON.parse(event.data);
-              
-                var obj = JSON.parse(event.data, function (key, value) {
-                  
-                });
-            };
-
-            ws.onerror = (error) => {
-                console.error("WebSocket error:", error);
-                localStorage.removeItem('ws_url');
-                document.getElementById('status').innerText = "Error";
-                document.getElementById('status').classList.add("text-danger");
-            };
-
-            ws.onclose = () => {
-                console.log("WebSocket connection closed.");
-                localStorage.removeItem('ws_url');
-                document.getElementById('status').innerText = "Disconnected";
-                document.getElementById('status').classList.remove("text-success", "text-danger");
-            };
-      }
-
-      function closeWebSocket() {
-            if (ws && ws.readyState === WebSocket.OPEN) {
-
-                ws.close();
-                localStorage.removeItem('ws_url');
-                document.getElementById('status').innerText = "Disconnected by User";
-            } else {
-                alert("WebSocket is not open or already closed.");
-            }
-      }  
-      
-      function send(event) {
-        const message = (new FormData(event.target)).get("message");
-        if (message) {
-          ws.send(message);
-        }
-
-        event.target.reset();
-        return false;
-      }
+            // Create a new chart
+            const ctx = document.getElementById('dataChart').getContext('2d');
+            window.dataChart = new Chart(ctx, {
+                type: 'bar', // Change to 'line' or 'pie' for other chart types
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Data Values',
+                        data: values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
 
       $(document).ready(function(){
         // Add smooth scrolling to all links in navbar + footer link

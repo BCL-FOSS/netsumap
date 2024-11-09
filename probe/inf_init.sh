@@ -29,7 +29,7 @@ pip install requests
 echo "PARAM FORMAT Ex.:http://0.0.0.0:25000 150" 
 echo "nmp_ip (netsumap-core IP/Hostname:Port)" 
 echo "pcap_count (Num packets to capture per run)"
-echo $findscript
+echo $script
 read -p "Enter Parameters: " SCRIPT_PARAMS
 
 # Construct the cron job command
@@ -43,6 +43,7 @@ if [ $? -eq 0 ]; then
 else
     # Add the cron job
     (sudo crontab -l; echo "$CRON_JOB") | sudo crontab -
+
     echo "Cron job added to run the script every 5 minutes with parameters: $SCRIPT_PARAMS"
 fi
 

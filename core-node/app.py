@@ -3,6 +3,7 @@ import json
 from init_app import app
 from models.UniFiNetAPI import UniFiNetAPI
 from models.util_models.RedisDB import RedisDB
+from models.util_models.Uptime import Uptime
 import numpy as np
 import asyncio
 import pandas as pd
@@ -134,11 +135,12 @@ async def probe_registration():
             new_probe = json.dumps(data_value)
 
             print(new_probe)
+            toplink='probes'
 
-            db_upload = await db.upload_profile(user_id=new_probe['id'], user_data=new_probe['probe_data'])
+            db_upload = await db.upload_db_data(id=new_probe['id'], top_link=toplink, data=new_probe['probe_data'])
             #print(db_upload)
         
-            db_query_value = await db.get_profile(key=new_probe['id'])
+            db_query_value = await db.get_db_data(top_link=toplink, match="nmp*")
             #print(db_query_value)
 
         return jsonify({"Registration Status" : "Success",
@@ -184,6 +186,39 @@ async def probe_webhook():
         return {'Error' : e}
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
+    
+@app.post("/isup")
+async def check_uptime():
+    host_check = Uptime()
+    try:
+        data = await request.get_json()
+        if data:
+            msg = json.dumps(data)
+            id_match="nmp*"
+            toplink='probes'
+            db_query_value = await db.get_db_data(top_link=toplink, match=id_match)
+
+            host_probes = jsonify(db_query_value)
+
+            print(host_probes)
+
+            for prof in host_probes:
+
+                if prof['hst_nm'] == msg['host']:
+                    if msg['port']:
+                        host_check.run(host=prof['ip'], port=prof['port'])
+
+                    if msg['maxCount']:
+                        host_check.run(host=prof['ip'], maxCount=prof['maxCount'])
+
+                    if msg['port'] and msg['maxCount']:
+                        host_check.run(host=prof['ip'], maxCount=prof['maxCount'], port=prof['port'])
+
+            host_check.run(host=msg['ip'])
+
+    except Exception as e:
+        return jsonify({"Uptime Check Run Error" : e})
+
 
 def preprocess_input(json_data):
     # JSON -> Pandas DataFrame 

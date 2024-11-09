@@ -13,6 +13,7 @@ sudo apt-get install python3-scapy -y
 scriptdir= $(pwd)
 scriptfile= "inf_run.sh"
 findscript= $scriptdir$scriptfile
+echo $findscript
 # Check if script exists
 if [ ! -f $findscript]; then
     echo "Error: File does not exist"
@@ -34,13 +35,13 @@ read -p "Enter Parameters: " SCRIPT_PARAMS
 CRON_JOB="*/5 * * * * /usr/bin/python3 $findscript $SCRIPT_PARAMS"
 
 # Check if the cron job already exists
-(crontab -l | grep -F "$CRON_JOB") > /dev/null 2>&1
+(sudo crontab -l | grep -F "$CRON_JOB") > /dev/null 2>&1
 
 if [ $? -eq 0 ]; then
     echo "Cron job already exists. No changes made."
 else
     # Add the cron job
-    (crontab -l; echo "$CRON_JOB") | crontab -
+    (sudo crontab -l; echo "$CRON_JOB") | sudo crontab -
     echo "Cron job added to run the script every 5 minutes with parameters: $SCRIPT_PARAMS"
 fi
 

@@ -18,7 +18,7 @@ USE_DB=True
 if os.path.exists('probe.db') == False:
     conn = sqlite3.connect('probe.db')
     cur = conn.cursor()
-    cur.execute("CREATE TABLE pbdata(id, status, host_ip, core_ip)")
+    cur.execute("CREATE TABLE pbdata(id, status, host_ip, hostname, core_ip)")
     res = cur.execute("SELECT name FROM sqlite_master")
     if res.fetchone() is None:
         print('Failed to create table in db ')
@@ -89,17 +89,18 @@ def register(url=''):
     if probe_status is None:
         print('Performing initial configuration of netsumap probe...')
         time.sleep(1.5)
-        probe_id = gen_id()
-        config_status = True
-        external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
-        hostname = socket.gethostname()
+        id=gen_id()
+        probe_id="nmp"+id
+        config_status=True
+        external_ip=urllib.request.urlopen('https://ident.me').read().decode('utf8')
+        hostname=socket.gethostname()
 
         register_url = url+'/register'
 
         probe_obj = {
                 "id": probe_id,
-                "probe_data":{"hst_nm": hostname,
-                            "ip": external_ip}
+                "hst_nm": hostname,
+                "ip": external_ip
             }
 
         probe_json = json.dumps(probe_obj)
@@ -107,9 +108,10 @@ def register(url=''):
         make_request(url=register_url,payload=probe_json)
 
         if USE_DB == True:
-            cur.execute("INSERT INTO pbdata (probe_id, config_status, ip_addr, url) VALUES (?, ?, ?)", (probe_id, config_status, ip_addr, url))
+            cur.execute("INSERT INTO pbdata (probe_id, config_status, external_ip, hostname, url) VALUES (?, ?, ?)", (probe_id, config_status, external_ip, hostname, url))
             conn.commit()
 
+        print(probe_id)
         print('Probe configuration complete')
     else:
          print('Probe already configured')

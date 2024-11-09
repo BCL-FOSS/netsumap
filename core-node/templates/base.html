@@ -239,35 +239,7 @@
     <script type="text/javascript">
       let ws;
 
-      function connectWebSocket() {
-            // Retrieve the URL from the input field
-            const wsUrl = document.getElementById('wsUrl').value;
-            
-            // Display an error if URL is empty
-            if (!wsUrl) {
-                alert("Please enter a WebSocket server URL.");
-                return;
-            }
-
-            localStorage.setItem('ws_url', wsUrl);
-            
-            // Initialize WebSocket
-            ws = new WebSocket(wsUrl);
-
-            // Define event listeners for WebSocket
-            ws.onopen = () => {
-                console.log("Connected to WebSocket server.");
-                document.getElementById('status').innerText = "Connected";
-                document.getElementById('status').classList.add("text-success");
-            };
-
-            ws.onmessage = (event) => {
-                console.log("Message from server:", event.data);
-                document.getElementById('messages').innerHTML += `<p>${event.data}</p>`;
-                json = JSON.parse(event.data);
-              
-                var obj = JSON.parse(event.data, function (key, value) {
-                  switch(key) {
+      switch(key) {
                     case 'net_evt':
                       const evt_li = document.createElement("li");
                       const evt_li_2 = document.createElement("li");
@@ -299,6 +271,36 @@
                       document.getElementById("clients_list").appendChild(sta_li);
                       document.getElementById("clients_list").appendChild(sta_li_2);
                   }
+
+      function connectWebSocket() {
+            // Retrieve the URL from the input field
+            const wsUrl = document.getElementById('wsUrl').value;
+            
+            // Display an error if URL is empty
+            if (!wsUrl) {
+                alert("Please enter a WebSocket server URL.");
+                return;
+            }
+
+            localStorage.setItem('ws_url', wsUrl);
+            
+            // Initialize WebSocket
+            ws = new WebSocket(wsUrl);
+
+            // Define event listeners for WebSocket
+            ws.onopen = () => {
+                console.log("Connected to WebSocket server.");
+                document.getElementById('status').innerText = "Connected";
+                document.getElementById('status').classList.add("text-success");
+            };
+
+            ws.onmessage = (event) => {
+                console.log("Message from server:", event.data);
+                document.getElementById('messages').innerHTML += `<p>${event.data}</p>`;
+                json = JSON.parse(event.data);
+              
+                var obj = JSON.parse(event.data, function (key, value) {
+                  
                 });
             };
 

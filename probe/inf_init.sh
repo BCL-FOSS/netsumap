@@ -10,8 +10,8 @@ sudo apt-get upgrade -y
 # Install Scapy from ubuntu repos
 sudo apt-get install python3-scapy -y
 
-script= $(pwd)
-script+= "/inf_run.sh"
+dot="$(cd "$(dirname "$0")"; pwd)"
+script="$dot/inf_run.sh"
 
 echo $script
 # Check if script exists
@@ -33,7 +33,7 @@ echo $findscript
 read -p "Enter Parameters: " SCRIPT_PARAMS
 
 # Construct the cron job command
-CRON_JOB="*/5 * * * * /usr/bin/python3 $findscript $SCRIPT_PARAMS"
+CRON_JOB="*/5 * * * * /usr/bin/python3 $script $SCRIPT_PARAMS"
 
 # Check if the cron job already exists
 (sudo crontab -l | grep -F "$CRON_JOB") > /dev/null 2>&1

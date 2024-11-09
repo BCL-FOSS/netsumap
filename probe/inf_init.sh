@@ -28,7 +28,8 @@ pip install requests
 # Prompt user for additional parameters
 echo "PARAM FORMAT Ex.:http://0.0.0.0:25000 150" 
 echo "nmp_ip (netsumap-core IP/Hostname:Port)" 
-echo "pcap_count (Num packets to capture per run)"\n
+echo "pcap_count (Num packets to capture per run)"
+echo $findscript
 read -p "Enter Parameters: " SCRIPT_PARAMS
 
 # Construct the cron job command

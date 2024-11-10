@@ -236,10 +236,11 @@
     -->
 
     <script type="text/javascript">
-      document.getElementById('loadDataButton').addEventListener('click', async function() {
-            // Fetch data from the server
-            const response = await fetch('/allprobes');
-            const data = await response.json();
+
+      async function getProbes(){
+        // Fetch data from the server
+        const response = await fetch('/allprobes');
+        const data = await response.json();
 
             // Update table
             const tableBody = document.querySelector('#dataTable tbody');
@@ -287,6 +288,10 @@
                     }
                 }
             });
+
+      }
+      document.getElementById('loadDataButton').addEventListener('click', async function() {
+            
         });
 
       $(document).ready(function(){

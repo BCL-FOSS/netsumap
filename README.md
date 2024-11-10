@@ -57,7 +57,7 @@ Model training data captured from:
 ```bash
     sudo ./netsumap_init.sh
 ```
-6. Visit the dashboard at [https://core-server-ip:25000/] to get started.
+6. Visit the dashboard at [https://your-core-node-domain.com/] to get started.
 
 To restart netsumap 
 ```bash

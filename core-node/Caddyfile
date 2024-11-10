@@ -1,4 +1,4 @@
 # Caddyfile
-example.com {
+netsumap.baughcl.com {
     reverse_proxy quart_app:5000
 }

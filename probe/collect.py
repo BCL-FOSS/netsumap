@@ -85,7 +85,7 @@ def register(url=''):
     conn = sqlite3.connect('probe.db')
     cur = conn.cursor()
     probe_status = cur.execute("SELECT status FROM pbdata")
-    print(probe_status)
+    print(probe_status.fetchall())
 
     if probe_status is None:
         print('Performing initial configuration of netsumap probe...')

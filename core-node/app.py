@@ -31,14 +31,6 @@ ALLOWED_EXTENSIONS = set(['csv'])
 
 # model = load_model(app.config['MODEL'])  
 
-@app.get("/")
-async def index():
-    return await render_template("index.html")
-
-@app.get("/app")
-async def app_main():
-    return await render_template("web_app.html")
-
 @app.errorhandler(404)
 async def page_not_found():
     return await render_template("404.html")

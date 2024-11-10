@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  quart_app:
+    restart: always
+    build:
+      context: .
+      dockerfile: quartapp/Dockerfile
+    container_name: quart_app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    expose:
+      - 5000
+    depends_on:
+      - redis
+    networks:
+      - webnet
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    volumes:
+      - redis_data:/data  # Mount the volume for data persistence
+    networks:
+      - webnet
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - quart_app
+    networks:
+      - webnet
+
+networks:
+  webnet:
+
+volumes:
+  redis_data:
+    external: true
+  caddy_data:
+    external: true
+  caddy_config:
+  

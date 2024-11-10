@@ -1,0 +1,4 @@
+# Caddyfile
+example.com {
+    reverse_proxy quart_app:5000
+}

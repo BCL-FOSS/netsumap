@@ -119,7 +119,7 @@ def register(url=''):
 
 def main(url='', count=0):
     register(url=url)
-    net_scan(url=url, count=count)
+    # net_scan(url=url, count=count)
     
 if __name__ == "__main__":
     url = sys.argv[1]

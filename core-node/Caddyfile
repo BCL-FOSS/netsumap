@@ -2,4 +2,9 @@
 nestumap.baughcl.com {
     reverse_proxy /register quart_app:5000/register
     reverse_proxy / quart_app:5000/
+
+    # Handle ACME challenge requests directly
+    route /.well-known/acme-challenge/* {
+        respond "ACME challenge handled directly by Caddy" 200
+    }
 }

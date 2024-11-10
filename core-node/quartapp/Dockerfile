@@ -5,9 +5,9 @@ RUN adduser quart --disabled-password
 # Set working directory for the purpose of this Dockerfile
 WORKDIR /home/quart
 
-RUN apt-get update 
+RUN apt-get update -y
 
-RUN apt-get upgrade
+RUN apt-get upgrade -y
 
 RUN apt install python3.12-venv -y
 

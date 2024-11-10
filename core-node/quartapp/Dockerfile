@@ -1,7 +1,7 @@
 FROM nvcr.io/nvidia/tensorflow:24.01-tf2-py3
 
 # Create a user
-RUN adduser -D quart
+RUN adduser quart --disabled-password 
 # Set working directory for the purpose of this Dockerfile
 WORKDIR /home/quart
 

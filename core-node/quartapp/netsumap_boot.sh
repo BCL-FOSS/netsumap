@@ -2,4 +2,4 @@
 
 . venv/bin/activate
 
-hypercorn app:app --bind 0.0.0.0:2500
+hypercorn app:app --bind 0.0.0.0:5000

@@ -22,7 +22,7 @@ sudo docker build -t netsumap-dashboard .
 sudo docker network create nmp-net
 
 # Start netsumap container and web app
-sudo docker run --gpus all --name netsumap --network nmp-net \
+sudo docker run --name netsumap --network nmp-net \
   --publish 30000:3000 -d -it -v $(pwd):$(pwd) -w $(pwd) docker.io/library/netsumap-dashboard
 
 sudo docker exec -it netsumap bash -c 'hypercorn app:app --bind 0.0.0.0:3000'

@@ -212,12 +212,15 @@ async def check_uptime():
     except Exception as e:
         return jsonify({"Uptime Check Run Error" : e})
     
-@app.get("/allprobes")
+@app.post("/allprobes")
 async def get_all_probes():
-    id_match = "nmp*"
-    toplink = 'probes'
-    db_query_value = await db.get_db_data(top_link=toplink, match=id_match)
-    
+    data = await request.get_json()
+    payload = json.dumps(data)
+    if payload == {}:
+        id_match = "nmp*"
+        toplink = 'probes'
+        db_query_value = await db.get_db_data(top_link=toplink, match=id_match)
+
     # Return JSON response
     return jsonify(db_query_value)
 

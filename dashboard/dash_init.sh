@@ -3,16 +3,7 @@
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
-# Install Redis DB
-sudo apt-get install lsb-release curl gpg -y
-curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
-sudo apt-get update -y
-sudo apt-get install redis -y
-
 # Add Docker's official GPG key:
-sudo apt-get update -y
 sudo apt-get install ca-certificates curl -y
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
@@ -32,7 +23,7 @@ sudo docker network create nmp-net
 
 # Start netsumap container and web app
 sudo docker run --gpus all --name netsumap --network nmp-net \
-  --publish 25000:2500 -d -it -v $(pwd):$(pwd) -w $(pwd) docker.io/library/netsumap-dashboard
+  --publish 30000:3000 -d -it -v $(pwd):$(pwd) -w $(pwd) docker.io/library/netsumap-dashboard
 
-sudo docker exec -it netsumap bash -c 'hypercorn app:app --bind 0.0.0.0:2500'
+sudo docker exec -it netsumap bash -c 'hypercorn app:app --bind 0.0.0.0:3000'
 

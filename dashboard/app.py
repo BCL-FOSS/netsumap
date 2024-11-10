@@ -1,5 +1,4 @@
-from quart import request, render_template, jsonify
-import json
+from quart import render_template, jsonify
 from init_app import app
 
 

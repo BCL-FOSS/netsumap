@@ -79,6 +79,20 @@ Run pcap session for instant analysis (same parameters as init script)
     sudo ./inf_run.sh
 ```
 
+### Dashboard Configuration
+1. Open port 30000
+```bash
+    sudo ufw allow 30000
+```
+2. Initialize & start dashboard
+```bash
+    sudo ./dash_init.sh
+```
+3. Restart dashboard
+```bash
+    sudo ./dash_restart.sh
+```
+Access dashboard at [https://dashboard-server-ip:30000/]
 
 
 

@@ -1,12 +1,7 @@
 from quart import render_template, jsonify
 from init_app import app
 
-
 @app.get("/")
-async def index():
-    return await render_template("index.html")
-
-@app.get("/app")
 async def app_main():
     return await render_template("web_app.html")
 

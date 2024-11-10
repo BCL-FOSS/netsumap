@@ -8,9 +8,6 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 sudo apt install docker-compose -y
 
-
-
-
 docker compose build --no-cache 
 
 docker volume create --name=redis_data

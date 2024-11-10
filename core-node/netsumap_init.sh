@@ -17,5 +17,5 @@ docker volume create --name=redis_data
 docker volume create --name=caddy_data
 docker volume create --name=caddy_config
 
-docker-compose up
+docker-compose up -d
 

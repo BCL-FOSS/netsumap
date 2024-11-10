@@ -8,7 +8,7 @@ WEBSOCKET_ADDRESS='ws://:30000/ws'
 MODEL='/home/appadmin/ai-threat-mgmt/malicious_ip_multiclass_classification_model.keras'
 
 # Redis DB Connection Information
-REDIS_DB="127.0.0.1"
+REDIS_DB="redis"
 REDIS_DB_PORT=6379
 REDIS_USER=""
 REDIS_PASSWORD=""

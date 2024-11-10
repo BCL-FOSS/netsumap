@@ -9,13 +9,15 @@ RUN apt-get update -y
 
 RUN apt-get upgrade -y
 
-RUN apt install python3.10-venv -y
+# RUN apt install python3.10-venv -y
 
 # Copy requirements to the app root
 COPY quartapp/requirements.txt ./
+
 # Create a virtual environment and install the dependecies
-RUN python3 -m venv venv && \
-  venv/bin/pip install --no-cache-dir -r requirements.txt --upgrade && \
+# RUN python3 -m venv venv && venv/bin/
+
+RUN pip install --no-cache-dir -r requirements.txt --upgrade && \
   chown -R quart:quart ./
 
 # Copy the app into our user root

@@ -212,17 +212,22 @@ async def check_uptime():
     except Exception as e:
         return jsonify({"Uptime Check Run Error" : e})
     
-@app.post("/allprobes")
+@app.get("/allprobes")
 async def get_all_probes():
-    data = await request.get_json()
-    payload = json.dumps(data)
-    if payload == {}:
+    try:
+
+   
         id_match = "nmp*"
         toplink = 'probes'
         db_query_value = await db.get_db_data(top_link=toplink, match=id_match)
 
-    # Return JSON response
-    return jsonify(db_query_value)
+        # Return JSON response
+        return jsonify(db_query_value)
+
+    except Exception as e:
+        return jsonify({"Error": e })
+
+    
 
 def preprocess_input(json_data):
     # JSON -> Pandas DataFrame 

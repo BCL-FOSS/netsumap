@@ -10,5 +10,5 @@ sudo apt install docker-compose
 
 docker volume create netsumap_caddy_data
 
-docker-compose build && docker-compose up
+docker-compose build --no-cache && docker-compose up
 

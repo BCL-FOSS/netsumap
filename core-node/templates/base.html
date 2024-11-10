@@ -239,7 +239,7 @@
 
       async function getProbes(){
         // Fetch data from the server
-        const response = await fetch('/allprobes');
+        const response = await fetch('http://139.84.149.203:25000/allprobes');
         const data = await response.json();
 
             // Update table

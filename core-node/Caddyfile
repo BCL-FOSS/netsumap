@@ -4,7 +4,7 @@
     acme_ca https://acme-v02.api.letsencrypt.org/directory
 }
 
-nestumap.baughcl.com {
+netsumap.baughcl.com {
     reverse_proxy /register quart_app:5000/register
     reverse_proxy / quart_app:5000/
 

@@ -8,10 +8,14 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 sudo apt install docker-compose -y
 
+
+
+
+docker-compose build --no-cache 
+
 docker volume create --name=redis_data
 docker volume create --name=caddy_data
 docker volume create --name=caddy_config
 
-
-docker-compose build --no-cache && docker-compose up
+docker-compose up
 

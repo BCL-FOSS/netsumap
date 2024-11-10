@@ -212,7 +212,7 @@ async def check_uptime():
     except Exception as e:
         return jsonify({"Uptime Check Run Error" : e})
     
-@app.route("/allprobes")
+@app.get("/allprobes")
 async def get_all_probes():
     id_match="nmp*"
     toplink='probes'

@@ -108,7 +108,7 @@ def register(url=''):
         make_request(url=register_url,payload=probe_json)
 
         if USE_DB == True:
-            cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname) VALUES (?, ?, ?)", (id, config_status, external_ip, hostname))
+            cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname) VALUES (?, ?, ?, ?)", (id, config_status, external_ip, hostname))
             conn.commit()
 
         print(probe_id)

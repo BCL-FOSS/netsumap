@@ -5,8 +5,14 @@
 }
 
 netsumap.baughcl.com {
-    reverse_proxy /register quart_app:5000/register
-    reverse_proxy quart_app:5000
+    reverse_proxy / http://quart_app:5000
+    reverse_proxy /register http://quart_app:5000/register
+    reverse_proxy /csv_inference http://quart_app:5000//csv_inference
+    reverse_proxy /json_inference http://quart_app:5000/json_inference
+    reverse_proxy /rmprobe http://quart_app:5000/rmprobe
+    reverse_proxy /netmetadata http://quart_app:5000/netmetadata
+    reverse_proxy /isup http://quart_app:5000/isup
+    reverse_proxy /allprobes http://quart_app:5000/allprobes
 
     # Handle ACME challenge requests directly
     route /.well-known/acme-challenge/* {

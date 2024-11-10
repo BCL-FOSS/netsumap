@@ -44,9 +44,10 @@ Model training data captured from:
 
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
-3. Open port 25000
+3. Open port necessary ports
 ```bash
-    sudo ufw allow 25000
+    sudo ufw allow 80
+    sudo ufw allow 443
 ```
 4. Install CUDA Compiler  
 ```python
@@ -57,7 +58,11 @@ Model training data captured from:
 ```bash
     sudo ./netsumap_init.sh
 ```
-6. Visit the dashboard at [https://your-core-node-domain.com/] to get started.
+6. Start netsumap core containers after startup initialization
+```bash
+    docker compose up -d
+```
+6. Verify netsumap core is running by visiting [https://your-core-node-domain.com/].
 
 To restart netsumap 
 ```bash
@@ -71,7 +76,7 @@ To restart netsumap
 
     # probe parameters require the core-node URL & the # of packets to capture for analysis. Example:
 
-    http://0.0.0.0:25000 50
+    [https://your-core-node-domain.com/] 50
 ```
 
 Run pcap session for instant analysis (same parameters as init script)

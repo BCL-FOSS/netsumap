@@ -1,4 +1,4 @@
 # Caddyfile
-netsumap.baughcl.com {
-    reverse_proxy quart_app:5000
+nestumap.baughcl.com {
+    reverse_proxy /register quart_app:5000/register
 }

@@ -214,15 +214,12 @@ async def check_uptime():
     
 @app.get("/allprobes")
 async def get_all_probes():
-    id_match="nmp*"
-    toplink='probes'
+    id_match = "nmp*"
+    toplink = 'probes'
     db_query_value = await db.get_db_data(top_link=toplink, match=id_match)
-
-    host_probes = jsonify(db_query_value)
-
-    print(host_probes)
-
-    return host_probes
+    
+    # Return JSON response
+    return jsonify(db_query_value)
 
 def preprocess_input(json_data):
     # JSON -> Pandas DataFrame 

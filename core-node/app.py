@@ -19,7 +19,8 @@ import os
 db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT']) 
 
 if db is None:
-    print('Verify Redis DB is installed and/or running') 
+    print('Verify Redis DB is installed and/or running. Ctrl + C to close the program') 
+    exit()
 
 K.clear_session() # Clears GPU resources before loading model
 

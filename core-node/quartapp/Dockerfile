@@ -9,7 +9,7 @@ RUN apt-get update -y
 
 RUN apt-get upgrade -y
 
-RUN apt install python3.12-venv -y
+RUN apt install python3.10-venv -y
 
 # Copy requirements to the app root
 COPY quartapp/requirements.txt ./

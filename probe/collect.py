@@ -18,7 +18,7 @@ USE_DB=True
 if os.path.exists('probe.db') == False:
     conn = sqlite3.connect('probe.db')
     cur = conn.cursor()
-    cur.execute("CREATE TABLE pbdata(id, status, host_ip, hostname, core_ip)")
+    cur.execute("CREATE TABLE pbdata(id, status, host_ip, hostname)")
     res = cur.execute("SELECT name FROM sqlite_master")
     if res.fetchone() is None:
         print('Failed to create table in db ')
@@ -108,7 +108,7 @@ def register(url=''):
         make_request(url=register_url,payload=probe_json)
 
         if USE_DB == True:
-            cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname, core_ip) VALUES (?, ?, ?)", (id, config_status, external_ip, hostname, url))
+            cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname) VALUES (?, ?, ?)", (id, config_status, external_ip, hostname))
             conn.commit()
 
         print(probe_id)

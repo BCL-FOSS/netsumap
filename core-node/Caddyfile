@@ -6,31 +6,31 @@ netsumap.baughcl.com {
 		reverse_proxy quart_app:5000
 	}
 
-    handle_path /register/ {
+    handle /register/* {
 		reverse_proxy quart_app:5000
 	}
 
-    handle_path /csv_inference/* {
+    handle /csv_inference/* {
 		reverse_proxy quart_app:5000
 	}
 
-    handle_path /json_inference/* {
+    handle /json_inference/* {
 		reverse_proxy quart_app:5000
 	}
 
-    handle_path /rmprobe/* {
+    handle /rmprobe/* {
 		reverse_proxy quart_app:5000
 	}
 
-    handle_path /netmetadata/* {
+    handle /netmetadata/* {
 		reverse_proxy quart_app:5000
 	}
 
-    handle_path /isup/* {
+    handle /isup/* {
 		reverse_proxy quart_app:5000
 	}
 
-    handle_path /allprobes/* {
+    handle /allprobes/* {
 		reverse_proxy quart_app:5000
 	}
 

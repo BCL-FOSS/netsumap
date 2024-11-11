@@ -1,20 +1,37 @@
 # Caddyfile
 
 netsumap.baughcl.com {
+    handle /* {
+		reverse_proxy quart_app:5000
+	}
 
-    reverse_proxy / quart_app:5000 {
-        header_up Host {host}
-        header_up X-Real-IP {remote_host}
-        header_up X-Forwarded-For {remote_host}
-        header_up X-Forwarded-Proto {scheme}
-    }
+	handle /csv_inference* {
+		reverse_proxy quart_app:5000
+	}
 
-    reverse_proxy /register quart_app:5000/register {
-        header_up Host {host}
-        header_up X-Real-IP {remote_host}
-        header_up X-Forwarded-For {remote_host}
-        header_up X-Forwarded-Proto {scheme}
-    }
+    handle /json_inference* {
+		reverse_proxy quart_app:5000
+	}
+
+    handle /register* {
+		reverse_proxy quart_app:5000
+	}
+
+    handle /rmprobe* {
+		reverse_proxy quart_app:5000
+	}
+
+    handle /netmetadata* {
+		reverse_proxy quart_app:5000
+	}
+
+    handle /isup* {
+		reverse_proxy quart_app:5000
+	}
+
+    handle /allprobes* {
+		reverse_proxy quart_app:5000
+	}
 
 }
 

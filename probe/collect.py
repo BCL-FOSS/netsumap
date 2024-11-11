@@ -46,13 +46,13 @@ def make_request(url='', payload={'':''}):
                 print("Request successful.")
         else:
                 print(f"Request failed with status code: {response.status_code}")
-
-        response.close()
         return response
 
     except Exception as e:
             print("Error occurred during request:", str(e))
             return None
+    finally:
+         response.close()
         
 def net_scan(url='', count=10):
     host_interfaces = socket.if_nameindex()

@@ -104,11 +104,13 @@ def register(url=''):
                 "ip": external_ip
             }
 
-        probe_json = json.dumps(probe_obj)
+        probe_json = json.loads(probe_obj)
 
-        response = make_request(url=register_url,payload=probe_json)
+        print(probe_json)
 
-        print(response.json())
+        make_request(url=register_url,payload=probe_json)
+
+    
 
         if USE_DB == True:
             cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname) VALUES (?, ?, ?, ?)", (id, config_status, external_ip, hostname))

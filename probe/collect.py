@@ -78,7 +78,9 @@ def net_scan(url='', count=10):
 
         core_url = url+"/netmetadata"
         payload = json.dumps(packet_data)
-        make_request(url=core_url, payload=payload)
+        response = make_request(url=core_url, payload=payload)
+
+        print(response)
 
     
         

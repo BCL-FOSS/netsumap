@@ -138,7 +138,7 @@ async def probe_registration():
             #print(db_upload, flush=True)
         
             db_query_value = await db.get_db_data(match="nmp*")
-            #print(db_query_value, flush=True)
+            print(db_query_value, flush=True)
 
         return jsonify({"Registration Status" : "Success",
                 "Profile_Data" : db_query_value})

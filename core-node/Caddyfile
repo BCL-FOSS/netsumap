@@ -1,11 +1,11 @@
 # Caddyfile
-https://quart_app:5000 {
-    reverse_proxy https://netsumap.baughcl.com {
-	    header_up Host quart_app:5000
-    }
 
-    reverse_proxy https://netsumap.baughcl.com/register {
-	    header_up Host quart_app:5000/register
-    }
+netsumap.baughcl.com {
+    reverse_proxy quart_app:5000
 }
+
+netsumap.baughcl.com/register {
+    reverse_proxy quart_app:5000/register
+}
+
 

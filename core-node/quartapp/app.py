@@ -135,6 +135,8 @@ async def probe_registration():
             
             print(new_probe, flush=True)
 
+            print(new_probe['hst_nm'])
+
             db_upload = await db.upload_db_data(id=new_probe['id'], data=new_probe['probe_data'])
             #print(db_upload, flush=True)
         

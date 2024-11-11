@@ -131,7 +131,8 @@ async def probe_registration():
     try:
         data_value = await request.get_json()
         if data_value:
-            print(data_value, flush=True)
+            probe_json = json.loads(data_value)
+            print(probe_json, flush=True)
 
             #db_upload = await db.upload_db_data(id=probe_id, data=probe_data)
             #print(db_upload, flush=True)
@@ -139,7 +140,7 @@ async def probe_registration():
             #db_query_value = await db.get_db_data(match="nmp*")
             #print(db_query_value, flush=True)
 
-        return jsonify(data_value)
+        return jsonify(probe_json)
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:

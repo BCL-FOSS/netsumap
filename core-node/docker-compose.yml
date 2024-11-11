@@ -30,9 +30,6 @@ services:
       - caddy_config:/config
     depends_on:
       - quart_app
-      
-networks:
-  webnet:
 
 volumes:
   redis_data:

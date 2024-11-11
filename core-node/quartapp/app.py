@@ -132,13 +132,13 @@ async def probe_registration():
         data_value = await request.get_json()
         if data_value:
             new_probe = json.dumps(data_value)
-            print(new_probe, flush=True)
+            #print(new_probe, flush=True)
 
             db_upload = await db.upload_db_data(id=new_probe['id'], data=new_probe['probe_data'])
-            print(db_upload, flush=True)
+            #print(db_upload, flush=True)
         
             db_query_value = await db.get_db_data(match="nmp*")
-            print(db_query_value, flush=True)
+            #print(db_query_value, flush=True)
 
         return jsonify({"Registration Status" : "Success",
                 "Profile_Data" : db_query_value})
@@ -221,8 +221,7 @@ async def get_all_probes():
     try:
 
         id_match = "nmp*"
-        toplink = 'probes'
-        db_query_value = await db.get_db_data(top_link=toplink, match=id_match)
+        db_query_value = await db.get_db_data(match=id_match)
 
         # Return JSON response
         return jsonify(db_query_value)

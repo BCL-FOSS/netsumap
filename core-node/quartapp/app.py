@@ -19,10 +19,10 @@ import os
 db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT']) 
 
 if db is None:
-    print('Verify Redis DB is installed and/or running. Ctrl + C to close the program') 
+    print('Verify Redis DB is installed and/or running. Ctrl + C to close the program', flush=True) 
     exit()
 else:
-    print("DB Connected")
+    print("DB Connected", flush=True)
 
 K.clear_session() # Clears GPU resources before loading model
 
@@ -132,15 +132,13 @@ async def probe_registration():
         data_value = await request.get_json()
         if data_value:
             new_probe = json.dumps(data_value)
+            print(new_probe, flush=True)
 
-            print(new_probe)
-            toplink='probes'
-
-            db_upload = await db.upload_db_data(id=new_probe['id'], top_link=toplink, data=new_probe['probe_data'])
-            print(db_upload)
+            db_upload = await db.upload_db_data(id=new_probe['id'], data=new_probe['probe_data'])
+            print(db_upload, flush=True)
         
-            db_query_value = await db.get_db_data(top_link=toplink, match="nmp*")
-            print(db_query_value)
+            db_query_value = await db.get_db_data(match="nmp*")
+            print(db_query_value, flush=True)
 
         return jsonify({"Registration Status" : "Success",
                 "Profile_Data" : db_query_value})

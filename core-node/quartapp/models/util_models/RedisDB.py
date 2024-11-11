@@ -34,7 +34,7 @@ class RedisDB:
             return {"DB Connection Error":str(e)}
         
     
-    async def upload_db_data(self, id = '',top_link="", data = {}):
+    async def upload_db_data(self, id = '', data = {}):
         try: 
             # Connect to the locally installed Redis database
             connection = await self.get_redis_connection()
@@ -43,7 +43,7 @@ class RedisDB:
 
             # Use HMSET to upload a probe data
 
-            await connection.hmset(top_link, str_hashmap)
+            await connection.hmset(str_hashmap)
     
             connection.close()
 
@@ -51,11 +51,11 @@ class RedisDB:
         except Exception as e:
             return {"DB Upload Error":str(e)}
         
-    async def get_db_data(self, top_link="", match=''):
+    async def get_db_data(self, match=''):
         try:
             connection = await self.get_redis_connection()
 
-            probe_keys = await connection.keys('%s:%s' % (top_link, match))
+            probe_keys = await connection.scan_iter(match)
 
             nmp_hashes = {}
 

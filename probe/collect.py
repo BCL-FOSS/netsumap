@@ -80,10 +80,8 @@ def net_scan(url='', count=10):
         payload = json.dumps(packet_data)
         response = make_request(url=core_url, payload=payload)
 
-        print(response)
+        print(response.json())
 
-    
-        
 def register(url=''):
     conn = sqlite3.connect('probe.db')
     cur = conn.cursor()
@@ -110,7 +108,7 @@ def register(url=''):
 
         response = make_request(url=register_url,payload=probe_json)
 
-        print(response)
+        print(response.json())
 
         if USE_DB == True:
             cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname) VALUES (?, ?, ?, ?)", (id, config_status, external_ip, hostname))

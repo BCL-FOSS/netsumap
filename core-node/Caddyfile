@@ -2,12 +2,11 @@
 
 netsumap.baughcl.com {
     
-
     handle /* {
 		reverse_proxy quart_app:5000
 	}
 
-    handle_path /register/* {
+    handle_path /register/ {
 		reverse_proxy quart_app:5000
 	}
 

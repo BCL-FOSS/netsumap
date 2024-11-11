@@ -46,6 +46,7 @@ def make_request(url='', payload={'':''}):
                 print("Request successful.")
         else:
                 print(f"Request failed with status code: {response.status_code}")
+
         return response
 
     except Exception as e:

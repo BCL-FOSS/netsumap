@@ -14,6 +14,7 @@ from sklearn.preprocessing import StandardScaler
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 import os
+from ast import literal_eval
 
 # init Redis DB connection
 db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT']) 
@@ -132,9 +133,10 @@ async def probe_registration():
         data_value = await request.get_json()
         if data_value:
             probe_json = json.loads(data_value)
-            print(probe_json, flush=True)
 
-            print(probe_json['id'], flush=True)
+            pb_data = literal_eval(probe_json)
+            print(pb_data, flush=True)
+            print(pb_data['id'], flush=True)
 
             #db_upload = await db.upload_db_data(id=probe_id, data=probe_data)
             #print(db_upload, flush=True)

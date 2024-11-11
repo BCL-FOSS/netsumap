@@ -133,7 +133,7 @@ async def probe_registration():
         if data_value:
             new_probe = json.dumps(data_value)
             
-            print(new_probe, flush=True)
+            print(jsonify(new_probe), flush=True)
 
             print(new_probe['hst_nm'], flush=True)
 

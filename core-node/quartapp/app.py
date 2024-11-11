@@ -220,7 +220,6 @@ async def check_uptime():
 async def get_all_probes():
     try:
 
-   
         id_match = "nmp*"
         toplink = 'probes'
         db_query_value = await db.get_db_data(top_link=toplink, match=id_match)

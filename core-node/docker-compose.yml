@@ -36,10 +36,9 @@ services:
       - caddy_config:/config
     depends_on:
       - quart_app
-      - redis
     networks:
       - webnet
-
+      
 networks:
   webnet:
 
@@ -50,4 +49,3 @@ volumes:
     external: true
   caddy_config:
     external: true
-  

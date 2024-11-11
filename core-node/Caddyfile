@@ -1,21 +1,11 @@
 # Caddyfile
-{
-    # Global settings
-    acme_ca https://acme-v02.api.letsencrypt.org/directory
-}
+https://quart_app:5000 {
+    reverse_proxy https://netsumap.baughcl.com {
+	    header_up Host quart_app:5000
+    }
 
-netsumap.baughcl.com {
-    reverse_proxy / quart_app:5000
-    reverse_proxy /register quart_app:5000/register
-    reverse_proxy /csv_inference quart_app:5000/csv_inference
-    reverse_proxy /json_inference quart_app:5000/json_inference
-    reverse_proxy /rmprobe quart_app:5000/rmprobe
-    reverse_proxy /netmetadata quart_app:5000/netmetadata
-    reverse_proxy /isup quart_app:5000/isup
-    reverse_proxy /allprobes quart_app:5000/allprobes
-
-    # Handle ACME challenge requests directly
-    route /.well-known/acme-challenge/* {
-        respond "ACME challenge handled directly by Caddy" 200
+    reverse_proxy https://netsumap.baughcl.com/register {
+	    header_up Host quart_app:5000/register
     }
 }
+

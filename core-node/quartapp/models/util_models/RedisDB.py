@@ -10,13 +10,15 @@ class RedisDB:
         self.port=port
         self.user_name=username
         self.pass_word=password
+        self.async_redis_obj = asyncio_redis
 
     async def get_redis_connection(self):
+        
         return await asyncio_redis.Connection.create(host=self.host_name, port=self.port)
 
     async def connect_to_db(self):
         try:
-            
+           
             # Create Redis connection
             connection = await self.get_redis_connection()
 

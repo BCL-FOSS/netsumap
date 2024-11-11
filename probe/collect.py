@@ -104,11 +104,9 @@ def register(url=''):
                 "ip": external_ip
             }
 
-        probe_json = json.loads(probe_obj)
+        
 
-        print(probe_json)
-
-        make_request(url=register_url,payload=probe_json)
+        make_request(url=register_url,payload=probe_obj)
 
     
 

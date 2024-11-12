@@ -132,7 +132,9 @@ async def probe_registration():
     try:
         data_value = await request.get_json()
         if data_value:
-            probe_json = json.loads(data_value)
+            probe_dict = json.loads(data_value)
+
+            probe_json = json.dumps(probe_dict)
 
             print(probe_json, flush=True)
 

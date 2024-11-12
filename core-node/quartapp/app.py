@@ -140,6 +140,8 @@ async def probe_registration():
 
             print(probe_string, flush=True)
 
+            print(probe_string['id'], flush=True)
+
             #db_upload = await db.upload_db_data(id=probe_id, data=probe_data)
             #print(db_upload, flush=True)
         

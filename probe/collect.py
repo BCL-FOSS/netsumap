@@ -100,11 +100,11 @@ def register(url=''):
 
         register_url = url+'/register'
 
-        probe_obj = {
+        probe_obj = json.dumps({
                 "id": probe_id,
                 "hst_nm": hostname,
                 "ip": external_ip
-            }
+            })
 
         response = make_request(url=register_url,payload=probe_obj)
 

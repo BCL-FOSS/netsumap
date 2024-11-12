@@ -49,7 +49,7 @@ def make_request(url='', payload={'':''}):
         else:
                 print(f"Request failed with status code: {response.status_code}")
 
-        response_data = json.dumps(response.json())
+        response_data = json.loads(response.json())
 
         return response_data
 

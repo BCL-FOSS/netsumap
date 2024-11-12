@@ -33,17 +33,18 @@ def gen_id():
             return print("Probe ID Gen Failed")   
         return str(id)
 
-def make_request(url='', payload=None):
+def make_request(url='', probe_json={}):
+
+    payload = json.dumps(probe_json)
 
     headers = {
         'Content-Type': 'application/json'
-        }
-    
-    #probe_payload=json.dumps(payload)
+    }
 
     try:
-        response = requests.post(url, json=payload, headers=headers)
         
+        response = requests.request("POST", url, headers=headers, data=payload)
+
         if response.status_code == 200:
                 print("Request successful.")
         else:
@@ -100,11 +101,11 @@ def register(url=''):
 
         register_url = url+'/register'
 
-        probe_obj = json.dumps({
+        probe_obj = {
                 "id": probe_id,
                 "hst_nm": hostname,
                 "ip": external_ip
-            }, indent=4)
+            }
 
         response = make_request(url=register_url, payload=probe_obj)
 

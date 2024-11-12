@@ -135,9 +135,9 @@ async def probe_registration():
             print(data_value, flush=True)
 
             # Extract specific fields from the JSON data
-            probe_id = data_value.get("id")
-            probe_ip = data_value.get("ip")
-            host_name = data_value.get("hst_nm")
+            probe_id = data_value["id"]
+            probe_ip = data_value["ip"]
+            host_name = data_value["hst_nm"]
 
             # Example debug output of extracted values
             print(f"Probe ID: {probe_id}", flush=True)

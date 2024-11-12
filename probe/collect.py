@@ -49,9 +49,7 @@ def make_request(url='', payload={'':''}):
         else:
                 print(f"Request failed with status code: {response.status_code}")
 
-        response_data = json.dumps(response.json())
-
-        return response_data
+        return response.json()
 
     except Exception as e:
             print("Error occurred during request:", str(e))
@@ -110,7 +108,7 @@ def register(url=''):
 
         response = make_request(url=register_url,payload=probe_obj)
 
-        print(response)
+        print(json.dumps(response))
 
         if USE_DB == True:
             cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname) VALUES (?, ?, ?, ?)", (id, config_status, external_ip, hostname))

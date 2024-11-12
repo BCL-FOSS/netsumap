@@ -134,6 +134,8 @@ async def probe_registration():
         if data_value:
             print(data_value, flush=True)
 
+            print(data_value.get('id'), flush=True)
+
             probe_dict = json.loads(data_value)
 
             probe_json = json.dumps(probe_dict)
@@ -141,6 +143,8 @@ async def probe_registration():
             print(probe_json, flush=True)
 
             print(probe_dict, flush=True)
+
+
                
 
             #db_upload = await db.upload_db_data(id=probe_id, data=probe_data)

@@ -139,8 +139,6 @@ async def probe_registration():
             print(probe_json, flush=True)
 
             print(probe_dict, flush=True)
-
-            print(jsonify(probe_json), flush=True)
                
 
             #db_upload = await db.upload_db_data(id=probe_id, data=probe_data)

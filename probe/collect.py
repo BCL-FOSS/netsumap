@@ -106,7 +106,7 @@ def register(url=''):
                 "ip": external_ip
             })
 
-        response = make_request(url=register_url,payload=probe_obj)
+        response = make_request(url=register_url, payload=probe_obj)
 
         print(json.dumps(response))
 

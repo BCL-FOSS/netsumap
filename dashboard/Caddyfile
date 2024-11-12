@@ -1,0 +1,11 @@
+# Caddyfile
+
+netsudash.baughcl.com {
+    
+    handle /* {
+		reverse_proxy quart_app:5000
+	}
+
+}
+
+

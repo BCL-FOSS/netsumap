@@ -47,7 +47,9 @@ def make_request(url='', payload={'':''}):
         else:
                 print(f"Request failed with status code: {response.status_code}")
 
-        return response.json()
+        response_data = json.dumps(response.json())
+
+        return response_data
 
     except Exception as e:
             print("Error occurred during request:", str(e))

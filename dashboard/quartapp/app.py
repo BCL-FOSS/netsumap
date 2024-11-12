@@ -3,7 +3,7 @@ from init_app import app
 
 @app.get("/")
 async def app_main():
-    return await render_template("web_app.html")
+    return await render_template("index.html")
 
 @app.errorhandler(404)
 async def page_not_found():

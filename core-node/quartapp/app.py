@@ -130,10 +130,10 @@ async def rest_prediction():
 @app.post("/register")
 async def probe_registration():
     try:
-        data_value = await request.get_json()
+        data_value = await request.json
         if data_value:
             print(data_value, flush=True)
-            
+
             probe_dict = json.loads(data_value)
 
             probe_json = json.dumps(probe_dict)

@@ -142,7 +142,7 @@ async def probe_registration():
             #db_query_value = await db.get_db_data(match="nmp*")
             #print(db_query_value, flush=True)
 
-        return "Done"
+        return probe_json
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:

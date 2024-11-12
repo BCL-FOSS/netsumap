@@ -47,7 +47,7 @@ def make_request(url='', payload={'':''}):
         else:
                 print(f"Request failed with status code: {response.status_code}")
 
-        return response
+        return response.json()
 
     except Exception as e:
             print("Error occurred during request:", str(e))
@@ -104,17 +104,15 @@ def register(url=''):
                 "ip": external_ip
             }
 
-        
+        response = make_request(url=register_url,payload=probe_obj)
 
-        make_request(url=register_url,payload=probe_obj)
-
-    
+        print(response)
 
         if USE_DB == True:
             cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname) VALUES (?, ?, ?, ?)", (id, config_status, external_ip, hostname))
             conn.commit()
 
-        print(probe_id)
+        #print(probe_id)
         print('Probe configuration complete')
     else:
          print('Probe already configured')

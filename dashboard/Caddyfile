@@ -1,6 +1,6 @@
 # Caddyfile
 
-netsudash.baughcl.com {
+dashboard.baughcl.com {
     
     handle /* {
 		reverse_proxy quart_app:5000

@@ -41,7 +41,7 @@ class RedisDB:
 
             # Use HMSET to upload a probe data
 
-            await connection.hmset(str_hashmap)
+            await connection.hset(id, mapping=data)
     
             connection.close()
 

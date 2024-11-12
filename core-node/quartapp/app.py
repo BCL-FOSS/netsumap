@@ -134,7 +134,17 @@ async def probe_registration():
         if data_value:
             print(data_value, flush=True)
 
-            print(data_value['id'], flush=True)
+            # Extract specific fields from the JSON data
+            probe_id = data_value.get("id")
+            probe_ip = data_value.get("ip")
+            host_name = data_value.get("hst_nm")
+
+            # Example debug output of extracted values
+            print(f"Probe ID: {probe_id}", flush=True)
+            print(f"Probe Data: {probe_ip}", flush=True)
+            print(f"Host Name: {host_name}", flush=True)
+
+            """
 
             probe_dict = json.loads(data_value)
 
@@ -143,6 +153,8 @@ async def probe_registration():
             print(probe_json, flush=True)
 
             print(probe_dict, flush=True)
+            """
+
 
             #db_upload = await db.upload_db_data(id=probe_id, data=probe_data)
             #print(db_upload, flush=True)
@@ -150,7 +162,11 @@ async def probe_registration():
             #db_query_value = await db.get_db_data(match="nmp*")
             #print(db_query_value, flush=True)
 
-        return probe_json
+        return jsonify({
+                "id": probe_id,
+                "probe_data": probe_ip,
+                "host_name": host_name
+            })
     except TypeError as error:
         return {'TypeError' :  str(error)}
     except Exception as e:

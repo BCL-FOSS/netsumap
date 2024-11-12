@@ -144,20 +144,9 @@ async def probe_registration():
             print(f"Probe Data: {probe_ip}", flush=True)
             print(f"Host Name: {host_name}", flush=True)
 
-            """
-
-            probe_dict = json.loads(data_value)
-
-            probe_json = json.dumps(probe_dict)
-
-            print(probe_json, flush=True)
-
-            print(probe_dict, flush=True)
-            """
-
-
-            #db_upload = await db.upload_db_data(id=probe_id, data=probe_data)
-            #print(db_upload, flush=True)
+            db_upload = await db.upload_db_data(id=probe_id, data=data_value)
+            
+            print(db_upload, flush=True)
         
             #db_query_value = await db.get_db_data(match="nmp*")
             #print(db_query_value, flush=True)

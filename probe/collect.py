@@ -49,7 +49,7 @@ def make_request(url='', payload={'':''}):
         else:
                 print(f"Request failed with status code: {response.status_code}")
 
-        response_data = json.loads(response.json())
+        response_data = json.dumps(response.json())
 
         return response_data
 
@@ -84,7 +84,7 @@ def net_scan(url='', count=10):
         payload = json.dumps(packet_data)
         response = make_request(url=core_url, payload=payload)
 
-        print(response.json())
+        print(json.loads(response.json()))
 
 def register(url=''):
     conn = sqlite3.connect('probe.db')

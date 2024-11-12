@@ -38,9 +38,11 @@ def make_request(url='', payload={'':''}):
     headers = {
         'Content-Type': 'application/json'
         }
+    
+    probe_payload=json.dumps(payload)
 
     try:
-        response = requests.post(url, json=payload, headers=headers)
+        response = requests.post(url, json=probe_payload, headers=headers)
         
         if response.status_code == 200:
                 print("Request successful.")

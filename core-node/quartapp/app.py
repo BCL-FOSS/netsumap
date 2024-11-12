@@ -134,10 +134,11 @@ async def probe_registration():
         if data_value:
             probe_json = json.loads(data_value)
 
-            print(probe_json, flush=True)
+            probe = json.dumps(probe_json)
 
-            for key in probe_json:
-                print(key, flush=True)
+            probe_string = literal_eval(probe)
+
+            print(probe_string, flush=True)
 
             #db_upload = await db.upload_db_data(id=probe_id, data=probe_data)
             #print(db_upload, flush=True)

@@ -206,7 +206,7 @@ async def probe_webhook():
     finally:
         return {'try_catch_end' : 'Check the frontend UI'}
     
-@app.post("/isup")
+@app.route("/isup")
 async def check_uptime():
     host_check = Uptime()
     try:
@@ -252,7 +252,7 @@ async def get_all_probes():
         return jsonify({"Error": e })
     
 @app.route('/background_process_test')
-def background_process_test():
+async def background_process_test():
     print ("Hello", flush=True)
     return ("nothing")
 

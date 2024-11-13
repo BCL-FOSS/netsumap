@@ -408,29 +408,6 @@
           });
         });
 
-        function test(){
-            const myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-
-            const raw = JSON.stringify({
-            "id": "probe_id",
-            "hst_nm": "hostname",
-            "ip": "external_ip"
-            });
-
-            const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow"
-            };
-
-            fetch("https://netsumap.baughcl.com/register", requestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.error(error));
-        }
-
         async function getProbes(){
           // Fetch data from the server
           const response = await fetch('http://139.84.149.203:25000/allprobes');

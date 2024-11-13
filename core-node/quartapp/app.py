@@ -34,6 +34,10 @@ ALLOWED_EXTENSIONS = set(['csv'])
 
 # model = load_model(app.config['MODEL'])  
 
+@app.route('/favicon.ico')
+async def favicon():
+    return '', 204  # Respond with an empty response and 204 status (No Content)
+
 @app.errorhandler(404)
 async def page_not_found():
     return await render_template("404.html")

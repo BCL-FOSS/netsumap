@@ -391,10 +391,6 @@
     <!-- Page level plugins -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-
     <script type="text/javascript">
 
         $(function() {
@@ -422,60 +418,6 @@
             return false;
           });
         });
-
-        async function getProbes(){
-          // Fetch data from the server
-          const response = await fetch('http://139.84.149.203:25000/allprobes');
-          const data = await response.json();
-  
-              // Update table
-              const tableBody = document.querySelector('#dataTable tbody');
-              tableBody.innerHTML = '';
-              for (probe in data){
-  
-                probe.forEach(item => {
-                  const row = document.createElement('tr');
-                  localStorage.setItem(item.hst_nm, item.id)
-                  row.innerHTML = `<td>${item.hst_nm}</td><td>${item.ip}</td><td><button class="btn btn-primary">Connection Check</button></td>`;
-                  tableBody.appendChild(row);
-                });
-  
-              }
-              
-  
-              // Prepare data for Chart.js
-              const labels = data.map(item => item.category);
-              const values = data.map(item => item.value);
-  
-              // Destroy any existing chart instance
-              if (window.dataChart) {
-                  window.dataChart.destroy();
-              }
-  
-              // Create a new chart
-              const ctx = document.getElementById('dataChart').getContext('2d');
-              window.dataChart = new Chart(ctx, {
-                  type: 'bar', // Change to 'line' or 'pie' for other chart types
-                  data: {
-                      labels: labels,
-                      datasets: [{
-                          label: 'Data Values',
-                          data: values,
-                          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                          borderColor: 'rgba(75, 192, 192, 1)',
-                          borderWidth: 1
-                      }]
-                  },
-                  options: {
-                      scales: {
-                          y: {
-                              beginAtZero: true
-                          }
-                      }
-                  }
-              });
-  
-        }
       </script>
 
 </body>

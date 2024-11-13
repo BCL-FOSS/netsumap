@@ -54,10 +54,6 @@ async def dash():
 async def netscan():
     return await render_template("blank.html")
 
-@app.get("/")
-async def netscan():
-    return await render_template("blank.html")
-
 @app.post("/csv_inference")
 async def file_prediction():
     try:

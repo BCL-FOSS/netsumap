@@ -397,6 +397,17 @@
 
     <script type="text/javascript">
 
+        $(function() {
+          $('#pybutton').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/background_process_test',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+
         function test(){
             const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");

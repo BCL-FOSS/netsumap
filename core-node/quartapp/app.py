@@ -238,7 +238,7 @@ async def check_uptime():
     except Exception as e:
         return jsonify({"Uptime Check Run Error" : e})
     
-@app.get("/allprobes")
+@app.route("/allprobes")
 async def get_all_probes():
     try:
 
@@ -250,8 +250,11 @@ async def get_all_probes():
 
     except Exception as e:
         return jsonify({"Error": e })
-
     
+@app.route('/background_process_test')
+def background_process_test():
+    print ("Hello")
+    return ("nothing")
 
 def preprocess_input(json_data):
     # JSON -> Pandas DataFrame 

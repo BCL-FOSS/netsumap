@@ -46,6 +46,10 @@ async def handle_internal_error(e):
 async def index():
     return await render_template("index.html")
 
+@app.get("/dashboard")
+async def dash():
+    return await render_template("blank.html")
+
 @app.post("/csv_inference")
 async def file_prediction():
     try:

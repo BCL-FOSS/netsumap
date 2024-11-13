@@ -253,7 +253,7 @@ async def get_all_probes():
     
 @app.route('/background_process_test')
 def background_process_test():
-    print ("Hello")
+    print ("Hello", flush=True)
     return ("nothing")
 
 def preprocess_input(json_data):

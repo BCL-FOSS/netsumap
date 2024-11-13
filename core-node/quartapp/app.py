@@ -54,6 +54,10 @@ async def dash():
 async def netscan():
     return await render_template("blank.html")
 
+@app.get("/")
+async def netscan():
+    return await render_template("blank.html")
+
 @app.post("/csv_inference")
 async def file_prediction():
     try:
@@ -255,6 +259,14 @@ async def get_all_probes():
 async def background_process_test():
     print ("Hello", flush=True)
     return ("nothing")
+
+@app.route('/background_input_test')
+def background_input_test():
+    # Get values from the request arguments
+    user_input = request.args.get('user_input', '')  
+    print("User Input:", user_input, flush=True)
+    # You can add more logic here to process the input
+    return jsonify(result=f"Processed input: {user_input}")
 
 def preprocess_input(json_data):
     # JSON -> Pandas DataFrame 

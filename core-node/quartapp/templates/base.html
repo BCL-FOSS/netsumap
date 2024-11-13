@@ -403,7 +403,22 @@
             $.getJSON('/background_process_test',
                 function(data) {
               //do nothing
+              
             });
+            return false;
+          });
+        });
+
+        $(function() {
+          $('#pyinput').on('click', function(e) {
+            e.preventDefault();
+            const userInput = $('#user_input').val();  // Get the value from the input field
+
+            $.getJSON('/background_input_test', { user_input: userInput },  // Send input as a parameter
+                function(data) {
+                    alert(data.result);  // Display the result from the server
+                }
+            );
             return false;
           });
         });

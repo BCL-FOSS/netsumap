@@ -44,10 +44,14 @@ async def handle_internal_error(e):
 
 @app.get("/")
 async def index():
-    return await render_template("index.html")
+    return await render_template("index.html", test_func=test_func)
 
 @app.get("/dashboard")
 async def dash():
+    return await render_template("blank.html")
+
+@app.get("/netscan")
+async def netscan():
     return await render_template("blank.html")
 
 @app.post("/csv_inference")
@@ -299,6 +303,9 @@ def predict(processed_input=None):
 def allowedFile(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def test_func():
+    return "from quart"
 
 def run() -> None:
     app.run()

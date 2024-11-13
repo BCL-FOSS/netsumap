@@ -44,7 +44,7 @@ async def handle_internal_error(e):
 
 @app.get("/")
 async def index():
-    return await render_template("nest.html")
+    return await render_template("index.html")
 
 @app.post("/csv_inference")
 async def file_prediction():

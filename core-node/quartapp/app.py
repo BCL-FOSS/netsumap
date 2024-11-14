@@ -76,6 +76,10 @@ async def net_scan():
 async def uptime():
     return await render_template("blank.html")
 
+@app.get("/performance")
+async def net_perf():
+    return await render_template("blank.html")
+
 @app.post("/csv_inference")
 async def file_prediction():
     try:

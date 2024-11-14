@@ -50,7 +50,7 @@ async def handle_internal_error(e):
 
 @app.get("/")
 async def index():
-    return await render_template("index.html", test_func=test_func)
+    return await render_template("dashboard.html", test_func=test_func)
 
 @app.get("/dashboard")
 async def dash():

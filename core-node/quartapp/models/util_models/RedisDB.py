@@ -49,16 +49,17 @@ class RedisDB:
         except Exception as e:
             return {"DB Upload Error":str(e)}
         
-    async def get_db_data(self, match=''):
+    async def get_db_data(self,id='', match=''):
         try:
             connection = await self.get_redis_connection()
 
-            probe_keys = await connection.scan_iter(match)
-
+            probe_keys = await connection.sscan_iter(id, match=match)
+            
             nmp_hashes = {}
 
             # Loop through each key and get hash data
             for key in probe_keys:
+                print(key, flush=True)
                 hash_data = await connection.hgetall(key)
                 nmp_hashes[key] = hash_data
 

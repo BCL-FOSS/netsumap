@@ -1,8 +1,6 @@
 from quart import request, render_template, jsonify
 import json
 from init_app import app
-from models.UniFiNetAPI import UniFiNetAPI
-from models.util_models.RedisDB import RedisDB
 from models.util_models.Uptime import Uptime
 import numpy as np
 import asyncio
@@ -14,16 +12,19 @@ from sklearn.preprocessing import StandardScaler
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 import os
-from ast import literal_eval
 
 # init Redis DB connection
-db = RedisDB(hostname=app.config['REDIS_DB'], port=app.config['REDIS_DB_PORT']) 
+db = app.config['DB_CONN']
+
+"""
 
 if db is None:
     print('Verify Redis DB is installed and/or running. Ctrl + C to close the program', flush=True) 
     exit()
 else:
     print("DB Connected", flush=True)
+
+"""
 
 K.clear_session() # Clears GPU resources before loading model
 
@@ -33,6 +34,7 @@ ALLOWED_EXTENSIONS = set(['csv'])
 # Load model defined in config file
 
 # model = load_model(app.config['MODEL'])  
+
 
 @app.route('/favicon.ico')
 async def favicon():
@@ -74,7 +76,7 @@ async def net_scan():
 async def uptime():
     return await render_template("blank.html")
 
-@app.route("/csv_inference")
+@app.post("/csv_inference")
 async def file_prediction():
     try:
         if request.method == 'POST':
@@ -120,7 +122,7 @@ async def file_prediction():
             'message': str(large_request)
         }), 500
 
-@app.route("/json_inference")
+@app.post("/json_inference")
 async def rest_prediction():
     try:
         if request.method == 'POST':
@@ -176,8 +178,8 @@ async def probe_registration():
             
             print(db_upload, flush=True)
         
-            #db_query_value = await db.get_db_data(match="nmp*")
-            #print(db_query_value, flush=True)
+            db_query_value = await db.get_db_data(id=probe_id, match="nmp*")
+            print(db_query_value, flush=True)
 
         return jsonify({
                 "id": probe_id,

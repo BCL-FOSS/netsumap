@@ -54,11 +54,27 @@ async def index():
 async def dash():
     return await render_template("blank.html")
 
-@app.get("/netscan")
-async def netscan():
+@app.get("/probemgr")
+async def probe_mgr():
     return await render_template("blank.html")
 
-@app.post("/csv_inference")
+@app.get("/assets")
+async def assets():
+    return await render_template("blank.html")
+
+@app.get("/netmap")
+async def net_map():
+    return await render_template("blank.html")
+
+@app.get("/netscan")
+async def net_scan():
+    return await render_template("blank.html")
+
+@app.get("/uptime")
+async def uptime():
+    return await render_template("blank.html")
+
+@app.route("/csv_inference")
 async def file_prediction():
     try:
         if request.method == 'POST':
@@ -104,7 +120,7 @@ async def file_prediction():
             'message': str(large_request)
         }), 500
 
-@app.post("/json_inference")
+@app.route("/json_inference")
 async def rest_prediction():
     try:
         if request.method == 'POST':

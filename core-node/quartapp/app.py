@@ -54,7 +54,7 @@ async def index():
 
 @app.get("/dashboard")
 async def dash():
-    return await render_template("dashboard.html")
+    return await render_template("dashboard.html", test_func=test_func)
 
 @app.get("/probemgr")
 async def probe_mgr():

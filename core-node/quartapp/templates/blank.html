@@ -7,9 +7,20 @@
 <h3>Test</h3>
 <form>
             <!-- Input field to capture user input -->
-    <input type="text" id="user_input" placeholder="Enter something">
-    <button id="pyinput" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-        class="fas fa-download fa-sm text-white-50"></i>Py Test</button>
+    <!--<input type="text" id="user_input" placeholder="Enter something">-->
+    <!--<button id="pyinput" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i>Py Test</button>-->
+
+        <div class="input-group">
+                <input type="text" id="user_input" class="form-control bg-light border-0 small" placeholder="Enter something"
+                    aria-label="Search" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button id="pyinput" class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+        </div>
+
+
 </form>
 
 

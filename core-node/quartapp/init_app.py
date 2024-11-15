@@ -75,8 +75,8 @@ else:
 app.config["SECURITY_EMAIL_VALIDATOR_ARGS"] = {"check_deliverability": False}
 
 # Connect to MongoDB (Auth Datastore)
-with app.app_context():
-    db = connect(alias=app.config['MONGO_DB_NAME'], db=app.config['MONGO_DB_NAME'], host=f"mongodb://{app.config['MONGO_DB_NAME']}", port=app.config['MONGO_DB_PORT'])
+
+db = connect(alias=app.config['MONGO_DB_NAME'], db=app.config['MONGO_DB_NAME'], host=f"mongodb://{app.config['MONGO_DB_NAME']}", port=app.config['MONGO_DB_PORT'])
 
 if db is None:
     print("verify mongo db is running. Ctrl + C to close netsumap", flush=True)

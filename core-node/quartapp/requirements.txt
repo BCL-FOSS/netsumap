@@ -14,6 +14,3 @@ asyncio
 hypercorn 
 pytest-asyncio 
 aiohttp
-argon2-cffi
-Flask-Security-Too
-mongoengine

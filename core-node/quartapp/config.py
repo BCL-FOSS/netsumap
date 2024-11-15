@@ -11,14 +11,8 @@ REDIS_USER=""
 REDIS_PASSWORD=""
 DB_CONN=None
 
-# MongoDB Connection Data
-MONGO_DB_NAME="mongo"
-MONGO_DB_HOST="mongo"
-MONGO_DB_PORT=27017
-
 # Generate secret key for encryption
 SECRET_KEY = ""
 
-# Flask Security Object
-SECURITY = None
+
 

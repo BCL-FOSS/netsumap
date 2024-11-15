@@ -5,8 +5,7 @@ import secrets
 from models.util.RedisDB import RedisDB
 from flask_security import Security, MongoEngineUserDatastore, \
     UserMixin, RoleMixin
-from models.auth_db.AuthDB import AuthDB
-from mongoengine import Document
+from mongoengine import Document, connect
 from mongoengine.fields import (
     BinaryField,
     BooleanField,
@@ -75,17 +74,15 @@ else:
 # Set email validator setting for Flask-Security
 app.config["SECURITY_EMAIL_VALIDATOR_ARGS"] = {"check_deliverability": False}
 
+# Connect to MongoDB (Auth Datastore)
 with app.app_context():
-    # Connect to MongoDB (Auth Datastore)
-    db_init = AuthDB()
-    db = db_init.db_connection(db_name=app.config['MONGO_DB_NAME'], host=app.config['MONGO_DB_NAME'])
+    db = connect(alias=app.config['MONGO_DB_NAME'], db=app.config['MONGO_DB_NAME'], host=f"mongodb://{app.config['MONGO_DB_NAME']}", port=app.config['MONGO_DB_PORT'])
 
 if db is None:
     print("verify mongo db is running. Ctrl + C to close netsumap", flush=True)
     exit()
 else:
     print("MongoDB Connected", flush=True)
-
 
 # Setup Flask-Security
 user_datastore = MongoEngineUserDatastore(db, User, Role)

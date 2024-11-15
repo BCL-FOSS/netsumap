@@ -15,9 +15,6 @@ import os
 from flask_security import Security, MongoEngineUserDatastore, \
     UserMixin, RoleMixin, auth_required, hash_password, permissions_accepted
 
-# Establish app context
-app.app_context().push()
-
 # init Redis DB connection
 db = app.config['DB_CONN']
 

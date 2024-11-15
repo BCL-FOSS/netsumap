@@ -85,9 +85,10 @@ if db is None:
 else:
     print("MongoDB Connected", flush=True)
 
-# Setup Flask-Security
-user_datastore = MongoEngineUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
+with app.app_context():
+    # Setup Flask-Security
+    user_datastore = MongoEngineUserDatastore(db, User, Role)
+    security = Security(app, user_datastore)
 
 if app.config['SECURITY'] is None:
     app.config['SECURITY'] = security

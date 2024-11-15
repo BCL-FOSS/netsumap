@@ -17,23 +17,6 @@ from mongoengine.fields import (
     StringField,
 )
 
-class Role(Document, RoleMixin):
-    db_name='mongo'
-    name = StringField(max_length=80, unique=True)
-    description = StringField(max_length=255)
-    permissions = ListField(required=False)
-    meta = {"db_alias": db_name}   
-
-class User(Document, UserMixin):
-    role = Role()
-    email = StringField(max_length=255, unique=True)
-    password = StringField(max_length=255)
-    active = BooleanField(default=True)
-    fs_uniquifier = StringField(max_length=64, unique=True)
-    confirmed_at = DateTimeField()
-    roles = ListField(ReferenceField(role), default=[])
-    meta = {"db_alias": role.db_name}
-
 # Create folder for uploaded PCAP CSVs 
 if os.path.isdir(os.path.join(os.path.dirname(__file__), 'Uploads')) is False:
     os.makedirs(os.path.join(os.path.dirname(__file__), 'Uploads'))
@@ -44,6 +27,21 @@ else:
 # Initialize Quart App
 app = Quart(__name__)
 app.config.from_object("config")
+
+class Role(Document, RoleMixin):
+    name = StringField(max_length=80, unique=True)
+    description = StringField(max_length=255)
+    permissions = ListField(required=False)
+    meta = {"db_alias": app.config['MONGO_DB_NAME']}   
+
+class User(Document, UserMixin):
+    email = StringField(max_length=255, unique=True)
+    password = StringField(max_length=255)
+    active = BooleanField(default=True)
+    fs_uniquifier = StringField(max_length=64, unique=True)
+    confirmed_at = DateTimeField()
+    roles = ListField(ReferenceField(Role), default=[])
+    meta = {"db_alias": app.config['MONGO_DB_NAME']}
 
 # Configure SECRET_KEY and SECURITY_PASSWORD_SALT for secure authentication workflow
 if os.environ.get('SECRET_KEY') is None:

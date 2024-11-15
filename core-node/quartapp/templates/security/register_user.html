@@ -1,0 +1,24 @@
+{% extends 'auth_base.html' %}
+
+{% block content %}
+
+<form class="user" action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
+    {{ register_user_form.hidden_tag() }}
+    <div class="form-group">
+        {{ render_field_with_errors(register_user_form.email) }}
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            {{ render_field_with_errors(register_user_form.password) }}
+        </div>
+        <div class="col-sm-6">
+            {% if register_user_form.password_confirm %}
+                {{ render_field_with_errors(register_user_form.password_confirm) }}
+            {% endif %}
+        </div>
+    </div>
+    {{ render_field(register_user_form.submit) }}
+    <hr>
+    <a class="btn btn-primary" href="{{ url_for_security('login') }}" role="button">Login</a>
+</form>
+{% endblock %}

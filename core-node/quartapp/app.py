@@ -1,7 +1,7 @@
 from quart import request, render_template, jsonify
 import json
 from init_app import app
-from models.util_models.Uptime import Uptime
+from models.util.Uptime import Uptime
 import numpy as np
 import asyncio
 import pandas as pd
@@ -12,19 +12,11 @@ from sklearn.preprocessing import StandardScaler
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 import os
+from flask_security import Security, MongoEngineUserDatastore, \
+    UserMixin, RoleMixin, auth_required, hash_password, permissions_accepted
 
 # init Redis DB connection
 db = app.config['DB_CONN']
-
-"""
-
-if db is None:
-    print('Verify Redis DB is installed and/or running. Ctrl + C to close the program', flush=True) 
-    exit()
-else:
-    print("DB Connected", flush=True)
-
-"""
 
 K.clear_session() # Clears GPU resources before loading model
 
@@ -34,7 +26,6 @@ ALLOWED_EXTENSIONS = set(['csv'])
 # Load model defined in config file
 
 # model = load_model(app.config['MODEL'])  
-
 
 @app.route('/favicon.ico')
 async def favicon():
@@ -50,33 +41,40 @@ async def handle_internal_error(e):
 
 @app.get("/")
 async def index():
-    return await render_template("dashboard.html", test_func=test_func)
+    return await render_template("index.html", test_func=test_func)
 
 @app.get("/dashboard")
+@auth_required()
 async def dash():
     return await render_template("dashboard.html", test_func=test_func)
 
 @app.get("/probemgr")
+@auth_required()
 async def probe_mgr():
     return await render_template("blank.html")
 
 @app.get("/assets")
+@auth_required()
 async def assets():
     return await render_template("blank.html")
 
 @app.get("/netmap")
+@auth_required()
 async def net_map():
     return await render_template("blank.html")
 
 @app.get("/netscan")
+@auth_required()
 async def net_scan():
     return await render_template("blank.html")
 
 @app.get("/uptime")
+@auth_required()
 async def uptime():
     return await render_template("blank.html")
 
 @app.get("/performance")
+@auth_required()
 async def net_perf():
     return await render_template("blank.html")
 

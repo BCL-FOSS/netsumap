@@ -13,5 +13,7 @@ Flask-Cors
 asyncio 
 hypercorn 
 pytest-asyncio 
-websocket-client
 aiohttp
+argon2-cffi
+Flask-Security-Too
+mongoengine

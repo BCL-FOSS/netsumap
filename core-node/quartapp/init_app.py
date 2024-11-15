@@ -60,7 +60,7 @@ app.config['SECURITY_REGISTER_USER_TEMPLATE'] = 'security/register_user.html'  #
 app.config['SECURITY_POST_LOGIN_VIEW'] = '/dashboard'            # Redirect to dashboard on login
 app.config['SECURITY_POST_REGISTER_VIEW'] = '/dashboard' 
 app.config['SECURITY_POST_LOGOUT_VIEW'] = '/' 
-app.config['SECURITY_LOGOUT_METHODS'] = 'POST' 
+app.config['SECURITY_LOGOUT_METHODS'] = ["POST"]
 app.config['SECURITY_REGISTERABLE'] = 'True' 
 
 # Connect to Redis DB

@@ -75,9 +75,10 @@ else:
 # Set email validator setting for Flask-Security
 app.config["SECURITY_EMAIL_VALIDATOR_ARGS"] = {"check_deliverability": False}
 
-# Connect to MongoDB (Auth Datastore)
-db_init = AuthDB()
-db = db_init.db_connection(db_name=app.config['MONGO_DB_NAME'], host=app.config['MONGO_DB_NAME'])
+with app.app_context():
+    # Connect to MongoDB (Auth Datastore)
+    db_init = AuthDB()
+    db = db_init.db_connection(db_name=app.config['MONGO_DB_NAME'], host=app.config['MONGO_DB_NAME'])
 
 if db is None:
     print("verify mongo db is running. Ctrl + C to close netsumap", flush=True)
@@ -85,10 +86,10 @@ if db is None:
 else:
     print("MongoDB Connected", flush=True)
 
-with app.app_context():
-    # Setup Flask-Security
-    user_datastore = MongoEngineUserDatastore(db, User, Role)
-    security = Security(app, user_datastore)
+
+# Setup Flask-Security
+user_datastore = MongoEngineUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
 
 if app.config['SECURITY'] is None:
     app.config['SECURITY'] = security

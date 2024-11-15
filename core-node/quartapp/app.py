@@ -1,6 +1,6 @@
 from quart import request, render_template, jsonify
 import json
-from init_app import app
+from init_app import app, security
 from models.util.Uptime import Uptime
 import numpy as np
 import asyncio

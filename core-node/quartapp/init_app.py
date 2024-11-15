@@ -42,6 +42,10 @@ class User(Document, UserMixin):
     roles = ListField(ReferenceField(Role), default=[])
     meta = {"db_alias": app.config['MONGO_DB_NAME']}
 
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1000 * 1000  # 500 MB
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['CORS_HEADER'] = 'application/json'
+
 # Configure SECRET_KEY and SECURITY_PASSWORD_SALT for secure authentication workflow
 if os.environ.get('SECRET_KEY') is None:
    os.environ['SECRET_KEY'] = secrets.token_urlsafe()
@@ -88,12 +92,6 @@ else:
 user_datastore = MongoEngineUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
 
-if app.config['SECURITY'] is None:
-    app.config['SECURITY'] = security
-
-app.config['MAX_CONTENT_LENGTH'] = 500 * 1000 * 1000  # 500 MB
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['CORS_HEADER'] = 'application/json'
 nest_asyncio.apply()
 
 

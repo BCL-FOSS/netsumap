@@ -11,7 +11,7 @@ from mongoengine.fields import (
 from flask_security import Security, MongoEngineUserDatastore, \
     UserMixin, RoleMixin, auth_required, hash_password, permissions_accepted
 
-from Role import Role
+from auth_db.Role import Role
 
 class User(Document, UserMixin):
     role = Role()

@@ -4,10 +4,35 @@ import os
 import secrets
 from models.util.RedisDB import RedisDB
 from flask_security import Security, MongoEngineUserDatastore, \
-    UserMixin, RoleMixin, auth_required, hash_password, permissions_accepted
-from models.auth_db.Role import Role
+    UserMixin, RoleMixin
 from models.auth_db.AuthDB import AuthDB
-from models.auth_db.User import User
+from mongoengine import Document
+from mongoengine.fields import (
+    BinaryField,
+    BooleanField,
+    DateTimeField,
+    IntField,
+    ListField,
+    ReferenceField,
+    StringField,
+)
+
+class Role(Document, RoleMixin):
+    db_name='mongo'
+    name = StringField(max_length=80, unique=True)
+    description = StringField(max_length=255)
+    permissions = ListField(required=False)
+    meta = {"db_alias": db_name}   
+
+class User(Document, UserMixin):
+    role = Role()
+    email = StringField(max_length=255, unique=True)
+    password = StringField(max_length=255)
+    active = BooleanField(default=True)
+    fs_uniquifier = StringField(max_length=64, unique=True)
+    confirmed_at = DateTimeField()
+    roles = ListField(ReferenceField(role), default=[])
+    meta = {"db_alias": role.db_name}
 
 # Create folder for uploaded PCAP CSVs 
 if os.path.isdir(os.path.join(os.path.dirname(__file__), 'Uploads')) is False:

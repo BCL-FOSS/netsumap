@@ -50,7 +50,7 @@ if os.environ.get('SECRET_KEY') is None:
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 if os.environ.get("SECURITY_PASSWORD_SALT") is None:
-    os.environ['SECURITY_PASSWORD_SALT'] = secrets.SystemRandom().getrandbits(128)
+    os.environ['SECURITY_PASSWORD_SALT'] = str(secrets.SystemRandom().getrandbits(128))
 
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT")
 

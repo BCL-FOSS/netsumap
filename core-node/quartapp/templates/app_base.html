@@ -442,16 +442,20 @@
           });
         });
 
-        $(function() {
-          $('#probeact').on('click', function(e) {
-            e.preventDefault()
-            $.getJSON('/background_process_test',
-                function(data) {
-              //do nothing
-              
+        // Use event delegation for dynamically generated buttons
+        $('#dataTable').on('click', '.probeact', function (e) {
+            e.preventDefault();
+
+            const probeId = $(this).data('id'); // Retrieve the ID from the button's data attribute
+
+            $.getJSON('/background_process_test', { id: probeId }, function (data) {
+                // Handle response (e.g., show a success message or log the data)
+                console.log(`Response for probe ${probeId}:`, data);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(`Failed to process probe ${probeId}: ${textStatus} - ${errorThrown}`);
             });
+
             return false;
-          });
         });
 
         

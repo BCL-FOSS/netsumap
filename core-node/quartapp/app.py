@@ -259,7 +259,7 @@ async def all_probes():
     db_query_value = await db.get_all_data(match=match)
 
     if db_query_value:
-        print(db_query_value, flush=True)
+        print(jsonify(db_query_value), flush=True)
     else:
         print('DB retrieval failed', flush=True)
 

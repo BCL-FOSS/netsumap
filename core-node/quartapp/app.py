@@ -172,7 +172,7 @@ async def probe_registration():
             
             print(db_upload, flush=True)
         
-            db_query_value = await db.get_db_data(id=probe_id, match="nmp*")
+            db_query_value = await db.get_obj_data(key=probe_id)
             print(db_query_value, flush=True)
 
         return jsonify({

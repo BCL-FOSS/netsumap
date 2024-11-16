@@ -435,7 +435,7 @@
             e.preventDefault();
             $.getJSON('/all_probes', // Send input as a parameter
                 function(data) {
-                    alert(data);  // Display the result from the server
+                    alert(data.getJSON);  // Display the result from the server
                     //const tableBody = document.querySelector('#dataTable tbody');
                     //tableBody.innerHTML = '';
                     //const row = document.createElement('tr');

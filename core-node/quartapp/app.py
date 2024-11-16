@@ -262,7 +262,6 @@ async def all_probes():
         print(db_query_value, flush=True)
     else:
         print('DB retrieval failed', flush=True)
-        
 
     # Return JSON response
     return db_query_value

@@ -49,8 +49,10 @@ class RedisDB:
         
     async def get_all_data(self, match=''):
         try:
+            probes=[]
             async for probe in self.redis_conn.scan_iter(match=match):
                 print(probe, flush=True)
+                probes.append(probe)
 
             '''
                 cursor, keys = await connection.hscan(match=match)
@@ -67,6 +69,8 @@ class RedisDB:
                     nmp_hashes[key] = hash_data
             
             '''
+
+            return probes
 
         except Exception as e:
             return json.dumps({"error": str(e)})

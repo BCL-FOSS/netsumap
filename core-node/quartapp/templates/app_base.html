@@ -442,26 +442,23 @@
           });
         });
 
+        const probeTableBody = document.getElementById('probetb');
 
-        // Use event delegation for dynamically generated buttons
-        $('#dataTable tbody').on('click', '.probeact', function (e) {
-            e.preventDefault();
-
-            const probeId = $(this).closest('tr').data('id'); // Retrieve the ID from the button's data attribute
-
-            $.getJSON('/background_process_test', { id: probeId }, function (data) {
-                // Handle response (e.g., show a success message or log the data)
-                console.log(`Response for probe ${probeId}:`, data);
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert(`Failed to process probe ${probeId}: ${textStatus} - ${errorThrown}`);
-            });
-
-            return false;
+        probeTableBody.addEventListener("click", (event) => {
+            if(event.target.tagName === 'BUTTON') {
+                $(function() {
+                    e.preventDefault()
+                    $.getJSON('/background_process_test',
+                            function(data) {
+                                alert(data)
+                        //do nothing
+                        
+                    });
+                    return false;
+                    
+                });
+            }
         });
-
-        
-
-        
 
       </script>
 

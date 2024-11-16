@@ -269,7 +269,7 @@ async def all_probes():
 @app.route('/background_process_test')
 async def background_process_test():
     print ("Hello", flush=True)
-    return ("nothing")
+    return "From background process"
 
 @app.route('/background_input_test')
 def background_input_test():

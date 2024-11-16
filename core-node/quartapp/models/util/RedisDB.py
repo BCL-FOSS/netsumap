@@ -51,8 +51,8 @@ class RedisDB:
         try:
             connection = await self.get_redis_connection()
 
-            probe_keys = await connection.scan_iter(match)
-
+            probe_keys = connection.scan_iter(match)
+                
             '''
                 nmp_hashes = {}
 

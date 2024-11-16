@@ -20,6 +20,8 @@ COPY quartapp/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt --upgrade && \
   chown -R quart:quart ./
 
+RUN pip install -U redis
+
 # Copy the app into our user root
 COPY quartapp/ /home/quart/
 # Make our entrypoint executable

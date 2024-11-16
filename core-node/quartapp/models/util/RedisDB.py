@@ -48,7 +48,7 @@ class RedisDB:
 
             # Use HMSET to upload a probe data
 
-            result = await connection.hmset(id, str_hashmap)
+            result = await connection.hset(id, mapping=str_hashmap)
     
             return result #{"DB Upload Status" : "Profile ID %s upload successful" % id}
         except Exception as e:
@@ -61,20 +61,22 @@ class RedisDB:
         try:
             connection = await self.get_redis_connection()
 
-            cursor, keys = await connection.scan(match=match)
-            print(f"Keys: {keys}", flush=True)
+            async for probe in connection.hscan_iter(match=match):
+                print(probe, flush=True)
 
             '''
+                cursor, keys = await connection.hscan(match=match)
+                print(f"Keys: {keys}", flush=True)
                 async for probe in connection.scan_iter(match=match):
                 print(probe, flush=True)
 
                 nmp_hashes = {}
 
-            # Loop through each key and get hash data
-            for key in probe_keys:
-                print(key, flush=True)
-                hash_data = await connection.hgetall(key)
-                nmp_hashes[key] = hash_data
+                # Loop through each key and get hash data
+                for key in probe_keys:
+                    print(key, flush=True)
+                    hash_data = await connection.hgetall(key)
+                    nmp_hashes[key] = hash_data
             
             '''
 

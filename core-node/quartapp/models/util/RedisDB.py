@@ -38,9 +38,9 @@ class RedisDB:
 
             # Use HMSET to upload a probe data
 
-            await connection.hmset(id, str_hashmap)
+            result = await connection.hmset(id, str_hashmap)
     
-            return {"DB Upload Status" : "Profile ID %s upload successful" % id}
+            return result #{"DB Upload Status" : "Profile ID %s upload successful" % id}
         except Exception as e:
             return {"DB Upload Error":str(e)}
         finally:

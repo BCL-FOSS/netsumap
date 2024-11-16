@@ -61,7 +61,7 @@ class RedisDB:
         try:
             connection = await self.get_redis_connection()
 
-            for probe in connection.scan_iter():
+            async for probe in connection.scan_iter(match=match):
                 print(probe, flush=True)
                 
             '''

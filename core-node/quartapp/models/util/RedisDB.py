@@ -61,10 +61,13 @@ class RedisDB:
         try:
             connection = await self.get_redis_connection()
 
-            async for probe in connection.scan_iter(match=match):
-                print(probe, flush=True)
-                
+            cursor, keys = await connection.scan(match=match)
+            print(f"Cursor: {cursor}, Keys: {keys}", flush=True)
+
             '''
+                async for probe in connection.scan_iter(match=match):
+                print(probe, flush=True)
+
                 nmp_hashes = {}
 
             # Loop through each key and get hash data

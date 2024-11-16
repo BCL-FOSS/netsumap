@@ -266,7 +266,6 @@ async def all_probes():
     # Return JSON response
     return db_query_value
 
-    
 @app.route('/background_process_test')
 async def background_process_test():
     print ("Hello", flush=True)

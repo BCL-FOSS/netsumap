@@ -251,18 +251,19 @@ async def check_uptime():
     except Exception as e:
         return jsonify({"Uptime Check Run Error" : e})
     
-@app.route("/allprobes")
-async def get_all_probes():
-    try:
-        match = "nmp*"
-        db_query_value = await db.get_all_data(match=match)
+@app.route('/all_probes')
+async def all_probes():
+    match = "nmp*"
+    db_query_value = await db.get_all_data(match=match)
+
+    if db_query_value is None:
+        print('DB retrieval failed', flush=True)
+    else:
         print(db_query_value, flush=True)
 
-        # Return JSON response
-        return db_query_value
+    # Return JSON response
+    return db_query_value
 
-    except Exception as e:
-        return jsonify({"Error": e })
     
 @app.route('/background_process_test')
 async def background_process_test():

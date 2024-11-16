@@ -453,8 +453,6 @@
                 return false;
             }
 
-            alert(selectedRowData)
-
             // Sending selected row data to the server
             $.getJSON('/background_process_test', function (response) {
                 alert(response); // Display the result from the server

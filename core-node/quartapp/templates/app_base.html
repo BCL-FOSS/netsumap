@@ -371,27 +371,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     
     <!-- Core plugin JavaScript-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -433,17 +412,44 @@
         $(function() {
           $('#probeinfo').on('click', function(e) {
             e.preventDefault();
-            $.getJSON('/all_probes', // Send input as a parameter
+            $.getJSON('/all_probes', function (data) {
+            // Clear existing table rows
+            const tableBody = $('#dataTable tbody');
+            tableBody.empty();
+
+            // Loop through the keys and nested objects in the JSON response
+            Object.keys(data).forEach(key => {
+                const probe = data[key];
+                const row = `
+                    <tr>
+                        <td>${probe.id}</td>
+                        <td>${probe.hst_nm}</td>
+                        <td>${probe.ip}</td>
+                        <td>
+                            <button id="probeact" class="btn btn-primary">
+                                Connection Check
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            });
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert(`Failed to retrieve data: ${textStatus} - ${errorThrown}`);
+        });
+
+        return false;
+          });
+        });
+
+        $(function() {
+          $('#probeact').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/background_process_test',
                 function(data) {
-                    alert(data.getJSON);  // Display the result from the server
-                    //const tableBody = document.querySelector('#dataTable tbody');
-                    //tableBody.innerHTML = '';
-                    //const row = document.createElement('tr');
-                        
-                    //row.innerHTML = `<td>${}</td><td>${}</td><td><button onclick="" class="btn btn-primary">Connection Check</button></td>`;
-                    //tableBody.appendChild(row);
-                }
-            );
+              //do nothing
+              
+            });
             return false;
           });
         });

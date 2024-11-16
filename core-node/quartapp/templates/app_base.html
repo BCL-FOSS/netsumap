@@ -442,11 +442,12 @@
           });
         });
 
+
         // Use event delegation for dynamically generated buttons
-        $('#dataTable').on('click', '.probeact', function (e) {
+        $('#dataTable tbody').on('click', '.probeact', function (e) {
             e.preventDefault();
 
-            const probeId = $(this).data('id'); // Retrieve the ID from the button's data attribute
+            const probeId = $(this).closest('tr').data('id'); // Retrieve the ID from the button's data attribute
 
             $.getJSON('/background_process_test', { id: probeId }, function (data) {
                 // Handle response (e.g., show a success message or log the data)

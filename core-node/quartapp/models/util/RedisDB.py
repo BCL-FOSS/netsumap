@@ -50,27 +50,14 @@ class RedisDB:
     async def get_all_data(self, match=''):
         try:
             probes=[]
+            nmp_hashes = {}
             async for probe in self.redis_conn.scan_iter(match=match):
                 print(probe, flush=True)
                 probes.append(probe)
+                hash_data = await self.redis_conn.hgetall(probe)
+                nmp_hashes[probe] = hash_data
 
-            '''
-                cursor, keys = await connection.hscan(match=match)
-                print(f"Keys: {keys}", flush=True)
-                async for probe in connection.scan_iter(match=match):
-                print(probe, flush=True)
-
-                nmp_hashes = {}
-
-                # Loop through each key and get hash data
-                for key in probe_keys:
-                    print(key, flush=True)
-                    hash_data = await connection.hgetall(key)
-                    nmp_hashes[key] = hash_data
-            
-            '''
-
-            return probes
+            return nmp_hashes
 
         except Exception as e:
             return json.dumps({"error": str(e)})

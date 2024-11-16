@@ -5,21 +5,28 @@
 <button id="probeinfo" class="btn btn-primary">
     <i class="fas fa-search fa-sm"></i> Refresh Probe(s) List
 </button>
+<button id="probeact" class="btn btn-primary">
+    <i class="fas fa-search fa-sm"></i> Probe Actions
+</button>
 
 <!-- Page Heading -->
 <h3>Data Table</h3>
-<table class="table table-striped" id="dataTable">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Hostname</th>
-            <th>IP</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody id="probetb">
-        <!-- Data will be inserted here by JavaScript -->
-    </tbody>                  
-</table>
+<div class="table-responsive">
+
+    <table class="table table-striped" id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Hostname</th>
+                <th>IP</th>
+            </tr>
+        </thead>
+        <tbody id="probetb">
+            <!-- Data will be inserted here by JavaScript -->
+        </tbody>                  
+    </table>
+
+</div>
+
 
 {% endblock %}

@@ -425,14 +425,15 @@
                         <td>${probe.id}</td>
                         <td>${probe.hst_nm}</td>
                         <td>${probe.ip}</td>
-                        <td>
-                            <button id="probeact" class="btn btn-primary">
-                                Connection Check
-                            </button>
-                        </td>
                     </tr>
                 `;
                 tableBody.append(row);
+
+                // Add click event for table rows to mark selection
+                $('#dataTable tbody tr').on('click', function () {
+                $('#dataTable tbody tr').removeClass('selected'); // Remove existing selections
+                $(this).addClass('selected'); // Mark the clicked row as selected
+            });
             });
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert(`Failed to retrieve data: ${textStatus} - ${errorThrown}`);
@@ -442,21 +443,29 @@
           });
         });
 
-         // Second function: Delegate the click event for dynamically generated buttons
-        $('#dataTable tbody').on('click', '.probeact', function (e) {
+        // Function to handle sending selected row data
+        $('#probeact').on('click', function (e) {
             e.preventDefault();
-            // Retrieve the probe ID from the parent <tr> element's data attribute
-            const probeId = $(this).closest('tr').data('id');
+            const selectedRowData = $('#dataTable tr.selected').data(); // Retrieve data from the selected row
+            
+            if (!selectedRowData) {
+                alert('Please select a row before submitting!');
+                return false;
+            }
 
-            $.getJSON('/background_process_test', function (data) {
-                // Handle the response (e.g., log or display a success message)
-                alert(data)
+            alert(selectedRowData)
+
+            // Sending selected row data to the server
+            $.getJSON('/background_process_test', function (response) {
+                alert(response); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert(`Failed to process probe ${probeId}: ${textStatus} - ${errorThrown}`);
+                alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
             });
 
             return false;
         });
+
+       
 
       
 

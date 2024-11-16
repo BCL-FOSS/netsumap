@@ -52,16 +52,21 @@ class RedisDB:
             connection = await self.get_redis_connection()
 
             probe_keys = await connection.scan_iter(match)
-            
-            nmp_hashes = {}
+
+            '''
+                nmp_hashes = {}
 
             # Loop through each key and get hash data
             for key in probe_keys:
                 print(key, flush=True)
                 hash_data = await connection.hgetall(key)
                 nmp_hashes[key] = hash_data
+            
+            '''
+            
+            
 
-            return nmp_hashes
+            return probe_keys
 
         except Exception as e:
             return json.dumps({"error": str(e)})

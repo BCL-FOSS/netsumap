@@ -254,6 +254,7 @@ async def check_uptime():
     
 @app.route('/all_probes')
 async def all_probes():
+    await db.connect_to_db()
     match = "nmp*"
     db_query_value = await db.get_all_data(match=match)
 

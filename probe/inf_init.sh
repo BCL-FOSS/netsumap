@@ -26,9 +26,9 @@ python3 -m venv .venv
 pip install requests
 
 # Prompt user for additional parameters
-echo "PARAM FORMAT Ex.:http://0.0.0.0:25000 150" 
-echo "nmp_ip (netsumap-core IP/Hostname:Port)" 
-echo "pcap_count (Num packets to capture per run)"
+echo "PARAM FORMAT Ex.:https://core-server-url.com 150" 
+echo "nmp_ip (netsumap-core url)" 
+echo "pcap_count (# packets to capture per run)"
 echo $script
 read -p "Enter Parameters: " SCRIPT_PARAMS
 

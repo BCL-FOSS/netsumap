@@ -23,15 +23,16 @@ class RedisDB:
             pong = await connection.ping()
             print(pong)
 
-            # When finished, close the connection.
-            connection.close()
+            
             
             return {"DB Connection Status": "Success"}
             
         except Exception as e:
             return {"DB Connection Error":str(e)}
-        
-    
+        finally:
+            # When finished, close the connection.
+            connection.close()
+
     async def upload_db_data(self, id = '', data = {}):
         try: 
             # Connect to the locally installed Redis database
@@ -43,17 +44,18 @@ class RedisDB:
 
             await connection.hmset(id, str_hashmap)
     
-            connection.close()
-
             return {"DB Upload Status" : "Profile ID %s upload successful" % id}
         except Exception as e:
             return {"DB Upload Error":str(e)}
+        finally:
+            connection.close()
+
         
-    async def get_db_data(self,id='', match=''):
+    async def get_all_data(self, match=''):
         try:
             connection = await self.get_redis_connection()
 
-            probe_keys = await connection.sscan_iter(id, match=match)
+            probe_keys = await connection.scan_iter(match)
             
             nmp_hashes = {}
 

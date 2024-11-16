@@ -115,7 +115,6 @@ def register(url=''):
             cur.execute("INSERT INTO pbdata (id, status, host_ip, hostname) VALUES (?, ?, ?, ?)", (id, config_status, external_ip, hostname))
             conn.commit()
 
-        #print(probe_id)
         print('Probe configuration complete')
     else:
          print('Probe already configured')

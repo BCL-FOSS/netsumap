@@ -1,0 +1,24 @@
+{% extends 'app_base.html' %}
+
+{% block content %}
+
+<button id="probeRefresh" class="btn btn-primary" type="button">
+    <i class="fas fa-search fa-sm"></i> Refresh Probe(s) List
+</button>
+
+<!-- Page Heading -->
+<h3>Data Table</h3>
+<table class="table table-striped" id="dataTable">
+    <thead>
+        <tr>
+            <th>Hostname</th>
+            <th>IP</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be inserted here by JavaScript -->
+    </tbody>                  
+</table>
+
+{% endblock %}

@@ -429,6 +429,29 @@
             return false;
           });
         });
+
+        $(function() {
+          $('#probeRefesh').on('click', function(e) {
+            e.preventDefault();
+            $.getJSON('/allprobes', // Send input as a parameter
+                function(data) {
+                    alert(data.result);  // Display the result from the server
+                    //const tableBody = document.querySelector('#dataTable tbody');
+                    //tableBody.innerHTML = '';
+                    //const row = document.createElement('tr');
+                        
+                    //row.innerHTML = `<td>${}</td><td>${}</td><td><button onclick="" class="btn btn-primary">Connection Check</button></td>`;
+                    //tableBody.appendChild(row);
+                }
+            );
+            return false;
+          });
+        });
+
+        
+
+        
+
       </script>
 
 </body>

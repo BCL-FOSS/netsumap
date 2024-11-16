@@ -13,6 +13,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 import os
 
+
 # init Redis DB connection
 db = app.config['DB_CONN']
 
@@ -39,7 +40,7 @@ async def handle_internal_error(e):
 
 @app.get("/")
 async def index():
-    return await render_template("index.html", test_func=test_func)
+    return await render_template("dashboard.html", test_func=test_func)
 
 @app.get("/dashboard")
 async def dash():
@@ -47,7 +48,7 @@ async def dash():
 
 @app.get("/probemgr")
 async def probe_mgr():
-    return await render_template("blank.html")
+    return await render_template("probemgr.html")
 
 @app.get("/assets")
 async def assets():
@@ -225,30 +226,27 @@ async def probe_webhook():
 async def check_uptime():
     host_check = Uptime()
     try:
-        data = await request.get_json()
-        if data:
-            msg = json.dumps(data)
-            id_match="nmp*"
-            toplink='probes'
-            db_query_value = await db.get_db_data(top_link=toplink, match=id_match)
+        id_match="nmp*"
+        toplink='probes'
+        db_query_value = await db.get_db_data(match=id_match)
 
-            host_probes = jsonify(db_query_value)
+        host_probes = jsonify(db_query_value)
 
-            print(host_probes)
+        print(host_probes)
 
-            for prof in host_probes:
+        for prof in host_probes:
 
-                if prof['hst_nm'] == msg['host']:
-                    if msg['port']:
+            if prof['hst_nm'] == msg['host']:
+                if msg['port']:
                         host_check.run(host=prof['ip'], port=prof['port'])
 
-                    if msg['maxCount']:
+                if msg['maxCount']:
                         host_check.run(host=prof['ip'], maxCount=prof['maxCount'])
 
-                    if msg['port'] and msg['maxCount']:
+                if msg['port'] and msg['maxCount']:
                         host_check.run(host=prof['ip'], maxCount=prof['maxCount'], port=prof['port'])
 
-            host_check.run(host=msg['ip'])
+        host_check.run(host=msg['ip'])
 
     except Exception as e:
         return jsonify({"Uptime Check Run Error" : e})
@@ -256,12 +254,12 @@ async def check_uptime():
 @app.route("/allprobes")
 async def get_all_probes():
     try:
-
-        id_match = "nmp*"
-        db_query_value = await db.get_db_data(match=id_match)
+        match = "nmp*"
+        db_query_value = await db.get_all_data(match=match)
+        print(db_query_value, flush=True)
 
         # Return JSON response
-        return jsonify(db_query_value)
+        return db_query_value
 
     except Exception as e:
         return jsonify({"Error": e })

@@ -154,7 +154,7 @@ async def rest_prediction():
 @app.post("/register")
 async def probe_registration():
     try:
-        await db.connect_to_db()
+        await db.ping_db()
         data_value = await request.get_json()
         if data_value:
             print(data_value, flush=True)
@@ -254,7 +254,7 @@ async def check_uptime():
     
 @app.route('/all_probes')
 async def all_probes():
-    #await db.connect_to_db()
+    await db.ping_db()
     match = "nmp*"
     db_query_value = await db.get_all_data(match=match)
 

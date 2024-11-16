@@ -50,7 +50,7 @@ class RedisDB:
     async def get_all_data(self, match=''):
         try:
            
-            async for probe in self.redis_conn.hscan_iter(match=match):
+            async for probe in self.redis_conn.scan_iter(match=match):
                 print(probe, flush=True)
 
             '''

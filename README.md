@@ -54,15 +54,11 @@ Model training data captured from:
     pip install nvidia-pyindex 
     pip install nvidia-cuda-nvcc
 ```
-5. Run startup script 
+5. Run startup script (starts netsumap after initialization)
 ```bash
     sudo ./netsumap_init.sh
 ```
-6. Start netsumap core containers after startup initialization
-```bash
-    docker compose up -d
-```
-6. Verify netsumap core is running by visiting [https://your-core-node-domain.com/].
+6. Visit netsumap core @ [https://your-core-node-domain.com/] to get started.
 
 To restart netsumap 
 ```bash
@@ -83,23 +79,6 @@ Run pcap session for instant analysis (same parameters as init script)
 ```bash
     sudo ./inf_run.sh
 ```
-
-### Dashboard Configuration
-1. Open port 30000
-```bash
-    sudo ufw allow 30000
-```
-2. Initialize & start dashboard
-```bash
-    sudo ./dash_init.sh
-```
-3. Restart dashboard
-```bash
-    sudo ./dash_restart.sh
-```
-Access dashboard at [https://dashboard-server-ip:30000/]
-
-
 
 
 

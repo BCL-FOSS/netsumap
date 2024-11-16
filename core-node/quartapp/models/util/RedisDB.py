@@ -1,6 +1,16 @@
 import redis
 import asyncio
 import asyncio_redis
+from asyncio_redis import *
+from asyncio_redis.connection import *
+from asyncio_redis.cursors import *
+from asyncio_redis.encoders import *
+from asyncio_redis.exceptions import *
+from asyncio_redis.log import *
+from asyncio_redis.pool import *
+from asyncio_redis.protocol import *
+from asyncio_redis.replies import *
+
 import json
 
 class RedisDB:
@@ -51,7 +61,7 @@ class RedisDB:
         try:
             connection = await self.get_redis_connection()
 
-            for probe in connection.scan_iter(match):
+            for probe in connection.scan_iter():
                 print(probe, flush=True)
                 
             '''

@@ -74,7 +74,7 @@ class RedisDB:
 
             probe = await connection.hgetall(key)
 
-            print(probe, flush=True)
+            return probe
                 
         except Exception as e:
             return json.dumps({"error": str(e)})

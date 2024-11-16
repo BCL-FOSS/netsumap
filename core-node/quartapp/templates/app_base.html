@@ -455,21 +455,10 @@
             
             // Sending selected row data to the server
             $.getJSON('/background_process_test', function (response) {
-                alert(response); // Display the result from the server
+                alert(response.data); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
             });
-
-            // Retrieve data values from the selected row
-            const rowData = {
-                id: selectedRowData.find('td:nth-child(1)').text(),       // First column (ID)
-                hostname: selectedRowData.find('td:nth-child(2)').text(), // Second column (Hostname)
-                ip: selectedRowData.find('td:nth-child(3)').text()        // Third column (IP)
-            };
-
-            // Display the parsed row data in an alert
-            alert(`Selected Row Data:\nID: ${rowData.id}\nHostname: ${rowData.hostname}\nIP: ${rowData.ip}`);
-
 
             return false;
         });

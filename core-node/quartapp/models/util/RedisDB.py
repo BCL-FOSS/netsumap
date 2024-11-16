@@ -64,10 +64,6 @@ class RedisDB:
                 nmp_hashes[key] = hash_data
             
             '''
-            
-            
-
-            return probe_keys
 
         except Exception as e:
             return json.dumps({"error": str(e)})

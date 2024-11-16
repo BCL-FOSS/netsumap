@@ -258,10 +258,11 @@ async def all_probes():
     match = "nmp*"
     db_query_value = await db.get_all_data(match=match)
 
-    if db_query_value is None:
-        print('DB retrieval failed', flush=True)
-    else:
+    if db_query_value:
         print(db_query_value, flush=True)
+    else:
+        print('DB retrieval failed', flush=True)
+        
 
     # Return JSON response
     return db_query_value

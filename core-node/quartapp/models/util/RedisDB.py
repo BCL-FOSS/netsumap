@@ -21,11 +21,7 @@ class RedisDB:
             connection = await self.get_redis_connection()
 
             pong = await connection.ping()
-            print(pong)
-
-            
-            
-            return {"DB Connection Status": "Success"}
+            print(pong, flush=True)
             
         except Exception as e:
             return {"DB Connection Error":str(e)}

@@ -154,6 +154,7 @@ async def rest_prediction():
 @app.post("/register")
 async def probe_registration():
     try:
+        await db.connect_to_db()
         data_value = await request.get_json()
         if data_value:
             print(data_value, flush=True)

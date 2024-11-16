@@ -29,6 +29,8 @@ class RedisDB:
             
         except Exception as e:
             return {"DB Connection Error":str(e)}
+        finally:
+            self.redis_conn.close()
     
 
     async def upload_db_data(self, id = '', data = {}):
@@ -42,6 +44,8 @@ class RedisDB:
             return result #{"DB Upload Status" : "Profile ID %s upload successful" % id}
         except Exception as e:
             return {"DB Upload Error":str(e)}
+        finally:
+            self.redis_conn.close()
         
     async def get_all_data(self, match=''):
         try:
@@ -67,6 +71,8 @@ class RedisDB:
 
         except Exception as e:
             return json.dumps({"error": str(e)})
+        finally:
+            self.redis_conn.close()
 
     async def get_obj_data(self, key=''):
         try:
@@ -77,5 +83,7 @@ class RedisDB:
                 
         except Exception as e:
             return json.dumps({"error": str(e)})
+        finally:
+            self.redis_conn.close()
         
 

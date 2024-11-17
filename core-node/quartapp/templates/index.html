@@ -13,7 +13,8 @@
                     </p>
                     <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
                         <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Sign Up</a>
-                        <a class="btn btn-outline-light btn-lg px-4" href="#!">Login</a>
+                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Sign In</a>
+                        <a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('dash') }}">View Dashboard</a>
                     </div>
                 </div>
             </div>
@@ -64,28 +65,11 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="text-center">
-                    <a class="btn btn-primary" href="" role="button">Create an Account!</a>
-                    <a class="btn btn-primary" href="" role="button">Login</a>
-                    <a class="btn btn-primary" href="{{ url_for('dash') }}" role="button">View Dashboard</a>
-                </div>
-                
             </div>
             <!-- /.container-fluid -->
 
         </div>
         <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2021</span>
-                </div>
-            </div>
-        </footer>
-        <!-- End of Footer -->
 
     </div>
     <!-- End of Content Wrapper -->

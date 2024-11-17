@@ -468,30 +468,23 @@
             return false;
         });
 
-        $('#dataTable tbody tr td').on('click', 'button', function(){
+        $('#dataTable').on('click', '.button', function(){
 
             e.preventDefault();
             const selectedRowData = $('#dataTable tr.selected').data(); // Retrieve data from the selected row
-            
+
             if (!selectedRowData) {
                 alert('Please select a row before submitting!');
                 return false;
             }
-            
+
             // Sending selected row data to the server
             $.getJSON('/background_process_test', function (response) {
                 alert(response.data); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
             });
-
-
         });
-
-       
-
-      
-
       </script>
 
 </body>

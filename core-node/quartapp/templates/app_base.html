@@ -468,7 +468,7 @@
             return false;
         });
 
-        $('#dataTable tbody tr').on('click', '.button', function(){
+        $('#dataTable tbody tr td').on('click', 'button', function(){
 
             e.preventDefault();
             const selectedRowData = $('#dataTable tr.selected').data(); // Retrieve data from the selected row

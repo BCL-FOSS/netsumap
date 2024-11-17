@@ -75,13 +75,18 @@ async def inference():
 async def upload_csv():
     file = (await request.files)['file']
 
-    if not file:
+    if file:
+        print('CSV file attached', flush=True)
+    else:
         return jsonify({"message": "No file uploaded"}), 400
         
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-    await file.save(file_path)
+    result = await file.save(file_path)
+
+    if result:
+        print(result, flush=True)
 
     """
         X_inference, original_data = preprocess_file_for_inference(file_path=file_path)

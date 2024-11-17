@@ -465,10 +465,10 @@
                 alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
             });
 
-            return false;
+            return false;       
         });
 
-        $('#dataTable').on('click', '.button', function(){
+        $('#dataTable').on('click', 'button', function(){
 
             e.preventDefault();
             const selectedRowData = $('#dataTable tr.selected').data(); // Retrieve data from the selected row

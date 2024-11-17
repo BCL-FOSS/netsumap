@@ -70,8 +70,25 @@ async def uptime():
 async def net_perf():
     return await render_template("blank.html")
 
-@app.post("/csv_inference")
-async def file_prediction():
+@app.get("/inference")
+async def inference():
+    return await render_template("inference.html")
+
+@app.route('/upload_csv', methods=['POST'])
+async def upload_csv():
+    if 'file' not in request.files:
+        return jsonify({"message": "No file uploaded"}), 400
+
+    file = request.files['file']
+    filename = file.filename
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    await file.save(file_path)
+
+    return jsonify({"message": f"{filename} uploaded successfully!"})
+
+@app.route("/csv_inference")
+async def csv_inference():
     try:
         if request.method == 'POST':
             file = request.files.getlist('files')

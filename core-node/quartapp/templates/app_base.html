@@ -23,9 +23,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Bootstrap core JavaScript-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
-
 </head>
 
 <body id="page-top">
@@ -117,6 +114,12 @@
                 <a class="nav-link" href="{{ url_for('net_scan') }}">
                     <i class="fas fa-fw fa-table"></i>
                     <span>PCAP Results</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('inference') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ML Analysis</span></a>
             </li>
 
             <!-- Divider -->
@@ -465,6 +468,50 @@
                 alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
             });
         });
+
+        $(document).ready(function () {
+            // Handle button click event for file upload
+            $('#uploadButton').on('click', function (e) {
+                e.preventDefault();
+
+                // Get the file input element and selected file
+                const fileInput = $('#fileInput')[0];
+                const file = fileInput.files[0];
+
+                if (!file) {
+                    alert('Please select a file before uploading!');
+                    return false;
+                }
+
+                // Validate the file type (ensure it's a CSV)
+                if (file.type !== 'text/csv') {
+                    alert('Please upload a valid CSV file!');
+                    return false;
+                }
+
+                // Prepare the FormData object
+                const formData = new FormData();
+                formData.append('file', file);
+
+                // Send the file to the Quart endpoint
+                $.ajax({
+                    url: '/upload_csv', // Quart endpoint URL
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // Prevent jQuery from processing the data
+                    contentType: false, // Prevent jQuery from setting the Content-Type header
+                    success: function (response) {
+                        alert(`File uploaded successfully: ${response.message}`);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert(`File upload failed: ${textStatus} - ${errorThrown}`);
+                    }
+                });
+
+                return false;
+            });
+        });
+
       </script>
 
 </body>

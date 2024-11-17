@@ -8,8 +8,10 @@ from models.util.RedisDB import RedisDB
 if os.path.isdir(os.path.join(os.path.dirname(__file__), 'Uploads')) is False:
     os.makedirs(os.path.join(os.path.dirname(__file__), 'Uploads'))
     UPLOAD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'Uploads'))
+    print("CSV directory created successfully", flush=True)
 else:
     UPLOAD_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), 'Uploads'))
+    print("CSV directory already created", flush=True)
 
 # Initialize Quart App
 app = Quart(__name__)

@@ -19,9 +19,6 @@ db = app.config['DB_CONN']
 
 K.clear_session() # Clears GPU resources before loading model
 
-# Allowed files extensions for /file_analysis 
-ALLOWED_EXTENSIONS = set(['csv'])
-
 # Load model defined in config file
 
 # model = load_model(app.config['MODEL'])  
@@ -81,58 +78,15 @@ async def upload_csv():
     if not file:
         return jsonify({"message": "No file uploaded"}), 400
         
-    filename = file.filename
+    filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
     await file.save(file_path)
+    X_inference, original_data = preprocess_file_for_inference(file_path=file_path)
+                    
+    inference_value = predict(processed_input=X_inference)
 
     return jsonify({"message": f"{filename} uploaded successfully!"})
-
-@app.route("/csv_inference")
-async def csv_inference():
-    try:
-        if request.method == 'POST':
-            file = request.files.getlist('files')
-            filename = ""
-            analysis_results = []
-            for f in file:
-                if 'csv_file' not in f:
-                    return jsonify({"error": "No file part in the request"}), 400
-                
-                #print(f.filename)
-                filename = secure_filename(f.filename)
-                #print(allowedFile(filename))
-                if allowedFile(filename):
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    f.save(file_path)
-                    X_inference, original_data = preprocess_file_for_inference(file_path=file_path)
-                    
-                    inference_value = predict(processed_input=X_inference)
-
-                    analysis_results.append(inference_value)
-
-                else:
-                    return jsonify({'message': 'File type not allowed'}), 400
-                
-            inference_values = json.dumps(analysis_results)    
-            K.clear_session()
-
-            return jsonify({
-            "status": "success",
-            "predictions": inference_values
-            })
-        else:
-            return jsonify({"status": "Request failed, upload pcap metadata for analysis."})
-    except Exception as e:
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
-    except RequestEntityTooLarge as large_request:
-        return jsonify({
-            'status': 'Upload File Size Exceeds %s' % app.config['MAX_CONTENT_LENGTH'],
-            'message': str(large_request)
-        }), 500
 
 @app.post("/json_inference")
 async def rest_prediction():
@@ -244,28 +198,17 @@ async def probe_webhook():
 @app.route("/isup")
 async def check_uptime():
     host_check = Uptime()
+    probe_id = request.args.get('probe_id', '')
+
     try:
         id_match="nmp*"
         toplink='probes'
         db_query_value = await db.get_db_data(match=id_match)
 
-        host_probes = jsonify(db_query_value)
+        for probe in db_query_value:
+            if probe == probe_id:
+                host_check.check_service()
 
-        print(host_probes)
-
-        for prof in host_probes:
-
-            if prof['hst_nm'] == msg['host']:
-                if msg['port']:
-                        host_check.run(host=prof['ip'], port=prof['port'])
-
-                if msg['maxCount']:
-                        host_check.run(host=prof['ip'], maxCount=prof['maxCount'])
-
-                if msg['port'] and msg['maxCount']:
-                        host_check.run(host=prof['ip'], maxCount=prof['maxCount'], port=prof['port'])
-
-        host_check.run(host=msg['ip'])
 
     except Exception as e:
         return jsonify({"Uptime Check Run Error" : e})
@@ -343,10 +286,6 @@ def predict(processed_input=None):
     prediction = predicted_classes.tolist()
     inference_value = json.dumps(prediction)
     return inference_value
-
-def allowedFile(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def test_func():
     return "from quart"

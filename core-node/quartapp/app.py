@@ -94,8 +94,6 @@ async def upload_csv():
         inference_value = predict(processed_input=X_inference)
     
     """
-    
-
     return jsonify({"message": f"{filename} uploaded successfully!"})
 
 @app.post("/json_inference")

@@ -78,8 +78,8 @@ async def inference():
 async def upload_csv():
     if 'file' not in request.files:
         return jsonify({"message": "No file uploaded"}), 400
-
-    file = request.files['file']
+    
+    file = (await request.files)['file']
     filename = file.filename
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 

@@ -414,32 +414,32 @@
             e.preventDefault();
             $.getJSON('/all_probes', function (data) {
             // Clear existing table rows
-            const tableBody = $('#dataTable tbody');
-            tableBody.empty();
+                const tableBody = $('#dataTable tbody');
+                tableBody.empty();
 
-            // Loop through the keys and nested objects in the JSON response
-            Object.keys(data).forEach(key => {
-                const probe = data[key];
-                const row = `
-                    <tr>
-                        <td>${probe.id}</td>
-                        <td>${probe.hst_nm}</td>
-                        <td>${probe.ip}</td>
-                    </tr>
-                `;
-                tableBody.append(row);
+                // Loop through the keys and nested objects in the JSON response
+                Object.keys(data).forEach(key => {
+                    const probe = data[key];
+                    const row = `
+                        <tr>
+                            <td>${probe.id}</td>
+                            <td>${probe.hst_nm}</td>
+                            <td>${probe.ip}</td>
+                        </tr>
+                    `;
+                    tableBody.append(row);
 
-                // Add click event for table rows to mark selection
-                $('#dataTable tbody tr').on('click', function () {
-                $('#dataTable tbody tr').removeClass('selected'); // Remove existing selections
-                $(this).addClass('selected'); // Mark the clicked row as selected
+                    // Add click event for table rows to mark selection
+                    $('#dataTable tbody tr').on('click', function () {
+                    $('#dataTable tbody tr').removeClass('selected'); // Remove existing selections
+                    $(this).addClass('selected'); // Mark the clicked row as selected
+                    });
+                });
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(`Failed to retrieve data: ${textStatus} - ${errorThrown}`);
             });
-            });
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert(`Failed to retrieve data: ${textStatus} - ${errorThrown}`);
-        });
 
-        return false;
+            return false;
           });
         });
 

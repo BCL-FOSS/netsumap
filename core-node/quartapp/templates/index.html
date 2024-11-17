@@ -2,6 +2,9 @@
 
 {% block content %}
  <!-- Header-->
+ <nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">netsumap</span>
+  </nav>
  <header class="bg-gradient-primary py-5">
     <div class="container px-5">
         <div class="row gx-5 justify-content-center">
@@ -37,7 +40,7 @@
                     <div class="row gx-5">
                         <div class="col-lg-4 mb-5 mb-lg-0">
                             <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                            <h2 class="h4 fw-bolder">Featured title</h2>
+                            <h2 class="h4 fw-bolder">Traffic Metadata Analysis</h2>
                             <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
                             <a class="text-decoration-none" href="#!">
                                 Call to action
@@ -46,7 +49,7 @@
                         </div>
                         <div class="col-lg-4 mb-5 mb-lg-0">
                             <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
-                            <h2 class="h4 fw-bolder">Featured title</h2>
+                            <h2 class="h4 fw-bolder">Attack Pattern identification</h2>
                             <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
                             <a class="text-decoration-none" href="#!">
                                 Call to action
@@ -55,7 +58,7 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
-                            <h2 class="h4 fw-bolder">Featured title</h2>
+                            <h2 class="h4 fw-bolder">Network Automation</h2>
                             <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
                             <a class="text-decoration-none" href="#!">
                                 Call to action
@@ -68,6 +71,7 @@
                 <div class="text-center">
                     <a class="btn btn-primary" href="" role="button">Create an Account!</a>
                     <a class="btn btn-primary" href="" role="button">Login</a>
+                    <a class="btn btn-primary" href="{{ url_for('dash') }}" role="button">View Dashboard</a>
                 </div>
                 
             </div>

@@ -76,10 +76,11 @@ async def inference():
 
 @app.route('/upload_csv', methods=['POST'])
 async def upload_csv():
-    if 'file' not in request.files:
-        return jsonify({"message": "No file uploaded"}), 400
-    
     file = (await request.files)['file']
+
+    if not file:
+        return jsonify({"message": "No file uploaded"}), 400
+        
     filename = file.filename
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 

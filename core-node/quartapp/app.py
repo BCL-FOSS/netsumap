@@ -74,6 +74,7 @@ async def inference():
 @app.route('/upload_csv', methods=['POST'])
 async def upload_csv():
     file = (await request.files)['file']
+    
 
     if file:
         print('CSV file attached', flush=True)
@@ -83,10 +84,12 @@ async def upload_csv():
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-    result = await file.save(file_path)
+    result = await request.files['file'].save(filename)
+
+    #result = await file.save(file_path)
 
     if result:
-        print(result, flush=True)
+        return jsonify({"message": f"{filename} uploaded successfully!"})
 
     """
         X_inference, original_data = preprocess_file_for_inference(file_path=file_path)

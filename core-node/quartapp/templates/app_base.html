@@ -451,28 +451,30 @@
           });
         });
 
-        $('#dataTable').on('click', 'button', function(e){
-
+        $('#dataTable').on('click', 'button', function (e) {
             e.preventDefault();
-            const selectedRowData = $('#dataTable tr.selected').data(); // Retrieve data from the selected row
-            
-            if (!selectedRowData) {
-                alert('Please select a row before submitting!');
+
+            // Find the row containing the clicked button
+            const selectedRow = $(this).closest('tr');
+
+            if (selectedRow.length === 0) {
+                alert('Please select a valid row before proceeding!');
                 return false;
             }
 
             // Retrieve data values from the row
             const rowData = {
-                id: selectedRowData.find('td:nth-child(1)').text().trim(),       // First column (ID)
-                hostname: selectedRowData.find('td:nth-child(2)').text().trim(), // Second column (Hostname)
-                ip: selectedRowData.find('td:nth-child(3)').text().trim()        // Third column (IP)
+                id: selectedRow.find('td:nth-child(1)').text().trim(),       // First column (ID)
+                hostname: selectedRow.find('td:nth-child(2)').text().trim(), // Second column (Hostname)
+                ip: selectedRow.find('td:nth-child(3)').text().trim()        // Third column (IP)
             };
 
-            alert(rowData)
+            // Display the retrieved row data
+            alert(`Row Data:\nID: ${rowData.id}\nHostname: ${rowData.hostname}\nIP: ${rowData.ip}`);
 
             // Sending selected row data to the server
-            $.getJSON('/background_process_test', function (response) {
-                alert(response.data); // Display the result from the server
+            $.getJSON('/background_process_test', rowData, function (response) {
+                alert(`Server Response: ${response.data}`); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
             });

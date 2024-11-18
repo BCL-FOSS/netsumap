@@ -84,9 +84,10 @@ async def upload_csv():
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-    (await request.files['file'].save(filename))
+    result = await file.save(filename)
 
-    #result = await file.save(file_path)
+    if result:
+        print(result, flush=True)
 
     """
         X_inference, original_data = preprocess_file_for_inference(file_path=file_path)

@@ -84,7 +84,7 @@ async def upload_csv():
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-    result = (await request.files)['file'].save(filename)
+    result = (await request.files['file'].save(filename))
 
     #result = await file.save(file_path)
 

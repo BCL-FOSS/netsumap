@@ -84,12 +84,9 @@ async def upload_csv():
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-    result = (await request.files['file'].save(filename))
+    (await request.files['file'].save(filename))
 
     #result = await file.save(file_path)
-
-    if result:
-        return jsonify({"message": f"{filename} uploaded successfully!"})
 
     """
         X_inference, original_data = preprocess_file_for_inference(file_path=file_path)

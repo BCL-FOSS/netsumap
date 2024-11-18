@@ -463,9 +463,9 @@
 
             // Retrieve data values from the row
             const rowData = {
-                id: selectedRow.find('td:nth-child(1)').text().trim(),       // First column (ID)
-                hostname: selectedRow.find('td:nth-child(2)').text().trim(), // Second column (Hostname)
-                ip: selectedRow.find('td:nth-child(3)').text().trim()        // Third column (IP)
+                id: selectedRowData.find('td:nth-child(1)').text().trim(),       // First column (ID)
+                hostname: selectedRowData.find('td:nth-child(2)').text().trim(), // Second column (Hostname)
+                ip: selectedRowData.find('td:nth-child(3)').text().trim()        // Third column (IP)
             };
 
             alert(rowData)

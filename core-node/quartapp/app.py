@@ -80,7 +80,7 @@ async def upload_csv():
         if file:
             print('CSV file attached', flush=True)
         else:
-            return jsonify({"message": "No file uploaded"}), 400
+            return f"CSV not in payload", 0
             
         filename = secure_filename(file.filename)
 
@@ -149,7 +149,7 @@ async def rest_prediction():
                 "predictions": inference_value
             })
         else:
-            return jsonify({"Error": "Submit POST request with packet metadata in JSON format"})
+            return 0
     
     except Exception as e:
          return jsonify({
@@ -188,9 +188,7 @@ async def probe_registration():
                 "host_name": host_name
             })
         else:
-            return jsonify({
-                "error": "probe adoption failed"
-            })
+            return 0
             
     except Exception as e:
          return jsonify({
@@ -209,7 +207,9 @@ async def probe_removal():
             if probe_to_rm['confirm'] == 'y':
                 print(probe_to_rm['id'])
 
-        return probe_to_rm #status
+            return probe_to_rm #status
+        else:
+            return 0
     except Exception as e:
          return jsonify({
             'status': 'error',
@@ -242,6 +242,8 @@ async def check_uptime():
         id = request.args.get('id', '')
         ip = request.args.get('ip', '')
         hostname = request.args.get('hostname', '') 
+        if not ip or not hostname or not id:
+            return 0
         print(f"host: {hostname}", flush=True)
         # host_check.check_service(ip=ip, host_name=hostname)
     except Exception as e:
@@ -260,7 +262,7 @@ async def all_probes():
         if db_query_value:
             print(json.dumps(db_query_value), flush=True)
         else:
-            print('DB retrieval failed', flush=True)
+            return 0
 
         # Return JSON response
         return db_query_value

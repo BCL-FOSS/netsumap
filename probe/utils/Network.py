@@ -63,7 +63,7 @@ class Net:
 
             print(json.loads(response.json()))
 
-    def open_tcp_ports():
+    def open_tcp_ports(self):
 
         # Get all connections 
         connections = psutil.net_connections(kind='inet')

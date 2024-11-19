@@ -241,19 +241,19 @@ async def check_uptime():
         ip = request.args.get('ip', '')
         hostname = request.args.get('hostname', '') 
 
-        print(jsonify({
+        print(json.dumps({
             'id': id,
             'ip': ip,
             'host': hostname
         }), flush=True)
         
-        return {
+        return json.dumps({
             'ip': ip,
             'host': hostname
-        }
+        })
         # host_check.check_service(ip=ip, host_name=hostname)
     except Exception as e:
-         return jsonify({
+         return json.dumps({
             'status': 'error',
             'message': str(e)
         })

@@ -1,4 +1,4 @@
-from quart import request, render_template, jsonify
+from quart import request, render_template, jsonify, flash, request, redirect, url_for
 import json
 from init_app import app
 from models.util.Uptime import Uptime
@@ -19,6 +19,8 @@ import uuid
 db = app.config['DB_CONN']
 
 K.clear_session() # Clears GPU resources before loading model
+
+ALLOWED_EXTENSIONS = {'csv'}
 
 # Load model defined in config file
 
@@ -74,7 +76,24 @@ async def inference():
 
 @app.route('/upload_csv', methods=['POST'])
 async def upload_csv():
-    try:
+
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return 'No file part', 0
+        file = request.files['file']
+        if file.filename == '':
+            return 'No selected file', 0
+            
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return jsonify({"message": f"{filename} uploaded successfully!"})
+        else:
+            return 'Upload Failed', 0
+
+    """
+        try:
         file = (await request.files)['file']
         
         if file:
@@ -83,11 +102,6 @@ async def upload_csv():
             return f"CSV not in payload", 0
             
         filename = secure_filename(file.filename)
-
-        file_id = gen_id()
-
-        if filename.strip() == "":
-            filename = f"PCAP_{file_id}"
 
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
@@ -99,6 +113,9 @@ async def upload_csv():
             'status': 'error',
             'message': str(e)
         })
+    
+    """
+    
 
 @app.route("/csv_inference")
 async def csv_inference():
@@ -367,6 +384,10 @@ def gen_id():
         return str(id)
     else:
         return 0   
+    
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def test_func():
     return "from quart"

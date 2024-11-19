@@ -9,13 +9,8 @@ RUN apt-get update -y
 
 RUN apt-get upgrade -y
 
-# RUN apt install python3.10-venv -y
-
 # Copy requirements to the app root
 COPY quartapp/requirements.txt ./
-
-# Create a virtual environment and install the dependecies
-# RUN python3 -m venv venv && venv/bin/
 
 RUN pip install --no-cache-dir -r requirements.txt --upgrade && \
   chown -R quart:quart ./
@@ -25,7 +20,7 @@ RUN pip install -U redis
 # Copy the app into our user root
 COPY quartapp/ /home/quart/
 # Make our entrypoint executable
-RUN chmod +x netsumap_boot.sh
+RUN chmod +x netsumap_boot.sh 
 
 # Set the user
 USER quart

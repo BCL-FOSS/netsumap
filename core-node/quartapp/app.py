@@ -238,8 +238,9 @@ async def check_uptime():
     try:
         host_check = Uptime()
         id = request.args.get('id', '')
-        ip = request.args.get('ip', '')
+        ip = str(request.args.get('ip', ''))
         hostname = request.args.get('hostname', '') 
+        
         if not ip or not hostname or not id:
             return 0
         

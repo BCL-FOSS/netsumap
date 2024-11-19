@@ -12,8 +12,8 @@ RUN apt-get upgrade -y
 # Copy requirements to the app root
 COPY quartapp/requirements.txt ./
 
-RUN pip install --no-cache-dir -r requirements.txt --upgrade && \
-  chown -R quart:quart ./
+RUN pip install --no-cache-dir -r requirements.txt --upgrade 
+  # && \ chown -R quart:quart ./
 
 RUN pip install -U redis
 
@@ -23,6 +23,6 @@ COPY quartapp/ /home/quart/
 RUN chmod +x netsumap_boot.sh 
 
 # Set the user
-USER quart
+# USER quart
 # Set the entrypoint
 ENTRYPOINT ["sh", "./netsumap_boot.sh"]

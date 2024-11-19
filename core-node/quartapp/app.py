@@ -78,16 +78,17 @@ async def inference():
 async def upload_csv():
 
     if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
+        file = (await request.files)
+        if 'file' not in file:
             return 'No file part', 0
-        file = request.files['file']
+        
         if file.filename == '':
-            return 'No selected file', 0
+            return 'No selected filename', 0
             
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            await file.save(file_path)
             return jsonify({"message": f"{filename} uploaded successfully!"})
         else:
             return 'Upload Failed', 0

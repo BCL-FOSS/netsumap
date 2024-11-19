@@ -76,25 +76,7 @@ async def inference():
 
 @app.route('/upload_csv', methods=['POST'])
 async def upload_csv():
-
-    if request.method == 'POST':
-        file = (await request.files)
-        if 'file' not in file:
-            return 'No file part', 0
-        
-        if file.filename == '':
-            return 'No selected filename', 0
-            
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            await file.save(file_path)
-            return jsonify({"message": f"{filename} uploaded successfully!"})
-        else:
-            return 'Upload Failed', 0
-
-    """
-        try:
+    try:
         file = (await request.files)['file']
         
         if file:
@@ -114,8 +96,6 @@ async def upload_csv():
             'status': 'error',
             'message': str(e)
         })
-    
-    """
     
 
 @app.route("/csv_inference")

@@ -3,12 +3,38 @@ import scapy.all
 import scapy.tools
 import socket
 import json
-from api_utils.API import API
 import psutil
+import json
+import requests
 
 class Net:
     def __init__(self) -> None:
         pass
+
+    def make_request(self, url='', payload={}):
+
+        payload = json.dumps(payload)
+
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        try:
+            
+            response = requests.request("POST", url, headers=headers, data=payload)
+
+            if response.status_code == 200:
+                    print("Request successful.")
+            else:
+                    print(f"Request failed with status code: {response.status_code}")
+
+            return response.json()
+
+        except Exception as e:
+                print("Error occurred during request:", str(e))
+                return None
+        finally:
+            response.close()
 
     def net_scan(self, url='', count=10):
         host_interfaces = socket.if_nameindex()
@@ -33,7 +59,7 @@ class Net:
 
             core_url = url+"/netmetadata"
             payload = json.dumps(packet_data)
-            response = API.make_request(url=core_url, payload=payload)
+            response = self.make_request(url=core_url, payload=payload)
 
             print(json.loads(response.json()))
 

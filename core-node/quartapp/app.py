@@ -237,9 +237,9 @@ async def probe_webhook():
 async def check_uptime():
     try:
         host_check = Uptime()
-        id = request.args.get('id', '')
-        ip = request.args.get('ip', '')
-        hostname = request.args.get('hostname', '') 
+        id = request.args.get('id')
+        ip = request.args.get('ip')
+        hostname = request.args.get('hostname') 
 
         print(json.dumps({
             'id': id,

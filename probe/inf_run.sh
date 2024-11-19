@@ -4,7 +4,4 @@
 # run example:
 # 	./inf_run.sh
 
-# Start venv
-. .venv/bin/activate 
-
 /usr/bin/python3 probe.py $1 $2

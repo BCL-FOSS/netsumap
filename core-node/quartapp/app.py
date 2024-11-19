@@ -241,9 +241,6 @@ async def check_uptime():
         ip = request.args.get('ip', '')
         hostname = request.args.get('hostname', '') 
         
-        if not ip or not hostname or not id:
-            return 0
-        
         return jsonify({
             'ip': ip,
             'host': hostname

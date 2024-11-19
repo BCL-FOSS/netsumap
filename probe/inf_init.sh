@@ -23,7 +23,8 @@ fi
 sudo apt install python3.12-venv -y
 python3 -m venv .venv
 . .venv/bin/activate
-pip install requests psutil
+pip install requests
+pip install --no-binary :all: psutil
 
 # Check if the cron job already exists
 (sudo crontab -l | grep -F "$CRON_JOB") > /dev/null 2>&1

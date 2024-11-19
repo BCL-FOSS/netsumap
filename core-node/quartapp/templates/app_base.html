@@ -358,8 +358,10 @@
             // Display the retrieved row data
             alert(`Row Data:\nID: ${rowData.id}\nHostname: ${rowData.hostname}\nIP: ${rowData.ip}`);
 
+            
             // Sending selected row data to the server
-            $.getJSON('/check_uptime', rowData, function (response) {
+            $.getJSON('/check_uptime', { rowData }, 
+            function (response) {
                 alert(`Server Response: ${response.data}`); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(`Failed to send data: ${textStatus} - ${errorThrown}`);

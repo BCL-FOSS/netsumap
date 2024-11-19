@@ -20,9 +20,9 @@ if [ ! -f $script ]; then
     exit 1
 fi
 
-sudo apt install python3.12-venv -y
-python3 -m venv .venv
-. .venv/bin/activate
+#sudo apt install python3.12-venv -y
+#python3 -m venv .venv
+# . .venv/bin/activate
 pip install requests
 pip install --no-binary :all: psutil
 

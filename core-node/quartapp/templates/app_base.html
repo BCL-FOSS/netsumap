@@ -352,7 +352,7 @@
             const rowData = {
                 id: selectedRow.find('td:nth-child(1)').text().trim(),       // First column (ID)
                 hostname: selectedRow.find('td:nth-child(2)').text().trim(), // Second column (Hostname)
-                ip: selectedRow.find('td:nth-child(3)').text().trim()        // Third column (IP)
+                ip: selectedRow.find('td:nth-child(3)').text().trim()       // Third column (IP)
             };
 
             // Display the retrieved row data
@@ -360,7 +360,7 @@
 
             
             // Sending selected row data to the server
-            $.getJSON('/check_uptime', { rowData }, 
+            $.getJSON('/check_uptime', { id: rowData.id, ip: rowData.ip, hostname: rowData.hostname }, 
             function (response) {
                 alert(`Server Response: ${response.data}`); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {

@@ -27,11 +27,12 @@ else:
      print("Probe DB already exists")
     
 def gen_id():
-        try:
-            id = uuid.uuid4()
-        except Exception as e:
-            return print("Probe ID Gen Failed")   
+    id = uuid.uuid4()
+    if id:
         return str(id)
+    else:
+        return print("Probe ID Gen Failed")    
+             
 
 def make_request(url='', probe_json={}):
 

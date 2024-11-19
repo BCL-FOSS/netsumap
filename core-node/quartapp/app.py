@@ -12,7 +12,8 @@ from sklearn.preprocessing import StandardScaler
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 import os
-
+from pathlib import Path
+import uuid
 
 # init Redis DB connection
 db = app.config['DB_CONN']
@@ -73,29 +74,53 @@ async def inference():
 
 @app.route('/upload_csv', methods=['POST'])
 async def upload_csv():
-    file = (await request.files)['file']
-    
-
-    if file:
-        print('CSV file attached', flush=True)
-    else:
-        return jsonify({"message": "No file uploaded"}), 400
+    try:
+        file = (await request.files)['file']
         
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        if file:
+            print('CSV file attached', flush=True)
+        else:
+            return jsonify({"message": "No file uploaded"}), 400
+            
+        filename = secure_filename(file.filename)
 
-    result = await file.save(file_path)
+        file_id = gen_id()
 
-    if result:
-        print(result, flush=True)
+        if filename.strip() == "":
+            filename = f"PCAP_{file_id}"
 
-    """
-        X_inference, original_data = preprocess_file_for_inference(file_path=file_path)
-                    
-        inference_value = predict(processed_input=X_inference)
-    
-    """
-    return jsonify({"message": f"{filename} uploaded successfully!"})
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+        await file.save(file_path)
+
+        return jsonify({"message": f"{filename} uploaded successfully!"})
+    except Exception as e:
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        })
+
+@app.route("/csv_inference")
+async def csv_inference():
+    try:
+        path = request.args.get('f_path', '')
+        name = request.args.get('f_name', '')
+        print(f"File Name: {name}\nFile Path: {path}", flush=True)
+
+        payload = {'file_name': name,
+                'file_path': path}
+        
+        """
+            X_inference, original_data = preprocess_file_for_inference(file_path=path)
+                        
+            inference_value = predict(processed_input=X_inference)
+        """
+        return jsonify(payload)
+    except Exception as e:
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        })
 
 @app.post("/json_inference")
 async def rest_prediction():
@@ -157,17 +182,21 @@ async def probe_registration():
             db_query_value = await db.get_obj_data(key=probe_id)
             print(db_query_value, flush=True)
 
-        return jsonify({
+            return jsonify({
                 "id": probe_id,
                 "probe_data": probe_ip,
                 "host_name": host_name
             })
-    except TypeError as error:
-        return {'TypeError' :  str(error)}
+        else:
+            return jsonify({
+                "error": "probe adoption failed"
+            })
+            
     except Exception as e:
-        return {'Exception' :  str(e)}
-    except asyncio.CancelledError as can_error:
-        return {'Exception' :  str(can_error)}
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
     
 @app.post("/rmprobe")    
 async def probe_removal():
@@ -181,10 +210,11 @@ async def probe_removal():
                 print(probe_to_rm['id'])
 
         return probe_to_rm #status
-    except TypeError as error:
-        return {'TypeError' :  str(error)}
     except Exception as e:
-        return {'Exception' :  str(e)}
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
     
 @app.post("/netmetadata")
 async def probe_webhook():
@@ -200,41 +230,74 @@ async def probe_webhook():
         else:
             raise Exception('Ensure JSON message is attached to the request')
     except Exception as e:
-        return {'Error' : e}
-    finally:
-        return {'try_catch_end' : 'Check the frontend UI'}
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
     
-@app.route("/isup")
+@app.route("/check_uptime")
 async def check_uptime():
-    host_check = Uptime()
-    probe_id = request.args.get('probe_id', '')
-
     try:
-        id_match="nmp*"
-        toplink='probes'
-        db_query_value = await db.get_db_data(match=id_match)
-
-        for probe in db_query_value:
-            if probe == probe_id:
-                host_check.check_service()
-
-
+        host_check = Uptime()
+        id = request.args.get('id', '')
+        ip = request.args.get('ip', '')
+        hostname = request.args.get('hostname', '') 
+        print(f"host: {hostname}", flush=True)
+        # host_check.check_service(ip=ip, host_name=hostname)
     except Exception as e:
-        return jsonify({"Uptime Check Run Error" : e})
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        })
     
 @app.route('/all_probes')
 async def all_probes():
-    await db.ping_db()
-    match = "nmp*"
-    db_query_value = await db.get_all_data(match=match)
+    try:
+        await db.ping_db()
+        match = "nmp*"
+        db_query_value = await db.get_all_data(match=match)
 
-    if db_query_value:
-        print(json.dumps(db_query_value), flush=True)
-    else:
-        print('DB retrieval failed', flush=True)
+        if db_query_value:
+            print(json.dumps(db_query_value), flush=True)
+        else:
+            print('DB retrieval failed', flush=True)
 
-    # Return JSON response
-    return db_query_value
+        # Return JSON response
+        return db_query_value
+    except Exception as e:
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        })
+
+@app.route('/all_pcaps')
+async def all_pcaps():
+    try:
+        csv_dir_path = app.config['UPLOAD_FOLDER']
+
+        pcap_list={}
+
+        main_path = Path(csv_dir_path).rglob('*.csv')
+        if main_path:
+            for file_path in main_path:
+                file_name = file_path.name
+                path = str(file_path.absolute().resolve())
+                pcap_obj = {
+                    "file_name": file_name,
+                    "file_path": path, 
+                }
+
+                pcap_list[file_name] = pcap_obj
+        else:
+            return 0
+
+        # Return JSON response
+        return pcap_list
+    except Exception as e:
+         return jsonify({
+            'status': 'error',
+            'message': str(e)
+        })
 
 @app.route('/background_process_test')
 async def background_process_test():
@@ -295,6 +358,13 @@ def predict(processed_input=None):
     prediction = predicted_classes.tolist()
     inference_value = json.dumps(prediction)
     return inference_value
+
+def gen_id():
+    id = uuid.uuid4()
+    if id:
+        return str(id)
+    else:
+        return 0   
 
 def test_func():
     return "from quart"

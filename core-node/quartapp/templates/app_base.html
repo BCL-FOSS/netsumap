@@ -356,7 +356,7 @@
             alert(`Row Data:\nID: ${rowData.id}\nHostname: ${rowData.hostname}\nIP: ${rowData.ip}`);
 
             // Sending selected row data to the server
-            $.getJSON('/background_process_test', rowData, function (response) {
+            $.getJSON('/check_uptime', rowData, function (response) {
                 alert(`Server Response: ${response.data}`); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
@@ -403,6 +403,73 @@
                 });
 
                 return false;
+            });
+        });
+
+        $(function() {
+          $('#csv_load').on('click', function(e) {
+            e.preventDefault();
+            $.getJSON('/all_pcaps', function (data) {
+            // Clear existing table rows
+                const tableBody = $('#csvDataTable tbody');
+                tableBody.empty();
+
+                // Loop through the keys and nested objects in the JSON response
+                Object.keys(data).forEach(key => {
+                    const pcap = data[key];
+                    const row = `
+                        <tr>
+                            <td>${pcap.file_name}</td>
+                            <td>${pcap.file_path}</td>
+                            <td>
+                                <button class="btn btn-primary">
+                                    Run Analysis
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.append(row);
+
+                    // Add click event for table rows to mark selection
+                    $('#dataTable tbody tr').on('click', function () {
+                    $('#dataTable tbody tr').removeClass('selected'); // Remove existing selections
+                    $(this).addClass('selected'); // Mark the clicked row as selected
+                    });
+                });
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(`Failed to retrieve data: ${textStatus} - ${errorThrown}`);
+            });
+
+            return false;
+          });
+        });
+
+        $('#csvDataTable').on('click', 'button', function (e) {
+            e.preventDefault();
+
+            // Find the row containing the clicked button
+            const selectedRow = $(this).closest('tr');
+
+            if (selectedRow.length === 0) {
+                alert('Please select a valid row before proceeding!');
+                return false;
+            }
+
+            // Retrieve data values from the row
+            const rowData = {
+                f_name: selectedRow.find('td:nth-child(1)').text().trim(),       // First column
+                f_path: selectedRow.find('td:nth-child(2)').text().trim(), // Second column 
+                
+            };
+
+            // Display the retrieved row data
+            alert(`Row Data:\nID: ${rowData.f_name}\nHostname: ${rowData.f_path}\n`);
+
+            // Sending selected row data to the server
+            $.getJSON('/csv_inference', rowData, function (response) {
+                alert(`Server Response: ${response.data}`); // Display the result from the server
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
             });
         });
 

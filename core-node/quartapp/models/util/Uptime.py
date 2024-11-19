@@ -12,7 +12,7 @@ class Uptime:
         self.passed = 0
         self.failed = 0
 
-    def check_service(self, host='', port_list=[]):
-       check_result = sr(IP(dst=host)/TCP(dport=port_list),inter=0.5,retry=-2,timeout=1)
+    def check_service(self, ip='', host_name='', port_list=[]):
+       check_result = sr(IP(dst=ip)/TCP(dport=port_list),inter=0.5,retry=-2,timeout=1)
 
    

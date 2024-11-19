@@ -10,6 +10,9 @@ services:
       - REDIS_PORT=6379
     depends_on:
       - redis
+    volumes:
+    - quart_app_data:/home/quart/instance/pcaps
+
 
   redis:
     image: redis:latest
@@ -32,6 +35,8 @@ services:
       - quart_app
 
 volumes:
+  quart_app_data:
+    external: true
   redis_data:
     external: true
   caddy_data:

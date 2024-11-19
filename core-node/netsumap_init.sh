@@ -13,6 +13,7 @@ docker compose build --no-cache
 docker volume create --name=redis_data
 docker volume create --name=caddy_data
 docker volume create --name=caddy_config
+docker volume create --name=quart_app_data
 
 docker compose up -d
 

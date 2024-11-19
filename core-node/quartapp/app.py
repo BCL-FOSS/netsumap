@@ -113,7 +113,7 @@ async def csv_inference():
                         
             inference_value = predict(processed_input=X_inference)
         """
-        return jsonify(payload)
+        return payload
     except Exception as e:
          return jsonify({
             'status': 'error',

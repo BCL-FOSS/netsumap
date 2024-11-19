@@ -91,7 +91,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Probes
+                Probe(s) Management
             </div>
 
             <!-- Nav Item - Charts -->
@@ -110,17 +110,20 @@
             </div>
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('net_scan') }}">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>PCAP Results</span></a>
-            </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('inference') }}">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ML Analysis</span></a>
+                    <span>PCAP Analysis</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('net_scan') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Data Visualizations</span></a>
+            </li>
+
+            
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

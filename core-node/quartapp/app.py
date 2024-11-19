@@ -238,13 +238,16 @@ async def check_uptime():
     try:
         host_check = Uptime()
         id = request.args.get('id', '')
-        ip = str(request.args.get('ip', ''))
+        ip = request.args.get('ip', '')
         hostname = request.args.get('hostname', '') 
         
         if not ip or not hostname or not id:
             return 0
         
-        return f"host: {hostname}"
+        return jsonify({
+            'ip': ip,
+            'host': hostname
+        })
         # host_check.check_service(ip=ip, host_name=hostname)
     except Exception as e:
          return jsonify({

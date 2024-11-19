@@ -7,8 +7,10 @@
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
-# Install Scapy from ubuntu repos
+# Install necessary python libraries system wide for script access.
 sudo apt-get install python3-scapy -y
+sudo apt install python3-requests -y
+sudo apt install python3-psutil -y
 
 dot="$(cd "$(dirname "$0")"; pwd)"
 script="$dot/inf_run.sh"
@@ -19,12 +21,6 @@ if [ ! -f $script ]; then
     echo "Error: File does not exist"
     exit 1
 fi
-
-#sudo apt install python3.12-venv -y
-#python3 -m venv .venv
-# . .venv/bin/activate
-pip install requests
-pip install --no-binary :all: psutil
 
 # Check if the cron job already exists
 (sudo crontab -l | grep -F "$CRON_JOB") > /dev/null 2>&1

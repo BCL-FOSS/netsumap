@@ -15,4 +15,8 @@ class Uptime:
     def check_service(self, ip='', host_name='', port_list=[]):
        check_result = sr(IP(dst=ip)/TCP(dport=port_list),inter=0.5,retry=-2,timeout=1)
 
+       ans, unans = check_result
+    
+       return ans, unans
+
    

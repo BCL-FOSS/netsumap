@@ -358,11 +358,11 @@
             };
 
             // Display the retrieved row data
-            alert(`Row Data:\nID: ${rowData.id}\nHostname: ${rowData.hostname}\nIP: ${rowData.ip}`);
+            alert(`Row Data:\nID: ${rowData.id}\nHostname: ${rowData.hostname}\nIP: ${rowData.ip}\nPorts: ${rowData.ports}`);
 
             
             // Sending selected row data to the server
-            $.getJSON('/check_uptime', { id: rowData.id, ip: rowData.ip, hostname: rowData.hostname }, 
+            $.getJSON('/check_uptime', { id: rowData.id, ip: rowData.ip, hostname: rowData.hostname, ports: rowData.ports }, 
             function (response) {
                 alert(`Server Response: ${response.data}`); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {

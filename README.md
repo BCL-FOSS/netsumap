@@ -15,7 +15,7 @@ It's currently turning into an infrastructure monitoring & management tool, with
 
 The "core" controls the "probes", with probes being either:
 - a self contained server in capture mode
-- existing infrastructure hosting a critical service (in this case the core would be monitoring the service & host itself).
+- existing infrastructure hosting a critical service (in this case the core would be monitoring the service & host).
 
 Model training data captured from: 
 - Honey pot(s) hosted & managed by Baugh Consulting & Lab L.L.C.

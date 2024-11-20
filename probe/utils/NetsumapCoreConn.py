@@ -44,7 +44,7 @@ class NetsumapCoreConn:
         finally:
             response.close()  
              
-    def register(self, url='', USE_DB=True):
+    def register(self, url='', USE_DB=True, ports=[]):
         conn = sqlite3.connect('probe.db')
         cur = conn.cursor()
         probe_status = cur.execute("SELECT status FROM pbdata")
@@ -63,7 +63,9 @@ class NetsumapCoreConn:
             probe_obj = {
                     "id": probe_id,
                     "hst_nm": hostname,
-                    "ip": external_ip
+                    "ip": external_ip,
+                    "ports": ports
+
                 }
 
             response = self.make_request(url=register_url, payload=probe_obj)

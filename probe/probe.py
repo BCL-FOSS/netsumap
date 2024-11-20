@@ -23,8 +23,10 @@ def main(url='', count=0):
     netmap = NetsumapCoreConn()
     network = Net()
 
-    netmap.register(url=url, USE_DB=USE_DB)
-    network.open_tcp_ports()
+    ports = network.open_tcp_ports()
+
+    netmap.register(url=url, USE_DB=USE_DB, ports=ports)
+    
     # network.net_scan(url=url, count=count)
     
 if __name__ == "__main__":

@@ -115,10 +115,10 @@ async def csv_inference():
         """
         return payload
     except Exception as e:
-         return jsonify({
+         return {
             'status': 'error',
             'message': str(e)
-        })
+        }
 
 @app.post("/json_inference")
 async def rest_prediction():
@@ -142,10 +142,10 @@ async def rest_prediction():
 
             K.clear_session()
 
-            return jsonify({
+            return {
                 "status": "success",
                 "predictions": inference_value
-            })
+            }
         else:
             return 0
     
@@ -167,11 +167,13 @@ async def probe_registration():
             probe_id = data_value["id"]
             probe_ip = data_value["ip"]
             host_name = data_value["hst_nm"]
+            ports = data_value["ports"]
 
             # Example debug output of extracted values
             print(f"Probe ID: {probe_id}", flush=True)
             print(f"Probe Data: {probe_ip}", flush=True)
             print(f"Host Name: {host_name}", flush=True)
+            print(f"Ports: {ports}", flush=True)
 
             db_upload = await db.upload_db_data(id=probe_id, data=data_value)
             
@@ -180,13 +182,12 @@ async def probe_registration():
             db_query_value = await db.get_obj_data(key=probe_id)
             print(db_query_value, flush=True)
 
-            return jsonify({
+            return {
                 "id": probe_id,
                 "probe_data": probe_ip,
-                "host_name": host_name
-            })
-        else:
-            return 0
+                "host_name": host_name,
+                "ports": ports
+            }
             
     except Exception as e:
          return jsonify({
@@ -240,16 +241,19 @@ async def check_uptime():
         id = request.args.get('id')
         ip = request.args.get('ip')
         hostname = request.args.get('hostname') 
+        ports = request.args.get('ports') 
 
         print(json.dumps({
             'id': id,
             'ip': ip,
-            'host': hostname
+            'host': hostname,
+            "ports": ports
         }), flush=True)
         
         return json.dumps({
             'ip': ip,
-            'host': hostname
+            'host': hostname,
+            'ports': ports
         })
         # host_check.check_service(ip=ip, host_name=hostname)
     except Exception as e:
@@ -268,15 +272,18 @@ async def all_probes():
         if db_query_value:
             print(json.dumps(db_query_value), flush=True)
         else:
-            return 0
+            return {
+            'status': 'error',
+            'message': 'no probes have been adopted to this netsumap-core'
+        }
 
         # Return JSON response
         return db_query_value
     except Exception as e:
-         return jsonify({
+         return {
             'status': 'error',
             'message': str(e)
-        })
+        }
 
 @app.route('/all_pcaps')
 async def all_pcaps():
@@ -297,7 +304,10 @@ async def all_pcaps():
 
                 pcap_list[file_name] = pcap_obj
         else:
-            return 0
+            return {
+            'status': 'error',
+            'message': 'no pcap csvs found. please upload your own files or set the probe in capture mode.'
+        } 
 
         # Return JSON response
         return pcap_list

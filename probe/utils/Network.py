@@ -67,6 +67,7 @@ class Net:
 
         # Get all connections 
         connections = psutil.net_connections(kind='inet')
+        ports = []
 
         # filter to get only ports equal to LISTEN
         my_ports = [conn.laddr.port for conn in connections if conn.status == psutil.CONN_LISTEN]
@@ -79,4 +80,11 @@ class Net:
 
         # Show the TCP ports that is waiting for connection (LISTENING)
         for port in my_ports:
+            ports.append(port)
             print(f"My Open TCP port= {port}  is LISTENING  for TCP connection", flush=True)
+
+        if ports != []:
+            return ports
+        else:
+             print("no open ports", flush=True)
+             pass

@@ -51,18 +51,18 @@ class RedisDB:
         try:
             probes=[]
             nmp_hashes = {}
-            retrieved_probes = await self.redis_conn.scan(match=match)
+            retrieved_probes = await self.redis_conn.scan_iter(match=match)
 
             if retrieved_probes:
                 print(retrieved_probes, flush=True)
-            
-            for cursor, probe_list in retrieved_probes:
-                for probe in probe_list:
-                    print(probe, flush=True)
-                    probes.append(probe)
-                    hash_data = await self.redis_conn.hgetall(probe)
-                    print(hash_data, flush=True)
-                    #nmp_hashes[probe] = hash_data
+
+            async for probe in retrieved_probes:
+                print(probe, flush=True)
+                probes.append(probe)
+                hash_data = await self.redis_conn.hgetall(probe)
+                print(hash_data, flush=True)
+                #nmp_hashes[probe] = hash_data
+                    
 
             #return nmp_hashes
     

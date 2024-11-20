@@ -51,7 +51,7 @@ class RedisDB:
         try:
             probes=[]
             nmp_hashes = {}
-            async for probe in self.redis_conn.scan_iter(match=match):
+            async for probe in self.redis_conn.scan(match=match):
                 print(probe, flush=True)
                 probes.append(probe)
                 hash_data = await self.redis_conn.hgetall(probe)
@@ -69,7 +69,10 @@ class RedisDB:
 
             probe = await self.redis_conn.hgetall(key)
 
-            return probe
+            if probe:
+                return probe
+            else:
+                return {"error":"search failed"}
                 
         except Exception as e:
             return json.dumps({"error": str(e)})

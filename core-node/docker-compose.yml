@@ -15,8 +15,7 @@ services:
 
   redis:
     image: redis/redis-stack-server:latest
-    environment:
-      - REDIS_ARGS=--save 1200 32
+    command: ["redis-server", "--save", "1200", "32", "--appendonly", "yes"]
     container_name: redis
     volumes:
       - redis_data:/data

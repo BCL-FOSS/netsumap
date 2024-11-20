@@ -46,8 +46,34 @@ class RedisDB:
             return {"DB Upload Error":str(e)}
         finally:
             await self.redis_conn.close()
-        
-    async def get_all_data(self, match=''):
+
+    async def get_all_data(self, match='*'):
+        try:
+            all_data = {}
+            cursor = b'0'  # Start the SCAN with cursor 0
+
+            # Use SCAN to fetch keys in batches
+            cursor, keys = await self.redis_conn.scan(cursor=cursor, match=match)
+            for key in keys:
+                print(key, flush=True)
+                # Retrieve the hash data for each key
+                hash_data = await self.redis_conn.hgetall(key)
+                all_data[key] = {k.decode('utf-8'): v.decode('utf-8') for k, v in hash_data.items()}
+
+            # Print or process all retrieved data
+            print(all_data, flush=True)
+            return all_data
+
+        except Exception as e:
+            print(f"Error retrieving data: {e}", flush=True)
+            return None
+
+        finally:
+            await self.redis_conn.close()
+
+
+    """
+        async def get_all_data(self, match=''):
         try:
             probes=[]
             nmp_hashes = {}
@@ -73,7 +99,8 @@ class RedisDB:
             return json.dumps({"error": str(e)})
         finally:
             await self.redis_conn.close()
-
+    """
+        
     async def get_obj_data(self, key=''):
         try:
 

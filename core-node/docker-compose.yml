@@ -11,14 +11,20 @@ services:
     depends_on:
       - redis
     volumes:
-    - quart_app_data:/home/quart/instance/pcaps
+      - quart_app_data:/home/quart/instance/pcaps
 
-  
   redis:
     image: redis/redis-stack-server:latest
     container_name: redis
+    command: redis-server --dir /data --save 60 1 --appendonly yes
     volumes:
       - redis_data:/data
+    healthcheck:
+          test: ["CMD", "redis-cli", "-h", "localhost", "-p", "6379", "ping"]
+          interval: 2s
+          timeout: 1m30s
+          retries: 5
+          start_period: 5s
 
 
   # redis:

@@ -58,7 +58,7 @@ class RedisDB:
                 print(key, flush=True)
                 # Retrieve the hash data for each key
                 hash_data = await self.redis_conn.hgetall(key)
-                all_data[key] = {k.decode('utf-8'): v.decode('utf-8') for k, v in hash_data.items()}
+                all_data[key] = {k: v for k, v in hash_data.items()}
 
             # Print or process all retrieved data
             print(all_data, flush=True)

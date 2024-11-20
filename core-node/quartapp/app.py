@@ -258,8 +258,8 @@ async def check_uptime():
                 }), flush=True)
                 
                 return json.dumps({
-                    'ans_pckts': ans,
-                    'unans_pckts': unans
+                    'ans_pckts': ans.summary(),
+                    'unans_pckts': unans.summary()
                 })
         else:
             return json.dumps({

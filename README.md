@@ -6,9 +6,16 @@
 </p>
 
 ### What is this?
-Quart app leveraging a neural network (NN) to identify patterns of an attack in LAN, WAN & cloud environments. Predicitons are used to automate security breach responses within REST API enabled network infrastructure.
+This initially started as a Quart app meant to do the following:
+- 👨🏽‍💻 traffic metadata analysis
+- 💥 attack pattern identification 
+- 🤖 network automation
 
-A single core-node manages deployed probes, which periodically send relevant traffic metadata gathered from specified interfaces back to the core for preprocessing and inference. 
+It's currently turning into an infrastructure monitoring & management tool, with network metadata analysis, automation & data visualizations built in. 
+
+The "core" controls the "probes", with probes being either:
+- a self contained server in capture mode
+- existing infrastructure hosting a critical service (in this case the core would be monitoring the service & host itself).
 
 Model training data captured from: 
 - Honey pot(s) hosted & managed by Baugh Consulting & Lab L.L.C.
@@ -16,15 +23,11 @@ Model training data captured from:
 
 [Hugging Face Model Repo](https://huggingface.co/bclai) *NN model will be published soon
 
-### Use Cases
-- 👨🏽‍💻 traffic metadata analysis
-- 💥 attack pattern identification 
-- 🤖 network automation
-
 #### Current Integrations
 - Ubiquiti UniFi Network
 - JSON, CSV network metadata analysis
 - Live packet capture + analysis
+- Uptime monitoring 
 
 #### Upcoming Integrations 👀
 - Cisco Meraki

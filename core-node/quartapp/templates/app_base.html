@@ -364,7 +364,7 @@
             // Sending selected row data to the server
             $.getJSON('/check_uptime', { id: rowData.id, ip: rowData.ip, hostname: rowData.hostname, ports: rowData.ports }, 
             function (response) {
-                alert(`Server Response: ${response.data}`); // Display the result from the server
+                alert(`Server Response: ${response.message}`); // Display the result from the server
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
             });

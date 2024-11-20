@@ -64,7 +64,7 @@ class NetsumapCoreConn:
                     "id": probe_id,
                     "hst_nm": hostname,
                     "ip": external_ip,
-                    "ports": ports
+                    "ports": str(ports)
 
                 }
 

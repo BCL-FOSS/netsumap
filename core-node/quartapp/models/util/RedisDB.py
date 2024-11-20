@@ -52,13 +52,20 @@ class RedisDB:
             probes=[]
             nmp_hashes = {}
             retrieved_probes = await self.redis_conn.scan(match=match)
-            for probe in retrieved_probes:
+
+            """
+                for probe in retrieved_probes:
                 print(probe, flush=True)
                 probes.append(probe)
                 hash_data = await self.redis_conn.hgetall(probe)
                 nmp_hashes[probe] = hash_data
 
             return nmp_hashes
+            
+            """
+
+            if retrieved_probes:
+                print(retrieved_probes, flush=True)
 
         except Exception as e:
             return json.dumps({"error": str(e)})

@@ -252,8 +252,8 @@ async def check_uptime():
             ans, unans = host_check.check_service(ip=ip, host_name=hostname, port_list=ports_to_scan)
 
             print(json.dumps({
-                'ans_pckts': ans,
-                'unans_pckts': unans
+                'ans_pckts': ans.summary(),
+                'unans_pckts': unans.summary()
             }), flush=True)
             
             return json.dumps({

@@ -15,7 +15,7 @@ services:
 
   redis:
     image: redis/redis-stack-server:latest
-    command: ["redis-server", "--save", "1200", "32", "--appendonly", "yes"]
+    command: ["redis-server", "--save", "1200", "32"]
     container_name: redis
     volumes:
       - redis_data:/data

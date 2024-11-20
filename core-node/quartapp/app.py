@@ -243,17 +243,25 @@ async def check_uptime():
         hostname = request.args.get('hostname') 
         ports = request.args.get('ports') 
 
-        ans, unans = host_check.check_service(ip=ip, host_name=hostname, port_list=ports)
+        ports_to_scan = [int(n) for n in ports[1:-1].split(",")]
 
-        print(json.dumps({
-            'ans_pckts': ans,
-            'unans_pckts': unans
-        }), flush=True)
-        
-        return json.dumps({
-            'ans_pckts': ans,
-            'unans_pckts': unans
-        })
+        if ports_to_scan:
+            for port in ports_to_scan:
+                print(port, flush=True)
+
+            ans, unans = host_check.check_service(ip=ip, host_name=hostname, port_list=ports_to_scan)
+
+            print(json.dumps({
+                'ans_pckts': ans,
+                'unans_pckts': unans
+            }), flush=True)
+            
+            return json.dumps({
+                'ans_pckts': ans,
+                'unans_pckts': unans
+            })
+        else:
+            return ports_to_scan
     except Exception as e:
          return json.dumps({
             'status': 'error',

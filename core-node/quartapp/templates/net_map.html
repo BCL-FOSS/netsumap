@@ -5,49 +5,35 @@
 <div class="row">
     <div class="col-lg-6">
         <h5>LAN Scan</h5>
-        <form class="row g-3">
-            <div class="col-md-4">
-              <label for="validationSubnet" class="form-label">Subnet, Range or IP to Scan</label>
-              <input type="text" class="form-control" id="validationSubnet" value="192.168.1.0/24" required>
-            </div>
-        
-            <div class="col-12">
-              <button class="btn btn-primary" id="" type="button">Start Scan</button>
-            </div>
-          </form>
+        <form >
+          <label for="validationSubnet" class="form-label">Subnet, Range or IP to Scan</label>
+          <input type="text" class="form-control" id="validationSubnet" value="192.168.1.0/24" required>
+          <button class="btn btn-primary" id="" type="button">Start Scan</button>
+        </form>
     </div>
     <div class="col-lg-6">
         <h5>Remote Scan</h5>
         <form class="row g-3">
-            <div class="col-md-4">
-              <label for="validationSubnetRemote" class="form-label">Subnet, Range or IP to Scan</label>
-              <input type="text" class="form-control" id="validationSubnetRemote" value="" required>
-            </div>
-            <div class="col-md-4">
-              <label for="validationPorts" class="form-label">Ports to Scan</label>
-              <input type="text" class="form-control" id="validationPorts" value="80" required>
-            </div>
-            
-            <div class="col-md-3">
-              <label for="validationScan" class="form-label">Network Scans</label>
-              <select class="form-select" id="validationScan" required>
-                <option selected disabled value="">Choose scan type</option>
-                <option value="syn">SYN Scan</option>
-                <option value="ack">ACK Scan</option>
-                <option value="udp">UDP Scan</option>
-                <option value="ip">IP Scan *Do not enter port(s)</option>  
-              </select>
-            </div>
-            <div class="col-12">
-              <button class="btn btn-primary" type="submit">Start Scan</button>
-            </div>
-          </form>
+          <label for="validationSubnetRemote" class="form-label">Subnet, Range or IP to Scan</label>
+          <input type="text" class="form-control" id="validationSubnetRemote" value="" required>
+          <label for="validationPorts" class="form-label">Ports to Scan</label>
+          <input type="text" class="form-control" id="validationPorts" value="80" required>
+          <label for="validationScan" class="form-label">Network Scans</label>
+          <select class="form-select" id="validationScan" required>
+            <option selected disabled value="">Choose scan type</option>
+            <option value="syn">SYN Scan</option>
+            <option value="ack">ACK Scan</option>
+            <option value="udp">UDP Scan</option>
+            <option value="ip">IP Scan *Do not enter port(s)</option>  
+          </select>
+          <button class="btn btn-primary" type="submit">Start Scan</button>   
+        </form>
     </div>
 </div>
 <div class="row">
 
   <div class="col-12">
-    
+
   </div>
     
 </div>

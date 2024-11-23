@@ -1,0 +1,21 @@
+services:
+  quart_app:
+    restart: always
+    build:
+      context: .
+      dockerfile: quartapp/Dockerfile
+    container_name: quart_app
+    ports:
+      - "5000:5000"
+      - "6969:6969"
+    environment:
+      - IPERF_PORT=6969
+      - CORE_NAME=netsumap.baughcl.com
+    network_mode: "host"  # Allows the container to bind to the host network
+    volumes:
+      - quart_app_data:/home/quart/instance/pcaps
+
+volumes:
+  quart_app_data:
+    external: true
+ 

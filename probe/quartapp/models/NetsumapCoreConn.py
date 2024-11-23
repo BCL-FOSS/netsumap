@@ -4,7 +4,6 @@ import requests
 import uuid
 import sqlite3
 import time
-import urllib.request
 import json
 import requests
 
@@ -42,9 +41,9 @@ class NetsumapCoreConn:
                 print("Error occurred during request:", str(e))
                 return None
         finally:
-            response.close()  
+            response.close()
              
-    def register(self, url='', USE_DB=True, ports=[]):
+    def register(self, url='', public_ip="", USE_DB=True, ports=[]):
         conn = sqlite3.connect('probe.db')
         cur = conn.cursor()
         probe_status = cur.execute("SELECT status FROM pbdata")
@@ -55,7 +54,7 @@ class NetsumapCoreConn:
             id=self.gen_id()
             probe_id="nmp"+id
             config_status=True
-            external_ip=urllib.request.urlopen('https://ident.me').read().decode('utf8')
+            external_ip=public_ip
             hostname=socket.gethostname()
 
             register_url = url+'/register'

@@ -8,8 +8,9 @@ from scapy import *
 from scapy.tools import *
 from scapy.layers.inet import *
 from scapy.layers.l2 import *
+import urllib.request
 
-class Net:
+class ProbeNetwork:
     def __init__(self) -> None:
         pass
 
@@ -26,11 +27,11 @@ class Net:
             response = requests.request("POST", url, headers=headers, data=payload)
 
             if response.status_code == 200:
-                    print("Request successful.")
+                print("Request successful.")
+                return response.json()
             else:
-                    print(f"Request failed with status code: {response.status_code}")
-
-            return response.json()
+                print(f"Request failed with status code: {response.status_code}", flush=True)
+                return None
 
         except Exception as e:
                 print("Error occurred during request:", str(e))
@@ -38,7 +39,10 @@ class Net:
         finally:
             response.close()
 
-    def net_scan(self, url='', count=10):
+    def get_public_ip(self):
+         return urllib.request.urlopen('https://ident.me').read().decode('utf8')
+
+    def retrieve_host_ifaces(self):
         host_interfaces = socket.if_nameindex()
         counter=0
         inf_to_scan = []
@@ -49,7 +53,16 @@ class Net:
             else:
                 inf_to_scan.append(inf)
                 print(str(index)+': '+ inf)
+        
+        if inf_to_scan != []:
+            return inf_to_scan
+        else:
+            return None
+         
 
+    def net_scan(self, url='', count=10):
+        
+        inf_to_scan = self.retrieve_host_ifaces()
         pcaps = sniff(iface=inf_to_scan, count=count, prn=lambda x: x.summary())
 
         for cap in pcaps:
@@ -88,11 +101,23 @@ class Net:
         if ports != []:
             return ports
         else:
-             print("no open ports", flush=True)
-             pass
+            return None
         
     def host_discovery_local(self, target_subnet="", intfce=""):
         # arping(net=target_subnet, timeout=2, verbose=1)
         ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=target_subnet), iface=intfce, timeout=2)
-        return ans, unans
+        
+        ans.summary()
+        unans.summary()
+
+        devices = []
+
+        for sent, received in ans:
+            devices.append({'ip': received.psrc, 'mac': received.hwsrc})
+
+        if devices != []:
+             return devices
+        else:
+             return None
+        
          

@@ -18,19 +18,19 @@ class Network:
     
     def ack_scan(self, target="", ports=[]):
         # ACK Scan
-        ans, unans = sr(IP(dst="www.slashdot.org")/TCP(dport=[80,666],flags="A"))
+        ans, unans = sr(IP(dst=target)/TCP(dport=ports,flags="A"))
         ans.summary( lambda s,r : r.sprintf("%IP.src% is alive") )
         unans.summary()
 
     def syn_scan(self, target="", ports=[]):
         # SYN Scan
-        ans, unans = sr(IP(dst="192.168.1.0/24")/TCP(dport=80,flags="S"))
+        ans, unans = sr(IP(dst=target)/TCP(dport=ports,flags="S"))
         ans.summary( lambda s,r : r.sprintf("%IP.src% is alive") )
         unans.summary()
 
     def udp_scan(self, target="", ports=[]):
         # UDP Ping
-        ans, unans = sr(IP(dst="192.168.*.1-10")/UDP(dport=0))
+        ans, unans = sr(IP(dst=target)/UDP(dport=ports))
         ans.summary( lambda s,r : r.sprintf("%IP.src% is alive") )
         unans.summary()
 

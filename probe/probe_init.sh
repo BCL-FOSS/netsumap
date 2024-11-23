@@ -1,0 +1,16 @@
+#!/bin/bash
+
+sudo apt-get update -y
+sudo apt-get upgrade -y
+
+# Install Docker
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+sudo apt install docker-compose -y
+
+docker compose build --no-cache 
+
+docker volume create --name=quart_app_data
+
+docker compose up -d
+

@@ -4,7 +4,7 @@ import sys
 import sqlite3
 import os
 from utils.NetsumapCoreConn import NetsumapCoreConn
-from utils.Network import Net
+from utils.ProbeNetwork import Net
 
 USE_DB=True
 

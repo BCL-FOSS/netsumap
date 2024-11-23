@@ -1,7 +1,7 @@
 from quart import request, render_template, jsonify, flash, request, redirect, url_for
 import json
 from init_app import app
-from models.util.Uptime import Uptime
+from models.util.CoreNetwork import Network
 import numpy as np
 import asyncio
 import pandas as pd
@@ -237,7 +237,7 @@ async def probe_webhook():
 @app.route("/check_uptime")
 async def check_uptime():
     try:
-        host_check = Uptime()
+        host_check = Network()
         id = request.args.get('id')
         ip = request.args.get('ip')
         hostname = request.args.get('hostname') 

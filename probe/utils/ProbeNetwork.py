@@ -1,11 +1,13 @@
-import scapy
-import scapy.all
-import scapy.tools
 import socket
 import json
 import psutil
 import json
 import requests
+from scapy.all import *
+from scapy import *
+from scapy.tools import *
+from scapy.layers.inet import *
+from scapy.layers.l2 import *
 
 class Net:
     def __init__(self) -> None:
@@ -48,7 +50,7 @@ class Net:
                 inf_to_scan.append(inf)
                 print(str(index)+': '+ inf)
 
-        pcaps = scapy.all.sniff(iface=inf_to_scan, count=count, prn=lambda x: x.summary())
+        pcaps = sniff(iface=inf_to_scan, count=count, prn=lambda x: x.summary())
 
         for cap in pcaps:
             
@@ -88,3 +90,9 @@ class Net:
         else:
              print("no open ports", flush=True)
              pass
+        
+    def host_discovery_local(self, target_subnet="", intfce=""):
+        # arping(net=target_subnet, timeout=2, verbose=1)
+        ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=target_subnet), iface=intfce, timeout=2)
+        return ans, unans
+         

@@ -56,7 +56,7 @@ async def assets():
 
 @app.get("/netmap")
 async def net_map():
-    return await render_template("blank.html")
+    return await render_template("net_map.html")
 
 @app.get("/netscan")
 async def net_scan():

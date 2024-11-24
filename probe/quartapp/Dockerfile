@@ -13,22 +13,10 @@ RUN apt-get upgrade -y
 # Install dependencies for building libpcap and other tools
 RUN apt-get install -y \
     git \
-    build-essential \
-    libtool \
-    automake \
-    autoconf \
     iperf3 \
     p0f \
     tshark \
     python3-pip 
-
-# Install libpcap for rpcapd
-RUN git clone https://github.com/the-tcpdump-group/libpcap.git /tmp/libpcap && \
-    cd /tmp/libpcap 
-RUN ./configure --enable-remote
-RUN make
-RUN make install
-RUN cd / && rm -rf /tmp/libpcap
 
 # Copy requirements to the app root
 COPY quartapp/requirements.txt ./

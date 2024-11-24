@@ -25,10 +25,9 @@ RUN apt-get install -y \
 # Install libpcap for rpcapd
 RUN git clone https://github.com/the-tcpdump-group/libpcap.git /tmp/libpcap && \
     cd /tmp/libpcap && \
-    ./configure && \
+    ./configure --enable-remote && \
     make && \
     make install && \
-    ldconfig && \
     cd / && rm -rf /tmp/libpcap
 
 # Copy requirements to the app root

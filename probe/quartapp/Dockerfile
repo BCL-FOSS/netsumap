@@ -20,15 +20,15 @@ RUN apt-get install -y \
     iperf3 \
     p0f \
     tshark \
-    python3-pip
+    python3-pip 
 
 # Install libpcap for rpcapd
 RUN git clone https://github.com/the-tcpdump-group/libpcap.git /tmp/libpcap && \
-    cd /tmp/libpcap && \
-    ./configure --enable-remote && \
-    make && \
-    make install && \
-    cd / && rm -rf /tmp/libpcap
+    cd /tmp/libpcap 
+RUN ./configure --enable-remote
+RUN make
+RUN make install
+RUN cd / && rm -rf /tmp/libpcap
 
 # Copy requirements to the app root
 COPY quartapp/requirements.txt ./

@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 # Create a user
-RUN adduser quart --disabled-password 
+RUN useradd -ms /bin/bash quart
 # Set working directory for the purpose of this Dockerfile
 WORKDIR /home/quart
 

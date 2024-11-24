@@ -22,7 +22,7 @@ RUN apt-get install -y \
 # COPY quartapp/requirements.txt ./
 
 # Install pip dependencies
-RUN apt-install -y \
+RUN apt-get install -y \
     python3-quart \
     python3-nest_asyncio \
     python3-Flask-Cors \

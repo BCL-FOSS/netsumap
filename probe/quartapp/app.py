@@ -14,9 +14,11 @@ async def start_iperf_server():
 
 @app.before_serving
 async def register_probe():
-    ports = ProbeNetwork.open_tcp_ports()
-    external_ip = ProbeNetwork.get_public_ip()
-    NetsumapCoreConn.register(url=os.getenv("CORE_NAME", ""), public_ip=external_ip, USE_DB=app.config['USE_DB'],ports=ports)
+    network = ProbeNetwork()
+    core_conn = NetsumapCoreConn()
+    ports = network.open_tcp_ports()
+    external_ip = network.get_public_ip()
+    core_conn.register(url=os.getenv("CORE_NAME", ""), public_ip=external_ip, USE_DB=app.config['USE_DB'],ports=ports)
 
 @app.errorhandler(404)
 async def page_not_found():
@@ -34,7 +36,8 @@ async def bandwidth_test():
 def run_iperf_server():
     """Start the iPerf3 server on a separate thread."""
     server = iperf3.Server()
-    external_ip = NetsumapCoreConn.get_public_ip()
+    network = ProbeNetwork()
+    external_ip = network.get_public_ip()
     server.bind_address = external_ip
     iperf_port = int(os.getenv("IPERF_PORT"))
     server.port = iperf_port

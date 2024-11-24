@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:22.04
 
 # Create a user
 RUN useradd -m quart
@@ -28,10 +28,9 @@ RUN apt-get install -y \
     git \
     iperf3 \
     p0f \
-    tshark \
-    pipx
+    tshark
   
-RUN pipx install --no-cache-dir -r requirements.txt --upgrade 
+RUN pip install --no-cache-dir -r requirements.txt --upgrade 
 
 # Copy the app into our user root
 COPY quartapp/ /home/quart/

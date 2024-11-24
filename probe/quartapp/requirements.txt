@@ -9,5 +9,4 @@ scapy
 requests
 psutil
 iperf3
-sqlite3
 pyshark

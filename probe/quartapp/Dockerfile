@@ -6,9 +6,22 @@ RUN useradd -m quart
 # Set working directory for the purpose of this Dockerfile
 WORKDIR /home/quart
 
+RUN apt-get update \
+ && apt-get install --assume-yes --no-install-recommends --quiet \
+        software-properties-common \
+ && add-apt-repository universe \
+ && apt-get update \
+ && apt-get install --assume-yes --no-install-recommends --quiet \
+        python3 \
+        python3-pip \
+ && apt-get clean all
+
 RUN apt-get update -y
 
 RUN apt-get upgrade -y
+
+# Copy requirements to the app root
+# COPY quartapp/requirements.txt ./
 
 # Install dependencies
 RUN apt-get install -y \
@@ -16,13 +29,6 @@ RUN apt-get install -y \
     iperf3 \
     p0f \
     tshark \
-    python3-pip 
-
-# Copy requirements to the app root
-# COPY quartapp/requirements.txt ./
-
-# Install pip dependencies
-RUN apt-get install -y \
     python3-quart \
     python3-nest_asyncio \
     python3-Flask-Cors \

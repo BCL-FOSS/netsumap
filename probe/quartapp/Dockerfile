@@ -26,9 +26,9 @@ COPY quartapp/requirements.txt ./
 # Install dependencies
 RUN apt-get install -y \
     git \
-    iperf3 \
-    p0f \
-    tshark
+    iperf3\
+    p0f\
+    tshark -y 
   
 RUN pip install --no-cache-dir -r requirements.txt --upgrade 
 

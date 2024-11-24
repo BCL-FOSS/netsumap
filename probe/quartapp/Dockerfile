@@ -2,6 +2,7 @@ FROM ubuntu:latest
 
 # Create a user
 RUN useradd -ms /bin/bash quart
+
 # Set working directory for the purpose of this Dockerfile
 WORKDIR /home/quart
 

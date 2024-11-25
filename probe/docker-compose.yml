@@ -5,9 +5,6 @@ services:
       context: .
       dockerfile: quartapp/Dockerfile
     container_name: quart_app
-    ports:
-      - "5000:5000"
-      - "6969:6969"
     environment:
       - IPERF_PORT=6969
       - CORE_NAME=netsumap.baughcl.com

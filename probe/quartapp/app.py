@@ -23,11 +23,6 @@ async def page_not_found():
 async def handle_internal_error(e):
     return jsonify({"error": "Internal server error"}), 500
 
-@app.post("/bdwthtest")
-async def bandwidth_test():
-
-    return None
-
 def run_iperf_server():
     """Start the iPerf3 server on a separate thread."""
     server = iperf3.Server()

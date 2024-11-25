@@ -40,7 +40,6 @@ listening_ports = main_network.open_tcp_ports()
 external_ip = main_network.get_public_ip()
 core_conn.register(url=os.getenv("CORE_NAME"), public_ip=external_ip, USE_DB=app.config['USE_DB'],ports=listening_ports)
 
-
 # General quart settings
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1000 * 1000  # 500 MB
 app.config['PROBE_DATA_FOLDER'] = data_dir_path

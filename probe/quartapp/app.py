@@ -31,7 +31,8 @@ async def redis_and_probe_init():
         print('Checking probe config status...')
 
         id_match = 'prb*'
-        if await db.get_all_data(id_match) is not None:
+        db_query_result = await db.get_all_data(id_match)
+        if db_query_result is not None:
             print('Probe already configured', flush=True)
             pass
         else:

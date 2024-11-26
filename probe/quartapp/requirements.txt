@@ -10,3 +10,7 @@ requests
 psutil
 iperf3
 pyshark
+aioredis
+redis 
+asyncio 
+aiohttp

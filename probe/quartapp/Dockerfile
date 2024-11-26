@@ -34,6 +34,8 @@ RUN apt-get install -y \
   
 RUN pip install --no-cache-dir -r requirements.txt --upgrade 
 
+RUN pip install -U redis
+
 # Copy the app into our user root
 COPY quartapp/ /home/quart/
 

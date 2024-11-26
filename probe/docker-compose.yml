@@ -1,4 +1,5 @@
 services:
+
   quart_app:
     restart: always
     build:
@@ -8,11 +9,23 @@ services:
     environment:
       - IPERF_PORT=6969
       - CORE_NAME=netsumap.baughcl.com
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     network_mode: "host"  # Allows the container to bind to the host network
     volumes:
       - quart_app_data:/home/quart/instance/pcaps
+    depends_on:
+      - redis
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    volumes:
+      - redis_data:/data  # Mount the volume for data persistence
 
 volumes:
   quart_app_data:
+    external: true
+  redis_data:
     external: true
  

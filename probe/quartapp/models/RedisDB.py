@@ -40,11 +40,8 @@ class RedisDB:
 
             # HSET probe data
             result = await self.redis_conn.hset(id, mapping=str_hashmap)
-
-            if result is not None:
-                return result #{"DB Upload Status" : "Profile ID %s upload successful" % id}
-            else:
-                return None
+    
+            return result #{"DB Upload Status" : "Profile ID %s upload successful" % id}
         except Exception as e:
             return {"DB Upload Error":str(e)}
         finally:
@@ -57,19 +54,15 @@ class RedisDB:
 
             # Use SCAN to fetch keys in batches
             cursor, keys = await self.redis_conn.scan(cursor=cursor, match=match)
-            if keys:
-                for key in keys:
-                    print(key, flush=True)
-                    # Retrieve the hash data for each key
-                    hash_data = await self.redis_conn.hgetall(key)
-                    all_data[key] = {k: v for k, v in hash_data.items()}
-                     # Print or process all retrieved data
+            for key in keys:
+                print(key, flush=True)
+                # Retrieve the hash data for each key
+                hash_data = await self.redis_conn.hgetall(key)
+                all_data[key] = {k: v for k, v in hash_data.items()}
 
-                print(all_data, flush=True)
-                return all_data
-            else:
-                print("No probe data found", flush=True)
-                return None
+            # Print or process all retrieved data
+            print(all_data, flush=True)
+            return all_data
 
         except Exception as e:
             print(f"Error retrieving data: {e}", flush=True)
@@ -77,6 +70,36 @@ class RedisDB:
 
         finally:
             await self.redis_conn.close()
+
+
+    """
+        async def get_all_data(self, match=''):
+        try:
+            probes=[]
+            nmp_hashes = {}
+            retrieved_probes = await self.redis_conn.scan(match=match)
+
+            if retrieved_probes:
+                print(retrieved_probes, flush=True)
+
+            for value in retrieved_probes:
+                counter, key_list = value
+                for key in key_list:
+                    hash_data = await self.redis_conn.hgetall(key)
+                    print(hash_data, flush=True)
+                #nmp_hashes[probe] = hash_data
+                    
+
+            #return nmp_hashes
+    
+
+            
+
+        except Exception as e:
+            return json.dumps({"error": str(e)})
+        finally:
+            await self.redis_conn.close()
+    """
         
     async def get_obj_data(self, key=''):
         try:
@@ -86,7 +109,7 @@ class RedisDB:
             if probe:
                 return probe
             else:
-                return None 
+                return {"error":"search failed"}
                 
         except Exception as e:
             return json.dumps({"error": str(e)})

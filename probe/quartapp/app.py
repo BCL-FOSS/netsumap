@@ -42,7 +42,7 @@ async def probe_init():
             db_query_value = await db.get_obj_data(key=probe_id)
             if db_query_value is not None:
                 print(db_query_value, flush=True)
-                core_conn.register(url=os.getenv('CORE_NAME'), public_ip=external_ip, id=probe_id, hostname=hostname, ports=ports)
+                await core_conn.register(url=os.getenv('CORE_NAME'), public_ip=external_ip, id=probe_id, hostname=hostname, ports=ports)
             else:
                 return {"error":"probe registration failed"}
 

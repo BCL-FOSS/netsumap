@@ -8,6 +8,10 @@ db = app.config['DB_CONN']
 main_network = app.config['NETWORK_OBJ']
 probe = app.config['PROBE_OBJ']
 core_conn = app.config['CORE_CONN']
+REST_SESSION = app.config['REST_SESSION']
+probe_id, hostname = probe.gen_probe_register_data()
+external_ip = main_network.get_public_ip()
+ports = main_network.open_tcp_ports()
 
 @app.before_serving
 async def start_iperf_server():
@@ -25,10 +29,6 @@ async def probe_init():
         print('Probe already configured', flush=True)
         pass
     else:  
-        probe_id, hostname = probe.gen_probe_register_data()
-        external_ip = main_network.get_public_ip()
-        ports = main_network.open_tcp_ports()
-
         data_values = {
                     "id": probe_id,
                     "hst_nm": hostname,
@@ -37,12 +37,21 @@ async def probe_init():
                 }
 
         db_upload = await db.upload_db_data(id=probe_id, data=data_values)
-        if db_upload is not None:
+        if db_upload:
             print(db_upload, flush=True)
             db_query_value = await db.get_obj_data(key=probe_id)
-            if db_query_value is not None:
+            if db_query_value:
                 print(db_query_value, flush=True)
-                await core_conn.register(url=os.getenv('CORE_NAME'), public_ip=external_ip, id=probe_id, hostname=hostname, ports=ports)
+                async with REST_SESSION as session:
+                    url=os.getenv('CORE_NAME')+'/register'
+                    headers = {
+                        'Content-Type': 'application/json'
+                    }
+
+                    response = await session.post(url=url, data=data_values, headers=headers)
+
+                    if response:
+                        print(response, flush=True)
             else:
                 return {"error":"probe registration failed"}
 

@@ -5,6 +5,7 @@ from models.RedisDB import RedisDB
 from models.NetsumapCoreConn import NetsumapCoreConn
 from models.ProbeNetwork import ProbeNetwork
 from models.Probe import Probe
+import aiohttp
 
 
 app = Quart(__name__)
@@ -36,5 +37,6 @@ else:
 app.config['PROBE_OBJ'] = Probe()
 app.config['NETWORK_OBJ'] = ProbeNetwork()
 app.config['CORE_CONN'] = NetsumapCoreConn()
+app.config['REST_SESSION'] = aiohttp.ClientSession()
 
 nest_asyncio.apply()

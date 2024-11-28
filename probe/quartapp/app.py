@@ -25,7 +25,7 @@ async def probe_init():
         print('Probe already configured', flush=True)
         pass
     else:  
-        probe_id, hostname = await probe.gen_probe_register_data()
+        probe_id, hostname = probe.gen_probe_register_data()
         external_ip = main_network.get_public_ip()
         ports = main_network.open_tcp_ports()
 

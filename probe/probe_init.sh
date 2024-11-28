@@ -25,7 +25,7 @@ sudo apt install docker-compose -y
 
 docker compose build --no-cache 
 
-docker volume create --name=quart_app_data
+docker volume create --name=probe_data
 docker volume create --name=redis_data
 
 docker compose up -d

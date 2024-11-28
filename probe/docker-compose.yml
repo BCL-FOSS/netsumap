@@ -1,11 +1,11 @@
 services:
 
-  quart_app:
+  probe:
     restart: always
     build:
       context: .
-      dockerfile: quartapp/Dockerfile
-    container_name: quart_app
+      dockerfile: probe_main/Dockerfile
+    container_name: probe
     environment:
       - IPERF_PORT=6969
       - CORE_NAME=netsumap.baughcl.com
@@ -13,7 +13,7 @@ services:
       - REDIS_PORT=6379
     network_mode: "host"  # Allows the container to bind to the host network
     volumes:
-      - quart_app_data:/home/quart/instance/pcaps
+      - probe_data:/home/netsumapprobe/instance/pcaps
     depends_on:
       - redis
   
@@ -24,7 +24,7 @@ services:
       - redis_data:/data  # Mount the volume for data persistence
 
 volumes:
-  quart_app_data:
+  probe_data:
     external: true
   redis_data:
     external: true

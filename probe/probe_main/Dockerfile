@@ -3,10 +3,10 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND noninteractive
 
 # Create a user
-RUN useradd -m quart
+RUN useradd -m netsumapprobe
 
 # Set working directory for the purpose of this Dockerfile
-WORKDIR /home/quart
+WORKDIR /home/netsumapprobe
 
 RUN apt-get update \
  && apt-get install --assume-yes --no-install-recommends --quiet \
@@ -23,7 +23,7 @@ RUN apt-get update -y
 RUN apt-get upgrade -y
 
 # Copy requirements to the app root
-COPY quartapp/requirements.txt ./
+COPY probe_main/requirements.txt ./
 
 # Install dependencies
 RUN apt-get install -y \
@@ -37,12 +37,12 @@ RUN pip install --no-cache-dir -r requirements.txt --upgrade
 RUN pip install -U redis
 
 # Copy the app into our user root
-COPY quartapp/ /home/quart/
+COPY probe_main/ /home/netsumapprobe/
 
 # Make our entrypoint executable
 RUN chmod +x probe_boot.sh 
 
 # Set the user
-# USER quart
+# USER netsumapprobe
 # Set the entrypoint
 ENTRYPOINT ["sh", "./probe_boot.sh"]

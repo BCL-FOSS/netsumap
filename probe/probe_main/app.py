@@ -1,4 +1,4 @@
-from quart import jsonify
+from flask import jsonify
 from init_app import app
 import threading
 import iperf3
@@ -14,17 +14,17 @@ external_ip = main_network.get_public_ip()
 ports = main_network.open_tcp_ports()
 
 @app.before_serving
-async def start_iperf_server():
+def start_iperf_server():
     """Ensure iPerf3 server starts when the app starts."""
     threading.Thread(target=run_iperf_server, daemon=True).start()
 
 @app.post('/probe_init')
-async def probe_init():
-    await db.ping_db()
+def probe_init():
+    db.ping_db()
     print('Checking probe config status...', flush=True)
 
     id_match = 'prb*'
-    db_query_result = await db.get_all_data(id_match)
+    db_query_result = db.get_all_data(id_match)
     if db_query_result is not None:
         print('Probe already configured', flush=True)
         pass
@@ -36,31 +36,21 @@ async def probe_init():
                     "ports": str(ports)
                 }
 
-        db_upload = await db.upload_db_data(id=probe_id, data=data_values)
+        db_upload = db.upload_db_data(id=probe_id, data=data_values)
         if db_upload:
             print(db_upload, flush=True)
-            db_query_value = await db.get_obj_data(key=probe_id)
+            db_query_value = db.get_obj_data(key=probe_id)
             if db_query_value:
-                print(db_query_value, flush=True)
-                async with REST_SESSION as session:
-                    url=os.getenv('CORE_NAME')+'/register'
-                    headers = {
-                        'Content-Type': 'application/json'
-                    }
-
-                    response = await session.post(url=url, data=data_values, headers=headers)
-
-                    if response:
-                        print(response, flush=True)
+               print(db_query_value, flush=True)
             else:
                 return {"error":"probe registration failed"}
 
 @app.errorhandler(404)
-async def page_not_found():
+def page_not_found():
     return jsonify({"error": "Resource not found or does not exist"}), 404
 
 @app.errorhandler(500)
-async def handle_internal_error(e):
+def handle_internal_error(e):
     return jsonify({"error": "Internal server error"}), 500
 
 def run_iperf_server():

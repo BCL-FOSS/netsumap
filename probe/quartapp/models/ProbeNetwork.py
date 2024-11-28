@@ -103,7 +103,7 @@ class ProbeNetwork:
         else:
             return None
         
-    def host_discovery_local(self, target_subnet="", intfce=""):
+    async def host_discovery_local(self, target_subnet="", intfce=""):
         # arping(net=target_subnet, timeout=2, verbose=1)
         ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=target_subnet), iface=intfce, timeout=2)
         

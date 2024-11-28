@@ -33,7 +33,7 @@ class NetsumapCoreConn:
         finally:
             response.close()
              
-    async def register(self, url='', public_ip="", id="", hostname="", ports=[]):
+    def register(self, url='', public_ip="", id="", hostname="", ports=[]):
         print('Performing initial configuration of netsumap probe...', flush=True)
         time.sleep(1.5)
         probe_id=id

@@ -14,7 +14,7 @@ async def start_iperf_server():
     """Ensure iPerf3 server starts when the app starts."""
     threading.Thread(target=run_iperf_server, daemon=True).start()
 
-@app.route('/probe_init')
+@app.post('/probe_init')
 async def probe_init():
     await db.ping_db()
     print('Checking probe config status...', flush=True)

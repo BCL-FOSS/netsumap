@@ -5,12 +5,12 @@ db = app.config['DB_CONN']
 main_network = app.config['NETWORK_OBJ']
 probe = app.config['PROBE_OBJ']
 core_conn = app.config['CORE_CONN']
-REST_SESSION = app.config['REST_SESSION']
+
+# Probe Data
 probe_id, hostname = probe.gen_probe_register_data()
 external_ip = main_network.get_public_ip()
 ports = main_network.open_tcp_ports()
    
-
 @app.post('/probe_init')
 def probe_init():
     db.ping_db()

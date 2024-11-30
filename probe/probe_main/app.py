@@ -1,8 +1,5 @@
 from flask import jsonify
 from init_app import app
-import threading
-import iperf3
-import os
 
 db = app.config['DB_CONN']
 main_network = app.config['NETWORK_OBJ']
@@ -12,11 +9,7 @@ REST_SESSION = app.config['REST_SESSION']
 probe_id, hostname = probe.gen_probe_register_data()
 external_ip = main_network.get_public_ip()
 ports = main_network.open_tcp_ports()
-
-@app.before_serving
-def start_iperf_server():
-    """Ensure iPerf3 server starts when the app starts."""
-    threading.Thread(target=run_iperf_server, daemon=True).start()
+   
 
 @app.post('/probe_init')
 def probe_init():
@@ -52,20 +45,6 @@ def page_not_found():
 @app.errorhandler(500)
 def handle_internal_error(e):
     return jsonify({"error": "Internal server error"}), 500
-
-def run_iperf_server():
-    """Start the iPerf3 server on a separate thread."""
-    server = iperf3.Server()
-    external_ip = main_network.get_public_ip()
-    server.bind_address = external_ip
-    iperf_port = int(os.getenv("IPERF_PORT"))
-    server.port = iperf_port
-    server.verbose = True
-    print(f"Starting iPerf3 server on {external_ip}:{iperf_port}", flush=True)
-    server.run()
-
-    if server == None:
-        return {"error":"Failed to start iperf server. verify iperf installation"}
 
 def run() -> None:
     app.run()

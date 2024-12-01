@@ -1,5 +1,4 @@
 import redis
-
 import json
 
 class RedisDB:
@@ -69,8 +68,6 @@ class RedisDB:
         finally:
             self.redis_conn.close()
 
-
-   
     def get_obj_data(self, key=''):
         try:
 

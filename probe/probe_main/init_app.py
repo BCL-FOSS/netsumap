@@ -11,7 +11,7 @@ import os
 def run_iperf_server():
     """Start the iPerf3 server on a separate thread."""
     server = iperf3.Server()
-    main_network = ProbeNetwork
+    main_network = ProbeNetwork()
     external_ip = main_network.get_public_ip()
     server.bind_address = external_ip
     iperf_port = int(os.getenv("IPERF_PORT"))

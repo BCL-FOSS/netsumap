@@ -22,13 +22,49 @@ def run_iperf_server():
 
     if server == None:
         return None
+    
+def register_check():
+
+    db = RedisDB(hostname="redis", port=6379)
+    main_network = ProbeNetwork()
+    probe = Probe()
+    core_conn = NetsumapCoreConn()
+
+    # Probe Data
+    probe_id, hostname = probe.gen_probe_register_data()
+    external_ip = main_network.get_public_ip()
+    ports = main_network.open_tcp_ports()
+    db.ping_db()
+    print('Checking probe config status...', flush=True)
+
+    id_match = 'prb*'
+    db_query_result = db.get_all_data(id_match)
+    if db_query_result is not None:
+        print('Probe already configured', flush=True)
+        pass
+    else:  
+        data_values = {
+                    "id": probe_id,
+                    "hst_nm": hostname,
+                    "ip": external_ip,
+                    "ports": str(ports)
+                }
+
+        db_upload = db.upload_db_data(id=probe_id, data=data_values)
+        if db_upload:
+            print(db_upload, flush=True)
+            db_query_value = db.get_obj_data(key=probe_id)
+            if db_query_value:
+               print(db_query_value, flush=True)
 
 def start_app():
     iperf_thread = threading.Thread(target=run_iperf_server, daemon=True).start()
     if iperf_thread is None:
         return None
-    else:
-        return Flask(__name__)
+    
+    register_check()
+
+    return Flask(__name__)
 
 app = start_app()
 

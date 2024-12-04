@@ -9,7 +9,7 @@ class Probe:
 
     def gen_probe_register_data(self):
         id=self.gen_id()
-        probe_id="nmp"+id
+        probe_id="prb"+id
         hostname=socket.gethostname()
 
         if probe_id and hostname:

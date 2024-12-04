@@ -2,7 +2,7 @@ from flask import Flask
 import os
 from models.RedisDB import RedisDB
 from models.NetsumapCoreConn import NetsumapCoreConn
-from models.ProbeNetwork import ProbeNetwork
+from models.Network import Network
 from models.Probe import Probe
 import threading
 import iperf3
@@ -11,7 +11,7 @@ import os
 def run_iperf_server():
     """Start the iPerf3 server on a separate thread."""
     server = iperf3.Server()
-    main_network = ProbeNetwork()
+    main_network = Network()
     external_ip = main_network.get_public_ip()
     server.bind_address = external_ip
     iperf_port = int(os.getenv("IPERF_PORT"))
@@ -24,9 +24,9 @@ def run_iperf_server():
         return None
     
 def register_check():
-
+    """Check probe registration status."""
     db = RedisDB(hostname="redis", port=6379)
-    main_network = ProbeNetwork()
+    main_network = Network()
     probe = Probe()
     core_conn = NetsumapCoreConn()
 
@@ -98,7 +98,7 @@ else:
     print("Redis DB Connected", flush=True)
 
 app.config['PROBE_OBJ'] = Probe()
-app.config['NETWORK_OBJ'] = ProbeNetwork()
+app.config['NETWORK_OBJ'] = Network()
 app.config['CORE_CONN'] = NetsumapCoreConn()
 
 

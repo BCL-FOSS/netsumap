@@ -8,7 +8,7 @@ class NetsumapCoreConn:
     def __init__(self) -> None:
         pass
 
-    async def make_request(self, url='', payload={}):
+    def make_request(self, url='', payload={}):
 
         payload = json.dumps(payload)
 
@@ -33,7 +33,7 @@ class NetsumapCoreConn:
         finally:
             response.close()
              
-    async def register(self, url='', public_ip="", id="", hostname="", ports=[]):
+    def register(self, url='', public_ip="", id="", hostname="", ports=[]):
         print('Performing initial configuration of netsumap probe...', flush=True)
         time.sleep(1.5)
         probe_id=id
@@ -50,7 +50,7 @@ class NetsumapCoreConn:
 
                 }
 
-        response = await self.make_request(url=register_url, payload=probe_obj)
+        response = self.make_request(url=register_url, payload=probe_obj)
 
         if response is None:
             print("Probe registration failed. Verify your netsumap-core instance is running. Exiting probe initialization...", flush=True)

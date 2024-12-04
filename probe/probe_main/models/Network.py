@@ -10,34 +10,9 @@ from scapy.layers.inet import *
 from scapy.layers.l2 import *
 import urllib.request
 
-class ProbeNetwork:
+class Network:
     def __init__(self) -> None:
         pass
-
-    def make_request(self, url='', payload={}):
-
-        payload = json.dumps(payload)
-
-        headers = {
-            'Content-Type': 'application/json'
-        }
-
-        try:
-            
-            response = requests.request("POST", url, headers=headers, data=payload)
-
-            if response.status_code == 200:
-                print("Request successful.")
-                return response.json()
-            else:
-                print(f"Request failed with status code: {response.status_code}", flush=True)
-                return None
-
-        except Exception as e:
-                print("Error occurred during request:", str(e))
-                return None
-        finally:
-            response.close()
 
     def get_public_ip(self):
          return urllib.request.urlopen('https://ident.me').read().decode('utf8')
@@ -103,7 +78,7 @@ class ProbeNetwork:
         else:
             return None
         
-    async def host_discovery_local(self, target_subnet="", intfce=""):
+    def host_discovery_local(self, target_subnet="", intfce=""):
         # arping(net=target_subnet, timeout=2, verbose=1)
         ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=target_subnet), iface=intfce, timeout=2)
         

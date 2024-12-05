@@ -9,6 +9,7 @@ from scapy.tools import *
 from scapy.layers.inet import *
 from scapy.layers.l2 import *
 import urllib.request
+import pyshark
 
 class Network:
     def __init__(self) -> None:
@@ -84,6 +85,7 @@ class Network:
         
         ans.summary()
         unans.summary()
+        
 
         devices = []
 
@@ -94,5 +96,26 @@ class Network:
              return devices
         else:
              return None
+        
+    def pcap_scan(self, iface='', count=0, time_out=50):
+        capture = pyshark.LiveCapture(interface=iface)
+
+        try:
+            for packet in capture.sniff_continuously(packet_count=count):
+                if packet is not None:
+                    print(packet, flush=True)
+        except:
+            pass
+        finally:
+            capture.close()
+            
+
+
+        #capture.sniff(packet_count=count, timeout=time_out)
+
+        
+        
+        
+    
         
          

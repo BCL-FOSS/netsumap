@@ -9,20 +9,23 @@ import iperf3
 import os
 
 def run_iperf_server():
-    """Start the iPerf3 server on a separate thread."""
-    server = iperf3.Server()
-    main_network = Network()
-    external_ip = main_network.get_public_ip()
-    server.bind_address = external_ip
-    iperf_port = int(os.getenv("IPERF_PORT"))
-    server.port = iperf_port
-    server.verbose = True 
-    iperf_start = server.run()
-    if iperf_start is None:
-        print("iPerf init failed.", flush=True)
-    else:
-        print(f"Starting iPerf3 server on {external_ip}:{iperf_port}", flush=True)
-    #    return None
+    try:
+        """Start the iPerf3 server on a separate thread."""
+        server = iperf3.Server()
+        main_network = Network()
+        external_ip = main_network.get_public_ip()
+        server.bind_address = external_ip
+        iperf_port = int(os.getenv("IPERF_PORT"))
+        server.port = iperf_port
+        server.verbose = True 
+        iperf_start = server.run()
+        if iperf_start is None:
+            print("iPerf init failed.", flush=True)
+        else:
+            print(f"Starting iPerf3 server on {external_ip}:{iperf_port}", flush=True)
+        #    return None
+    except Exception as e:
+        print(e, flush=True)
     
 def register_check():
     """Check probe registration status."""

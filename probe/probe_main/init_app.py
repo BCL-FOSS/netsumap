@@ -16,16 +16,18 @@ def run_iperf_server():
     server.bind_address = external_ip
     iperf_port = int(os.getenv("IPERF_PORT"))
     server.port = iperf_port
-    server.verbose = True
-    print(f"Starting iPerf3 server on {external_ip}:{iperf_port}", flush=True)
-    server.run()
-
-    #if server == None:
+    server.verbose = True 
+    iperf_start = server.run()
+    if iperf_start is None:
+        print("iPerf init failed.", flush=True)
+    else:
+        print(f"Starting iPerf3 server on {external_ip}:{iperf_port}", flush=True)
     #    return None
     
 def register_check():
     """Check probe registration status."""
     db = RedisDB(hostname="redis", port=6379)
+    db.ping_db()
     main_network = Network()
     probe = Probe()
     core_conn = NetsumapCoreConn()

@@ -20,8 +20,8 @@ def run_iperf_server():
     print(f"Starting iPerf3 server on {external_ip}:{iperf_port}", flush=True)
     server.run()
 
-    if server == None:
-        return None
+    #if server == None:
+    #    return None
     
 def register_check():
     """Check probe registration status."""
@@ -58,9 +58,7 @@ def register_check():
                print(db_query_value, flush=True)
 
 def start_app():
-    iperf_thread = threading.Thread(target=run_iperf_server, daemon=True).start()
-    if iperf_thread is None:
-        return None
+    threading.Thread(target=run_iperf_server, daemon=True).start()
     
     register_check()
 

@@ -12,7 +12,7 @@ class RedisDB:
         self.redis_conn = redis.Redis.from_url(
             f"redis://{self.host_name}:{self.port}", encoding="utf-8", decode_responses=True
         )
-        if self.redis_conn is None:
+        if isinstance(self.redis_conn, redis.Redis) is False:
             return print('Initial Redis connection failed.', flush=True)
         else:
             print(self.redis_conn, flush=True)

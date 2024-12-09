@@ -6,6 +6,7 @@ from models.Network import Network
 from models.Probe import Probe
 import threading
 import iperf3
+from iperf3 import TestResult
 import os
 
 def run_iperf_server():
@@ -19,7 +20,12 @@ def run_iperf_server():
         iperf_port = int(os.getenv("IPERF_PORT"))
         server.port = iperf_port
         server.verbose = True 
-        server.run()
+        iperf_status = server.run()
+
+        if isinstance(iperf_status, TestResult):
+            pass
+        else:
+            return None
 
     except Exception as e:
         print(e, flush=True)

@@ -2,6 +2,8 @@ from flask import jsonify, request
 from init_app import app
 
 db = app.config['DB_CONN']
+print(db.redis_conn, flush=True)
+
 main_network = app.config['NETWORK_OBJ']
 probe = app.config['PROBE_OBJ']
 core_conn = app.config['CORE_CONN']

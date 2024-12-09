@@ -11,5 +11,8 @@ REDIS_USER=""
 REDIS_PASSWORD=""
 DB_CONN=None
 
+# IPERF configuration
+IPERF_PORT = 6363
+
 
 

@@ -10,6 +10,7 @@ import os
 
 def run_iperf_server():
     try:
+    
         """Start the iPerf3 server on a separate thread."""
         server = iperf3.Server()
         main_network = Network()
@@ -18,15 +19,14 @@ def run_iperf_server():
         iperf_port = int(os.getenv("IPERF_PORT"))
         server.port = iperf_port
         server.verbose = True 
-        iperf_start = server.run()
-        if iperf_start is None:
-            print("iPerf init failed.", flush=True)
-            return None
-        else:
-            print(f"Starting iPerf3 server on {external_ip}:{iperf_port}", flush=True)
-        #    return None
+        server.run()
+
     except Exception as e:
         print(e, flush=True)
+
+    # print(f"Starting iPerf3 server on {external_ip}:{iperf_port}", flush=True)
+    #    return None
+    
     
 def start_app():
     threading.Thread(target=run_iperf_server, daemon=True).start()

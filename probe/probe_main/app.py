@@ -8,11 +8,11 @@ main_network = app.config['NETWORK_OBJ']
 probe = app.config['PROBE_OBJ']
 core_conn = app.config['CORE_CONN']
 
-@app.post("/probe_init")
+@app.route('/probe_init', methods=['GET', 'POST'])
 def probe_init():
     register_check()
 
-@app.post("/pcap_init")
+@app.route('/pcap_init', methods=['POST'])
 def pcap_init():
     scan_options = request.get_json(silent=True)
     if scan_options is not None:
@@ -24,6 +24,7 @@ def page_not_found():
 
 @app.errorhandler(500)
 def handle_internal_error(e):
+    print(e, flush=True)
     return jsonify({"error": "Internal server error"}), 500
 
 def run() -> None:
@@ -61,6 +62,6 @@ def register_check():
                 db_query_value = db.get_obj_data(key=probe_id)
                 if db_query_value:
                     print(db_query_value, flush=True)
-                    
+
     except Exception as e:
         print(e, flush=True)

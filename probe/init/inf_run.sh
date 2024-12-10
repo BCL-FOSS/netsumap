@@ -5,6 +5,6 @@
 # 	./inf_run.sh
 
 # Start venv
-. .venv/bin/activate 
+# . .venv/bin/activate 
 
 /usr/bin/python3 probe_start.py $1

@@ -275,7 +275,7 @@ async def check_uptime():
 async def all_probes():
     try:
         await db.ping_db()
-        match = "nmp*"
+        match = "prb*"
         db_query_value = await db.get_all_data(match=match)
 
         if db_query_value:

@@ -23,7 +23,7 @@ fi
 sudo apt install python3.12-venv -y
 python3 -m venv .venv
 . .venv/bin/activate
-pip install requests
+pip install --no-cache-dir -r requirements.txt --upgrade 
 
 # Prompt user for additional parameters
 echo "PARAM FORMAT Ex.:https://netsumap-core-url" 

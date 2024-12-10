@@ -12,9 +12,9 @@ import sqlite3
 import time
 import os
 import urllib.request
-from models.NetsumapCoreConn import NetsumapCoreConn
-from models.Network import Network
-from models.Probe import Probe
+from ..models.NetsumapCoreConn import NetsumapCoreConn
+from ..models.Network import Network
+from ..models.Probe import Probe
 
 USE_DB=True
 

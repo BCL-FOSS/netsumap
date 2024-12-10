@@ -8,7 +8,7 @@ class NetsumapCoreConn:
     def __init__(self) -> None:
         pass
 
-    def make_request(url='', probe_json={}):
+    def make_request(self, url='', probe_json={}):
 
         payload = json.dumps(probe_json)
 

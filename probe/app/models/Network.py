@@ -97,8 +97,8 @@ class Network:
         else:
              return None
         
-    def pcap_scan(self, iface='', count=0, time_out=50):
-        capture = pyshark.LiveCapture(interface=iface)
+    def pcap_scan(self, iface='', count=0, pcap_path='', time_out=50):
+        capture = pyshark.LiveCapture(interface=iface, output_file=pcap_path)
 
         try:
             for packet in capture.sniff_continuously(packet_count=count):

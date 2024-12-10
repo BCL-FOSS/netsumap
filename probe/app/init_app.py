@@ -16,12 +16,7 @@ def run_iperf_server():
     iperf_port = 6363
     server.port = iperf_port
     server.verbose = True 
-    iperf_status = server.run()
-
-    if isinstance(iperf_status, TestResult):
-        pass
-    else:
-        return None
+    server.run()
     
 def start_iperf():
     try:
@@ -49,9 +44,20 @@ if os.path.isdir(data_dir_path) is False:
 else:
     pass
 
+pcap_dir = 'pcaps'
+pcap_save_path = os.path.join(data_dir_path, pcap_dir)
+
+# Create pcap file folder 
+if os.path.isdir(pcap_save_path) is False:
+    os.makedirs(pcap_save_path, exist_ok=True)
+    print(f"Probe data directory {pcap_save_path} created successfully", flush=True)
+else:
+    pass
+
 # General quart settings
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1000 * 1000  # 500 MB
 app.config['PROBE_DATA_FOLDER'] = data_dir_path
+app.config['PCAP_FOLDER'] = pcap_save_path
 app.config['CORS_HEADER'] = 'application/json'
 
 app.config['NETWORK_OBJ'] = Network()

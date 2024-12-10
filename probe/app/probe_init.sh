@@ -7,13 +7,13 @@
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
+sudo ufw allow 6363
+sudo ufw allow 5000
+
 sudo apt-get install -y \
     iperf3\
     p0f\
-    tshark -y \
-    python3.12-venv -y
+    tshark -y
 
-python3 -m venv .probe_venv
-. .probe_venv/bin/activate
 pip install --no-cache-dir -r requirements.txt --upgrade 
 

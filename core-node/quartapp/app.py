@@ -402,6 +402,3 @@ def test_func():
 
 def run() -> None:
     app.run()
-
-
-    

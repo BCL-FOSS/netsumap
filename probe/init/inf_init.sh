@@ -7,16 +7,7 @@
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
-# Install Scapy from ubuntu repos
-sudo apt-get install -y \
-    python3-scapy \
-    python3-Flask \
-    python3-hypercorn \
-    python3-scapy \
-    python3-requests \
-    python3-psutil \
-    python3-iperf3 \
-    python3-pyshark
+pip install --no-cache-dir -r requirements.txt --upgrade 
 
 dot="$(cd "$(dirname "$0")"; pwd)"
 script="$dot/inf_run.sh"

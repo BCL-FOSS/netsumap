@@ -12,13 +12,13 @@ import sqlite3
 import time
 import os
 import urllib.request
-from ..models.NetsumapCoreConn import NetsumapCoreConn
-from ..models.Network import Network
-from ..models.Probe import Probe
+from probe.models.NetsumapCoreConn import NetsumapCoreConn
+from probe.models.Network import Network
+from probe.models.Probe import Probe
 
 USE_DB=True
 
-probe = Probe()
+probe_cfg = Probe()
 main_network = Network()
 core_conn = NetsumapCoreConn()
 
@@ -67,7 +67,7 @@ def register(url=''):
     if probe_status.fetchall() == []:
         print('Performing initial configuration of netsumap probe...')
         time.sleep(1.5)
-        probe_id, hostname = probe.gen_probe_register_data()
+        probe_id, hostname = probe_cfg.gen_probe_register_data()
         external_ip = main_network.get_public_ip()
         ports = main_network.open_tcp_ports()
 

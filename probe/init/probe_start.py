@@ -80,8 +80,9 @@ def register(url=''):
                         "ports": str(ports)
                     }
 
-        response = core_conn.make_request(url=register_url, probe_json=probe_obj)
+        response = make_request(url=register_url, probe_json=probe_obj)
 
+        
         print(json.dumps(response))
 
         if USE_DB == True:

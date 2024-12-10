@@ -8,7 +8,15 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 
 # Install Scapy from ubuntu repos
-sudo apt-get install python3-scapy -y
+sudo apt-get install -y \
+    python3-scapy \
+    python3-Flask \
+    python3-hypercorn \
+    python3-scapy \
+    python3-requests \
+    python3-psutil \
+    python3-iperf3 \
+    python3-pyshark
 
 dot="$(cd "$(dirname "$0")"; pwd)"
 script="$dot/inf_run.sh"
@@ -20,10 +28,10 @@ if [ ! -f $script ]; then
     exit 1
 fi
 
-sudo apt install python3.12-venv -y
-python3 -m venv .venv
-. .venv/bin/activate
-pip install --no-cache-dir -r requirements.txt --upgrade 
+# sudo apt install python3.12-venv -y
+# python3 -m venv .venv
+# . .venv/bin/activate
+# pip install --no-cache-dir -r requirements.txt --upgrade 
 
 # Prompt user for additional parameters
 echo "PARAM FORMAT Ex.:https://netsumap-core-url" 

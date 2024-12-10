@@ -62,7 +62,7 @@ def make_request(url='', probe_json={}):
 def register(url=''):
     conn = sqlite3.connect('probe.db')
     cur = conn.cursor()
-    probe_status = cur.execute("SELECT status FROM pbdata")
+    probe_status = cur.execute("SELECT id FROM pbdata")
 
     if probe_status.fetchall() == []:
         print('Performing initial configuration of netsumap probe...')
@@ -85,7 +85,7 @@ def register(url=''):
         print(json.dumps(response))
 
         if USE_DB == True:
-            cur.execute("INSERT INTO pbdata (id, host_ip, hostname) VALUES (?, ?, ?, ?)", (probe_id, external_ip, hostname))
+            cur.execute("INSERT INTO pbdata (id, host_ip, hostname) VALUES (?, ?, ?)", (probe_id, external_ip, hostname))
             conn.commit()
 
         #print(probe_id)

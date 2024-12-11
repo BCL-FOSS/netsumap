@@ -168,12 +168,14 @@ async def probe_registration():
             probe_ip = data_value["ip"]
             host_name = data_value["hst_nm"]
             ports = data_value["ports"]
+            ifaces = data_value["ifaces"]
 
             # Example debug output of extracted values
             print(f"Probe ID: {probe_id}", flush=True)
             print(f"Probe Data: {probe_ip}", flush=True)
             print(f"Host Name: {host_name}", flush=True)
             print(f"Ports: {ports}", flush=True)
+            print(f"Interfaces: {ifaces}", flush=True)
 
             db_upload = await db.upload_db_data(id=probe_id, data=data_value)
             
@@ -186,7 +188,8 @@ async def probe_registration():
                 "id": probe_id,
                 "probe_data": probe_ip,
                 "host_name": host_name,
-                "ports": ports
+                "ports": ports,
+                "ifaces": ifaces
             }
             
     except Exception as e:
@@ -264,6 +267,28 @@ async def check_uptime():
         else:
             return json.dumps({
                     'error': 'no ports selected. ICMP is not available.'
+                })
+    except Exception as e:
+         return json.dumps({
+            'status': 'error',
+            'message': str(e)
+        })
+    
+@app.route("/run_pcap")
+async def run_pcap():
+    try:
+        
+        ifaces = request.args.get('ifaces') 
+
+        ifaces_to_scan = [n for n in ifaces[1:-1].split(",")]
+
+        if ifaces_to_scan:
+            for iface in ifaces_to_scan:
+                print(iface, flush=True)
+
+        else:
+            return json.dumps({
+                    'error': 'no interface(s) selected.'
                 })
     except Exception as e:
          return json.dumps({

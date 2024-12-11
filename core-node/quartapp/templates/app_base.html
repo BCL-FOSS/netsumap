@@ -315,19 +315,45 @@
                             <td>${probe.hst_nm}</td>
                             <td>${probe.ip}</td>
                             <td>${probe.ports}</td>
+                            <td>${probe.ifaces}</td>
                             <td>
-                                <button class="btn btn-primary">
-                                    Connection Check
-                                </button>
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Probe Actions</button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <button class="btn btn-primary dropdown-item" data-action="check_uptime">
+                                                Connection Check
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="btn btn-primary dropdown-item" data-action="run_pcap">
+                                                Capture Traffic
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="btn btn-primary dropdown-item" data-action="update_probe">
+                                                Update Probe
+                                            </button>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <button class="btn btn-primary dropdown-item" data-action="custom_action">
+                                                Custom Action
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </td>
+
+
                         </tr>
                     `;
                     tableBody.append(row);
 
-                    // Add click event for table rows to mark selection
-                    $('#dataTable tbody tr').on('click', function () {
-                    $('#dataTable tbody tr').removeClass('selected'); // Remove existing selections
-                    $(this).addClass('selected'); // Mark the clicked row as selected
+                     // Add click event for table rows to mark selection
+                    $('#dataTable tbody tr').on('click', function() {
+                        $('#dataTable tbody tr').removeClass('selected').css('background-color', ''); // Remove existing selections and reset color
+                        $(this).addClass('selected').css('background-color', 'lightcoral'); // Mark the clicked row as selected and change color to light red
                     });
                 });
             }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -338,7 +364,7 @@
           });
         });
 
-        $('#dataTable').on('click', 'button', function (e) {
+        $('#dataTable').on('click', '.dropdown-item', function (e) {
             e.preventDefault();
 
             // Find the row containing the clicked button
@@ -354,20 +380,46 @@
                 id: selectedRow.find('td:nth-child(1)').text().trim(),       // First column (ID)
                 hostname: selectedRow.find('td:nth-child(2)').text().trim(), // Second column (Hostname)
                 ip: selectedRow.find('td:nth-child(3)').text().trim(),       // Third column (IP)
-                ports: selectedRow.find('td:nth-child(4)').text().trim()       // Fourth column (Ports)
+                ports: selectedRow.find('td:nth-child(4)').text().trim(),       // Fourth column (Ports)
+                ifaces: selectedRow.find('td:nth-child(5)').text().trim()       // Fifth column (Interfaces)
             };
 
             // Display the retrieved row data
-            alert(`Row Data:\nID: ${rowData.id}\nHostname: ${rowData.hostname}\nIP: ${rowData.ip}\nPorts: ${rowData.ports}`);
+            alert(`Row Data:\nID: ${rowData.id}\nHostname: ${rowData.hostname}\nIP: ${rowData.ip}\nPorts: ${rowData.ports}\nInterfaces: ${rowData.ifaces}`);
+
+            // Determine the action based on the button's data-action attribute
+            const action = $(this).data('action');
+
+            // Map actions to endpoints
+            const endpoints = {
+                check_uptime: '/check_uptime',
+                run_pcap: '/run_pcap',
+                update_probe: '/update_probe',
+                custom_action: '/custom_action'
+            };
+
+            const endpoint = endpoints[action];
+            if (!endpoint) {
+                alert('Invalid action selected!');
+                return;
+            }
+
+            // Sending selected row data to the server
+            $.getJSON(endpoint, { id: rowData.id, ip: rowData.ip, hostname: rowData.hostname, ports: rowData.ports, ifaces: rowData.ifaces }, 
+            function(response) {
+                alert(`Server Response: ${response.message}`); // Display the result from the server
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
+            });
 
             
             // Sending selected row data to the server
-            $.getJSON('/check_uptime', { id: rowData.id, ip: rowData.ip, hostname: rowData.hostname, ports: rowData.ports }, 
-            function (response) {
-                alert(`Server Response: ${response.message}`); // Display the result from the server
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
-            });
+            //$.getJSON('/check_uptime', { id: rowData.id, ip: rowData.ip, hostname: rowData.hostname, ports: rowData.ports }, 
+            //function (response) {
+            //    alert(`Server Response: ${response.message}`); // Display the result from the server
+            //}).fail(function (jqXHR, textStatus, errorThrown) {
+            //    alert(`Failed to send data: ${textStatus} - ${errorThrown}`);
+            //});
         });
 
         $(document).ready(function () {
@@ -480,86 +532,6 @@
             });
         });
 
-    </script>
-
-    <script type="module">
-
-        import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-
-        
-        
-        
-
-        function renderTree(data) {
-            const width = 928;
-            // Compute the tree height; this approach will allow the height of the
-            // SVG to scale according to the breadth (width) of the tree layout.
-            const root = d3.hierarchy(data);
-            const dx = 10;
-            const dy = width / (root.height + 1);
-
-                // Create a tree layout.
-            const tree = d3.tree().nodeSize([dx, dy]);
-
-                // Sort the tree and apply the layout.
-            root.sort((a, b) => d3.ascending(a.data.name, b.data.name));
-            tree(root);
-
-                // Compute the extent of the tree. Note that x and y are swapped here
-                // because in the tree layout, x is the breadth, but when displayed, the
-                // tree extends right rather than down.
-            let x0 = Infinity;
-            let x1 = -x0;
-            root.each(d => {
-                    if (d.x > x1) x1 = d.x;
-                    if (d.x < x0) x0 = d.x;
-            });
-
-                // Compute the adjusted height of the tree.
-            const height = x1 - x0 + dx * 2;
-
-            const svg = d3.create("svg")
-                    .attr("width", width)
-                    .attr("height", height)
-                    .attr("viewBox", [-dy / 3, x0 - dx, width, height])
-                    .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
-
-            const link = svg.append("g")
-                    .attr("fill", "none")
-                    .attr("stroke", "#555")
-                    .attr("stroke-opacity", 0.4)
-                    .attr("stroke-width", 1.5)
-                    .selectAll()
-                    .data(root.links())
-                    .join("path")
-                        .attr("d", d3.linkHorizontal()
-                            .x(d => d.y)
-                            .y(d => d.x));
-                
-            const node = svg.append("g")
-                    .attr("stroke-linejoin", "round")
-                    .attr("stroke-width", 3)
-                    .selectAll()
-                    .data(root.descendants())
-                    .join("g")
-                    .attr("transform", d => `translate(${d.y},${d.x})`);
-
-            node.append("circle")
-                    .attr("fill", d => d.children ? "#555" : "#999")
-                    .attr("r", 2.5);
-
-            node.append("text")
-                    .attr("dy", "0.31em")
-                    .attr("x", d => d.children ? -6 : 6)
-                    .attr("text-anchor", d => d.children ? "end" : "start")
-                    .text(d => d.data.name)
-                    .attr("stroke", "white")
-                    .attr("paint-order", "stroke");     
-        }
-                
-        // Append the SVG element.
-        container.append(svg.node());
-        
     </script>
 
 </body>

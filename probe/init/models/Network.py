@@ -34,25 +34,6 @@ class Network:
             return inf_to_scan
         else:
             return None
-         
-
-    def net_scan(self, url='', count=10):
-        
-        inf_to_scan = self.retrieve_host_ifaces()
-        pcaps = sniff(iface=inf_to_scan, count=count, prn=lambda x: x.summary())
-
-        for cap in pcaps:
-            
-            packet_data = {
-                
-                "net_evt": cap.show(dump=True)
-            }
-
-            core_url = url+"/netmetadata"
-            payload = json.dumps(packet_data)
-            response = self.make_request(url=core_url, payload=payload)
-
-            print(json.loads(response.json()))
 
     def open_tcp_ports(self):
 
@@ -78,40 +59,8 @@ class Network:
             return ports
         else:
             return None
-        
-    def host_discovery_local(self, target_subnet="", intfce=""):
-        # arping(net=target_subnet, timeout=2, verbose=1)
-        ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=target_subnet), iface=intfce, timeout=2)
-        
-        ans.summary()
-        unans.summary()
-        
-
-        devices = []
-
-        for sent, received in ans:
-            devices.append({'ip': received.psrc, 'mac': received.hwsrc})
-
-        if devices != []:
-             return devices
-        else:
-             return None
-        
-    def pcap_scan(self, iface='', count=0, time_out=50):
-        capture = pyshark.LiveCapture(interface=iface)
-
-        try:
-            for packet in capture.sniff_continuously(packet_count=count):
-                if packet is not None:
-                    print(packet, flush=True)
-        except:
-            pass
-        finally:
-            capture.close()
             
-
-
-        #capture.sniff(packet_count=count, timeout=time_out)
+       
 
         
         

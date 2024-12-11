@@ -12,7 +12,6 @@ import sqlite3
 import time
 import os
 import urllib.request
-from models.NetsumapCoreConn import NetsumapCoreConn
 from models.Network import Network
 from models.Probe import Probe
 
@@ -20,8 +19,6 @@ USE_DB=True
 
 probe_cfg = Probe()
 main_network = Network()
-core_conn = NetsumapCoreConn()
-
 
 if os.path.exists('probe.db') == False:
     conn = sqlite3.connect('probe.db')
@@ -70,6 +67,7 @@ def register(url=''):
         probe_id, hostname = probe_cfg.gen_probe_register_data()
         external_ip = main_network.get_public_ip()
         ports = main_network.open_tcp_ports()
+        ifaces = main_network.retrieve_host_ifaces()
 
         register_url = url+'/register'
 
@@ -77,7 +75,8 @@ def register(url=''):
                         "id": probe_id,
                         "hst_nm": hostname,
                         "ip": external_ip,
-                        "ports": str(ports)
+                        "ports": str(ports),
+                        "ifaces": str(ifaces)
                     }
 
         response = make_request(url=register_url, probe_json=probe_obj)

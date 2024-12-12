@@ -24,7 +24,7 @@ class Network:
         inf_to_scan = []
         for index, inf in host_interfaces:
             #ignores first 3 interfaces returned in output. skipped interfaces irrelevant to scan.
-            if counter != 3:
+            if counter != 1:
                 counter+=1
             else:
                 inf_to_scan.append(inf)

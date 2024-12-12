@@ -69,6 +69,8 @@ def register(url=''):
         ports = main_network.open_tcp_ports()
         ifaces = main_network.retrieve_host_ifaces()
 
+        print(ifaces, flush=True)
+
         register_url = url+'/register'
 
         probe_obj = {

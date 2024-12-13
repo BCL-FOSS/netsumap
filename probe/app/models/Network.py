@@ -66,6 +66,11 @@ class Network:
 
         # Get all connections 
         connections = psutil.net_connections(kind='inet')
+
+        ifaces = psutil.net_if_stats()
+
+        print(ifaces, flush=True)
+        
         ports = []
 
         # filter to get only ports equal to LISTEN

@@ -10,6 +10,7 @@ from scapy.layers.inet import *
 from scapy.layers.l2 import *
 import urllib.request
 import pyshark
+import subprocess
 
 class Network:
     def __init__(self) -> None:
@@ -17,33 +18,7 @@ class Network:
 
     def get_public_ip(self):
          return urllib.request.urlopen('https://ident.me').read().decode('utf8')
-
-    def retrieve_host_ifaces(self):
-        host_interfaces = psutil.net_if_stats()
-        print(host_interfaces, flush=True)
-
-        """
-            counter=0
-        inf_to_scan = []
-        for index, inf in host_interfaces:
-            #ignores first 3 interfaces returned in output. skipped interfaces irrelevant to scan.
-            #if counter != 1:
-            #    counter+=1
-            #else:
-            #    inf_to_scan.append(inf)
-            #    print(str(index)+': '+ inf)
-            inf_to_scan.append(inf)
-            print(str(index)+': '+ inf)
         
-        if inf_to_scan != []:
-            return inf_to_scan
-        else:
-            return None
-        
-        """
-        
-         
-
     def net_scan(self, url='', count=10):
         
         inf_to_scan = self.retrieve_host_ifaces()
@@ -66,10 +41,6 @@ class Network:
 
         # Get all connections 
         connections = psutil.net_connections(kind='inet')
-
-        ifaces = socket.if_nameindex()
-
-        print(ifaces, flush=True)
         
         ports = []
 
@@ -121,6 +92,25 @@ class Network:
             pass
         finally:
             capture.close()
+
+    def get_ifaces(self):
+        try:
+            # Execute the `ip link show` command to list all interfaces
+            result = subprocess.run(['ip', 'link', 'show'], capture_output=True, text=True, check=True)
+            
+            # Parse the output to extract interface names
+            interfaces = []
+            for line in result.stdout.splitlines():
+                # Interface names appear after the line number and a colon
+                if line and line[0].isdigit():
+                    interface_name = line.split(':')[1].strip()
+                    # Ignore interfaces like 'lo' if desired
+                    interfaces.append(interface_name)
+
+            return interfaces
+        except subprocess.CalledProcessError as e:
+            print(f"Error retrieving interfaces: {e}")
+            return []
             
 
 

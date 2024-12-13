@@ -17,23 +17,25 @@ class Network:
 
     def get_public_ip(self):
          return urllib.request.urlopen('https://ident.me').read().decode('utf8')
-
-    def retrieve_host_ifaces(self):
-        host_interfaces = socket.if_nameindex()
-        counter=0
-        inf_to_scan = []
-        for index, inf in host_interfaces:
-            #ignores first 3 interfaces returned in output. skipped interfaces irrelevant to scan.
-            if counter != 3:
-                counter+=1
-            else:
-                inf_to_scan.append(inf)
-                print(str(index)+': '+ inf)
         
-        if inf_to_scan != []:
-            return inf_to_scan
-        else:
-            return None
+    def get_ifaces(self):
+        try:
+            # Execute the `ip link show` command to list all interfaces
+            result = subprocess.run(['ip', 'link', 'show'], capture_output=True, text=True, check=True)
+            
+            # Parse the output to extract interface names
+            interfaces = []
+            for line in result.stdout.splitlines():
+                # Interface names appear after the line number and a colon
+                if line and line[0].isdigit():
+                    interface_name = line.split(':')[1].strip()
+                    # Ignore interfaces like 'lo' if desired
+                    interfaces.append(interface_name)
+
+            return interfaces
+        except subprocess.CalledProcessError as e:
+            print(f"Error retrieving interfaces: {e}")
+            return []
 
     def open_tcp_ports(self):
 

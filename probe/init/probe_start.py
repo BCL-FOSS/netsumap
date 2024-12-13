@@ -101,8 +101,10 @@ def main(url=''):
     
 if __name__ == "__main__":
     url = sys.argv[1]
+
+    main_network.retrieve_host_ifaces()
   
-    main(url=url)
+    #main(url=url)
 
 
     

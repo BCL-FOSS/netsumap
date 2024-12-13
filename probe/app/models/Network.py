@@ -19,9 +19,11 @@ class Network:
          return urllib.request.urlopen('https://ident.me').read().decode('utf8')
 
     def retrieve_host_ifaces(self):
-        host_interfaces = socket.if_nameindex()
+        host_interfaces = psutil.net_if_stats()
         print(host_interfaces, flush=True)
-        counter=0
+
+        """
+            counter=0
         inf_to_scan = []
         for index, inf in host_interfaces:
             #ignores first 3 interfaces returned in output. skipped interfaces irrelevant to scan.
@@ -37,6 +39,9 @@ class Network:
             return inf_to_scan
         else:
             return None
+        
+        """
+        
          
 
     def net_scan(self, url='', count=10):

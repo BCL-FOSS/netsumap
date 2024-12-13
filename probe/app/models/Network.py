@@ -20,6 +20,7 @@ class Network:
 
     def retrieve_host_ifaces(self):
         host_interfaces = socket.if_nameindex()
+        print(host_interfaces, flush=True)
         counter=0
         inf_to_scan = []
         for index, inf in host_interfaces:

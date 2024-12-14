@@ -18,7 +18,7 @@ import uuid
 # init Redis DB connection
 db = app.config['DB_CONN']
 
-K.clear_session() # Clears GPU resources before loading model
+# K.clear_session() # Clears GPU resources before loading model
 
 ALLOWED_EXTENSIONS = {'csv'}
 

@@ -10,8 +10,8 @@ Werkzeug
 nest_asyncio 
 Flask-Cors 
 asyncio 
-hypercorn 
 pytest-asyncio 
 aiohttp
 scapy
 aioredis
+uvicorn

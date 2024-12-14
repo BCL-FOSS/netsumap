@@ -7,9 +7,6 @@
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
-sudo ufw allow 6363
-sudo ufw allow 5000
-
 sudo apt-get install -y \
     iperf3\
     p0f\

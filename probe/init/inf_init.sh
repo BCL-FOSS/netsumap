@@ -7,6 +7,9 @@
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
+sudo ufw allow 6363/tcp
+sudo ufw allow 5000/tcp
+
 pip install --no-cache-dir -r requirements.txt --upgrade 
 
 dot="$(cd "$(dirname "$0")"; pwd)"

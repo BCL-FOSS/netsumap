@@ -64,31 +64,36 @@ class Network:
             return None
         
     def open_listening_ports(self):
-        # Get all connections for both TCP and UDP
-        connections = psutil.net_connections(kind='inet') + psutil.net_connections(kind='inet4') + psutil.net_connections(kind='inet6')
+        # Retrieve UFW status with rules
+        try:
+            result = subprocess.run(['ufw', 'status'], capture_output=True, text=True, check=True)
+            output = result.stdout
+        except subprocess.CalledProcessError as e:
+            print("Error retrieving UFW status:", e, flush=True)
+            return None
 
         ports = []
 
-        # Filter connections to get ports with status LISTEN (TCP) or listening UDP sockets
-        listening_ports = [
-            conn.laddr.port 
-            for conn in connections 
-            if conn.status == psutil.CONN_LISTEN or conn.type == socket.SOCK_DGRAM
-        ]
+        # Parse UFW output to extract open ports
+        for line in output.splitlines():
+            if 'ALLOW' in line:
+                # Extract the port and protocol from the line
+                parts = line.split()
+                if len(parts) > 0:
+                    rule = parts[0]
+                    if "/" in rule:  # Format like '22/tcp'
+                        port, protocol = rule.split("/")
+                        ports.append(int(port))
 
-        # Exclude duplicate ports
-        listening_ports = list(set(listening_ports))
+        # Remove duplicates and sort ports
+        ports = list(set(ports))
+        ports.sort()
 
-        # Order from smallest to largest port
-        listening_ports.sort()
-
-        # Display and store the listening ports
-        for port in listening_ports:
-            ports.append(port)
-            print(f"Open port {port} is LISTENING for connections", flush=True)
+        # Display the ports
+        for port in ports:
+            print(f"Open port {port} is ALLOWED by UFW", flush=True)
 
         return ports if ports else None
-
         
     def host_discovery_local(self, target_subnet="", intfce=""):
         # arping(net=target_subnet, timeout=2, verbose=1)

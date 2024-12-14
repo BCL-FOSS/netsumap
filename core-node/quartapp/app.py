@@ -14,7 +14,6 @@ from werkzeug.exceptions import RequestEntityTooLarge
 import os
 from pathlib import Path
 import uuid
-import iperf3
 
 # init Redis DB connection
 db = app.config['DB_CONN']
@@ -297,47 +296,7 @@ async def run_pcap():
             'message': str(e)
         })
     
-@app.route("/speed_test")
-async def speed_test():
-    try:
-        
-        hostname = request.args.get('hostname') 
-        
-        ports = request.args.get('ports') 
 
-        #ports_to_scan = [int(n) for n in ports[1:-1].split(",")]
-        ports_to_scan = [int(n) for n in ports[1:-1].split(",") if int(n) == 6363]
-
-        if ports_to_scan:
-            for port in ports_to_scan:
-                print(port, flush=True)
-        
-        client = iperf3.Client()
-        client.server_hostname = hostname
-        client.port = ports_to_scan
-        result = client.run()
-
-        if result.error:
-            print(result.error, flush=True)
-        else:
-            print('', flush=True)
-            print('Test completed:', flush=True)
-            print('  started at         {0}'.format(result.time), flush=True)
-            print('  bytes transmitted  {0}'.format(result.bytes), flush=True)
-            print('  jitter (ms)        {0}'.format(result.jitter_ms), flush=True)
-            print('  avg cpu load       {0}%\n'.format(result.local_cpu_total), flush=True)
-
-            print('Average transmitted data in all sorts of networky formats:', flush=True)
-            print('  bits per second      (bps)   {0}'.format(result.bps), flush=True)
-            print('  Kilobits per second  (kbps)  {0}'.format(result.kbps), flush=True)
-            print('  Megabits per second  (Mbps)  {0}'.format(result.Mbps), flush=True)
-            print('  KiloBytes per second (kB/s)  {0}'.format(result.kB_s), flush=True)
-            print('  MegaBytes per second (MB/s)  {0}'.format(result.MB_s), flush=True)
-    except Exception as e:
-         return json.dumps({
-            'status': 'error',
-            'message': str(e)
-        })
     
 @app.route('/all_probes')
 async def all_probes():

@@ -15,4 +15,3 @@ pytest-asyncio
 aiohttp
 scapy
 aioredis
-iperf3

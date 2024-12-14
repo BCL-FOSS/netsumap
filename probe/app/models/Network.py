@@ -111,7 +111,29 @@ class Network:
         except subprocess.CalledProcessError as e:
             print(f"Error retrieving interfaces: {e}")
             return []
+        
+    def send_csv(self, url, csv_filepath):
+
+        try:
+            with open(csv_filepath, 'rb') as file:
+                files = {'file': (csv_filepath, file, 'text/csv')}
             
+                headers = {
+                    'Content-Type': 'text/csv'
+                }
+                response = requests.request("POST", url, headers=headers, files=files)
+
+                if response.status_code == 200:
+                    print("Request successful.")
+                else:
+                    print(f"Request failed with status code: {response.status_code}")
+
+                return response.json()
+        except FileNotFoundError:
+            print(f"Error: The file {csv_filepath} does not exist.")
+        except requests.RequestException as e:
+            print(f"Error: Unable to send request to {url}. Details: {e}")
+                
 
 
         #capture.sniff(packet_count=count, timeout=time_out)

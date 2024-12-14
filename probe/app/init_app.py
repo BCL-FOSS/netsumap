@@ -50,7 +50,7 @@ pcap_save_path = os.path.join(data_dir_path, pcap_dir)
 # Create pcap file folder 
 if os.path.isdir(pcap_save_path) is False:
     os.makedirs(pcap_save_path, exist_ok=True)
-    print(f"Probe data directory {pcap_save_path} created successfully", flush=True)
+    print(f"Probe pcap data directory {pcap_save_path} created successfully", flush=True)
 else:
     pass
 

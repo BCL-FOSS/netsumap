@@ -15,6 +15,8 @@ import os
 from pathlib import Path
 import uuid
 import tracemalloc
+from hypercorn.asyncio import serve
+from hypercorn.config import Config
 
 tracemalloc.start()
 
@@ -431,4 +433,7 @@ def test_func():
     return "from quart"
 
 def run() -> None:
-    app.run()
+    config = Config()
+    config.bind = ["0.0.0.0:5000"]  # Update the port and address as needed
+    asyncio.run(serve(app, config))
+    #app.run()

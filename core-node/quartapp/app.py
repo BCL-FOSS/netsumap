@@ -433,7 +433,7 @@ def test_func():
     return "from quart"
 
 def run() -> None:
-    config = Config()
-    config.bind = ["0.0.0.0:5000"]  # Update the port and address as needed
-    asyncio.run(serve(app, config))
-    #app.run()
+    #config = Config()
+    #config.bind = ["0.0.0.0:5000"]  # Update the port and address as needed
+    #asyncio.run(serve(app, config))
+    app.run()

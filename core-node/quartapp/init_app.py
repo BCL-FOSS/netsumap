@@ -31,7 +31,7 @@ if app.config['DB_CONN'] is None:
 else:
     print("Redis DB Connected", flush=True)
 
-#nest_asyncio.apply()
+nest_asyncio.apply()
 
 
 

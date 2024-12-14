@@ -66,7 +66,7 @@ def register(url=''):
         time.sleep(1.5)
         probe_id, hostname = probe_cfg.gen_probe_register_data()
         external_ip = main_network.get_public_ip()
-        ports = main_network.open_tcp_ports()
+        ports = main_network.open_listening_ports()
         ifaces = main_network.get_ifaces()
 
         print(ifaces, flush=True)

@@ -63,6 +63,33 @@ class Network:
         else:
             return None
         
+    def open_listening_ports(self):
+        # Get all connections for both TCP and UDP
+        connections = psutil.net_connections(kind='inet') + psutil.net_connections(kind='inet4') + psutil.net_connections(kind='inet6')
+
+        ports = []
+
+        # Filter connections to get ports with status LISTEN (TCP) or listening UDP sockets
+        listening_ports = [
+            conn.laddr.port 
+            for conn in connections 
+            if conn.status == psutil.CONN_LISTEN or conn.type == psutil.SOCK_DGRAM
+        ]
+
+        # Exclude duplicate ports
+        listening_ports = list(set(listening_ports))
+
+        # Order from smallest to largest port
+        listening_ports.sort()
+
+        # Display and store the listening ports
+        for port in listening_ports:
+            ports.append(port)
+            print(f"Open port {port} is LISTENING for connections", flush=True)
+
+        return ports if ports else None
+
+        
     def host_discovery_local(self, target_subnet="", intfce=""):
         # arping(net=target_subnet, timeout=2, verbose=1)
         ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=target_subnet), iface=intfce, timeout=2)

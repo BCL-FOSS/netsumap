@@ -11,6 +11,3 @@ sudo apt-get install -y \
     iperf3\
     p0f\
     tshark -y
-
-pip install --no-cache-dir -r requirements.txt --upgrade 
-

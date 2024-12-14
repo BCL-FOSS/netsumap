@@ -1,7 +1,0 @@
-Flask
-hypercorn 
-scapy
-requests
-psutil
-iperf3
-pyshark

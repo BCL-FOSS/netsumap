@@ -14,6 +14,9 @@ from werkzeug.exceptions import RequestEntityTooLarge
 import os
 from pathlib import Path
 import uuid
+import tracemalloc
+
+tracemalloc.start()
 
 # init Redis DB connection
 db = app.config['DB_CONN']

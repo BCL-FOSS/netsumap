@@ -72,7 +72,7 @@ class Network:
         listening_ports = [
             conn.laddr.port 
             for conn in connections 
-            if conn.status == psutil.CONN_LISTEN or conn.type == psutil.SOCK_DGRAM
+            if conn.status == psutil.CONN_LISTEN or conn.type == socket.SOCK_DGRAM
         ]
 
         # Exclude duplicate ports

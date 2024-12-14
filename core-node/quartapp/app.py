@@ -14,11 +14,6 @@ from werkzeug.exceptions import RequestEntityTooLarge
 import os
 from pathlib import Path
 import uuid
-import tracemalloc
-from hypercorn.asyncio import serve
-from hypercorn.config import Config
-
-tracemalloc.start()
 
 # init Redis DB connection
 db = app.config['DB_CONN']
@@ -433,7 +428,4 @@ def test_func():
     return "from quart"
 
 def run() -> None:
-    #config = Config()
-    #config.bind = ["0.0.0.0:5000"]  # Update the port and address as needed
-    #asyncio.run(serve(app, config))
     app.run()

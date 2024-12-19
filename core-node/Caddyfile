@@ -22,6 +22,10 @@ netsumap.baughcl.com {
 		reverse_proxy quart_app:5000
 	}
 
+	handle /iperf* {
+        reverse_proxy iperf_server:6363
+    }
+
 }
 
 

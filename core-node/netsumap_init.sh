@@ -7,7 +7,9 @@ sudo ufw allow 6363
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
-# Install Docker
+pip install nvidia-pyindex 
+pip install nvidia-cuda-nvcc
+
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 sudo apt install docker-compose -y

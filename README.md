@@ -47,41 +47,40 @@ Model training data captured from:
 
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
-3. Open port necessary ports
+3. Update core-node/Caddyfile with url (if self hosting)
 ```bash
-    sudo ufw allow 80
-    sudo ufw allow 443
+    change.url.com {
+        ...
+    }
 ```
-4. Install CUDA Compiler  
-```python
-    pip install nvidia-pyindex 
-    pip install nvidia-cuda-nvcc
-```
-5. Run startup script (starts netsumap after initialization)
+4. Run startup script (starts netsumap after initialization)
 ```bash
     sudo ./netsumap_init.sh
 ```
-6. Visit netsumap core @ [https://your-core-node-domain.com/] to get started.
+5. Visit netsumap core @ [https://your-core-node-domain.com/] to get started.
 
 To restart netsumap 
 ```bash
     sudo ./netsumap_restart.sh
 ```
 
-### Network Probe Configuration
-1. Initialize the probe, will create a cronjob which runs packet capture every 5 minutes (can be adjusted)
+### Probe Configuration
+
+#### Recommended Environment
+- Ubuntu 22.04 LTS
+
+1. Register probe with core-node
 ```bash
-    sudo ./inf_init.sh
+    sudo ./config/prb_init.sh
 
-    # probe parameters require the core-node URL & the # of packets to capture for analysis. Example:
-
-    [https://your-core-node-domain.com/] 50
+    # Enter core-node URL during configuration ie:
+    [https://your-core-node-domain.com]
+```
+2. Start probe with:
+```bash
+    sudo ./probe_start.sh
 ```
 
-Run pcap session for instant analysis (same parameters as init script)
-```bash
-    sudo ./inf_run.sh
-```
 
 
 

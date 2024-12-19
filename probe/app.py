@@ -20,7 +20,6 @@ db_conn = sqlite3.connect(db_path)
 if isinstance(db_conn, Connection):
     app.config['USE_DB'] = True
 
-
 @app.route('/pcap', methods=['POST'])
 def pcap():
     scan_options = request.get_json(silent=True)

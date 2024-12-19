@@ -37,10 +37,12 @@ def test():
     core_url_search = cur.execute("SELECT url FROM pbdata")
     core_url = core_url_search.fetchone()
     print(core_url, flush=True)
+    iperf_url = str(core_url)+"/iperf"
+    print(iperf_url, flush=True)
     port = app.config['IPERF_PORT']
 
     client = iperf3.Client()
-    client.server_hostname = str(core_url)+"/iperf"
+    client.server_hostname = iperf_url
     client.port = port
     client.json_output = True
     client.reverse = True

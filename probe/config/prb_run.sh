@@ -7,4 +7,4 @@
 # Start venv
 # . .venv/bin/activate 
 
-/usr/bin/python3 probe_conf.py $1
+/usr/bin/python3 probe_uptime.py $1

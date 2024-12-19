@@ -37,11 +37,30 @@ class Network:
         except subprocess.CalledProcessError as e:
             print(f"Error retrieving interfaces: {e}")
             return []
+        
+    def net_scan(self, url='', count=10):
+        
+        inf_to_scan = self.retrieve_host_ifaces()
+        pcaps = sniff(iface=inf_to_scan, count=count, prn=lambda x: x.summary())
+
+        for cap in pcaps:
+            
+            packet_data = {
+                
+                "net_evt": cap.show(dump=True)
+            }
+
+            core_url = url+"/netmetadata"
+            payload = json.dumps(packet_data)
+            response = self.make_request(url=core_url, payload=payload)
+
+            print(json.loads(response.json()))
 
     def open_tcp_ports(self):
 
         # Get all connections 
         connections = psutil.net_connections(kind='inet')
+        
         ports = []
 
         # filter to get only ports equal to LISTEN
@@ -94,6 +113,58 @@ class Network:
             print(f"Open port {port} is ALLOWED by UFW", flush=True)
 
         return ports if ports else None
+        
+    def host_discovery_local(self, target_subnet="", intfce=""):
+        # arping(net=target_subnet, timeout=2, verbose=1)
+        ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=target_subnet), iface=intfce, timeout=2)
+        
+        ans.summary()
+        unans.summary()
+        
+
+        devices = []
+
+        for sent, received in ans:
+            devices.append({'ip': received.psrc, 'mac': received.hwsrc})
+
+        if devices != []:
+             return devices
+        else:
+             return None
+        
+    def pcap_scan(self, iface='', count=0, pcap_path='', time_out=50):
+        capture = pyshark.LiveCapture(interface=iface, output_file=pcap_path)
+
+        try:
+            for packet in capture.sniff_continuously(packet_count=count):
+                if packet is not None:
+                    print(packet, flush=True)
+        except:
+            pass
+        finally:
+            capture.close()
+        
+    def send_csv(self, url, csv_filepath):
+
+        try:
+            with open(csv_filepath, 'rb') as file:
+                files = {'file': (csv_filepath, file, 'text/csv')}
+            
+                headers = {
+                    'Content-Type': 'text/csv'
+                }
+                response = requests.request("POST", url, headers=headers, files=files)
+
+                if response.status_code == 200:
+                    print("Request successful.")
+                else:
+                    print(f"Request failed with status code: {response.status_code}")
+
+                return response.json()
+        except FileNotFoundError:
+            print(f"Error: The file {csv_filepath} does not exist.")
+        except requests.RequestException as e:
+            print(f"Error: Unable to send request to {url}. Details: {e}")
 
             
        

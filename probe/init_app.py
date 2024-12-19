@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from models.Network import Network
+from config.models.Network import Network
 import os
 
 app = Flask(__name__)

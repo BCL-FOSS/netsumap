@@ -360,30 +360,19 @@ async def all_pcaps():
 @app.route("/speed_test")
 async def speed_test():
     try:
-        
         hostname = request.args.get('hostname') 
         
         ports = request.args.get('ports') 
 
-
-        #ports_to_scan = [int(n) for n in ports[1:-1].split(",")]
         port_to_scan = [int(n) for n in ports[1:-1].split(",") if int(n) == 5000]
 
         if port_to_scan:
             for port in port_to_scan:
-                print(port, flush=True)
-                url = hostname+f":{port}"+"/test"
+                if port == 5000:
+                    print(port, flush=True)
+                    url = hostname+f":{port}"+"/test"
 
-        iperf_server_ip = Network()
-        iperf_server_ip.get_public_ip()
-
-        iperf_server = app.config['IPERF_URL']
-        iperf_port = app.config['IPERF_PORT']
-
-        payload = {
-            "hostname": iperf_server,
-            "port": iperf_port
-        }
+        payload = {"": ""}
 
         async with aiopost as session:
             async with session.post(url, json=payload) as response:

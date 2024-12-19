@@ -14,8 +14,8 @@ DB_CONN=None
 # IPERF configuration
 IPERF_PORT = 6363
 
-# Core Connection
-CORE_CONN='https://netsumap.baughcl.com'
+# SQL DB INIT
+USE_DB=False
 
 
 

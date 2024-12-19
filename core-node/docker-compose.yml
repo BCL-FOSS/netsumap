@@ -34,6 +34,13 @@ services:
     depends_on:
       - quart_app
 
+  iperf_server:
+    image: networkstatic/iperf3:latest
+    container_name: iperf_server
+    command: ["-s", "-p", "6363"]
+    expose:
+      - "6363"
+
 volumes:
   quart_app_data:
     external: true
@@ -43,3 +50,7 @@ volumes:
     external: true
   caddy_config:
     external: true
+
+
+
+

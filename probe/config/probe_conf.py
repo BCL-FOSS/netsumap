@@ -23,7 +23,7 @@ main_network = Network()
 if os.path.exists('probe.db') == False:
     conn = sqlite3.connect('probe.db')
     cur = conn.cursor()
-    cur.execute("CREATE TABLE pbdata(id, host_ip, hostname)")
+    cur.execute("CREATE TABLE pbdata(id, host_ip, hostname, core_url)")
     res = cur.execute("SELECT name FROM sqlite_master")
     if res.fetchone() is None:
         print('Failed to create table in db ')
@@ -87,14 +87,16 @@ def register(url=''):
         print(json.dumps(response))
 
         if USE_DB == True:
-            cur.execute("INSERT INTO pbdata (id, host_ip, hostname) VALUES (?, ?, ?)", (probe_id, external_ip, hostname))
+            cur.execute("INSERT INTO pbdata (id, host_ip, hostname, core_url) VALUES (?, ?, ?, ?)", (probe_id, external_ip, hostname, url))
             conn.commit()
-
+            
         #print(probe_id)
         print('Probe configuration complete')
+        conn.close()
     else:
          print('Probe already configured')
          pass
+   
 
 def main(url=''):
     register(url=url)

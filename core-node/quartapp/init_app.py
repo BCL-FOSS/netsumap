@@ -2,10 +2,39 @@ from quart import Quart
 import nest_asyncio
 import os
 from models.util.RedisDB import RedisDB
+import iperf3
+import threading
+from models.util.CoreNetwork import Network
+
+def run_iperf_server():
+    
+    """Start the iPerf3 server on a separate thread."""
+    server = iperf3.Server()
+    main_network = Network()
+    external_ip = main_network.get_public_ip()
+    server.bind_address = external_ip
+    iperf_port = 6363
+    server.port = iperf_port
+    server.verbose = True 
+
+    while True:
+        server.run()
+
+def start_iperf():
+    try:
+
+        threading.Thread(target=run_iperf_server, daemon=True).start()
+
+    except RuntimeError as error:
+        print(f'error starting iperf server: {error}', flush=True)
+        print('Error occured during probe initialization. Verify iperf installation. ctrl+c to exit.', flush=True)
+        exit()
 
 # Initialize Quart App
 app = Quart(__name__)
 app.config.from_object("config")
+
+start_iperf()
 
 folder_name = 'pcaps'
 csv_dir_path = os.path.join(app.instance_path, folder_name)

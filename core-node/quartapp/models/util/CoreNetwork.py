@@ -3,11 +3,19 @@ from scapy import *
 from scapy.tools import *
 from scapy.layers.inet import *
 from scapy.layers.l2 import *
-
+import urllib.request
+import socket
 
 class Network:
     def __init__(self) -> None:
         pass
+
+    def get_hostname():
+        hostname = socket.gethostname()
+        return hostname
+
+    def get_public_ip(self):
+        return urllib.request.urlopen('https://ident.me').read().decode('utf8')
 
     def check_service(self, ip='', host_name='', port_list=[]):
        check_result = sr(IP(dst=ip)/TCP(dport=port_list),inter=0.5,retry=-2,timeout=1)

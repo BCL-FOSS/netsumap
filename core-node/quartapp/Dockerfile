@@ -9,6 +9,8 @@ RUN apt-get update -y
 
 RUN apt-get upgrade -y
 
+RUN apt-get install -y iperf3
+
 # Copy requirements to the app root
 COPY quartapp/requirements.txt ./
 

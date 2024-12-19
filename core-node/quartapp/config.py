@@ -14,5 +14,9 @@ DB_CONN=None
 # Generate secret key for encryption
 SECRET_KEY = ""
 
+# IPERF Server Info
+IPERF_URL= "https://netsumap.baughcl.com"
+IPERF_PORT = 6363
+
 
 

@@ -7,8 +7,7 @@
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
-sudo ufw allow 6363/tcp
-sudo ufw allow 5000/tcp
+sudo ufw allow 5000
 
 pip install --no-cache-dir -r requirements.txt --upgrade 
 
@@ -28,7 +27,7 @@ fi
 # pip install --no-cache-dir -r requirements.txt --upgrade 
 
 # Prompt user for additional parameters
-echo "PARAM FORMAT Ex.:https://netsumap-core-url" 
+echo "PARAM FORMAT Ex.:https://netsumap-core-url/ping" 
 
 echo $script
 read -p "Enter Parameters: " SCRIPT_PARAMS

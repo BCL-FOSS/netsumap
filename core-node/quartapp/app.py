@@ -15,9 +15,12 @@ import os
 from pathlib import Path
 import uuid
 import iperf3
+from iperf3 import TestResult
+import aiohttp
 
 # init Redis DB connection
 db = app.config['DB_CONN']
+aiopost = aiohttp.ClientSession()
 
 K.clear_session() # Clears GPU resources before loading model
 
@@ -362,35 +365,35 @@ async def speed_test():
         
         ports = request.args.get('ports') 
 
+
         #ports_to_scan = [int(n) for n in ports[1:-1].split(",")]
-        ports_to_scan = [int(n) for n in ports[1:-1].split(",") if int(n) == 6363]
+        port_to_scan = [int(n) for n in ports[1:-1].split(",") if int(n) == 5000]
 
-        if ports_to_scan:
-            for port in ports_to_scan:
+        if port_to_scan:
+            for port in port_to_scan:
                 print(port, flush=True)
-        
-        client = iperf3.Client()
-        client.server_hostname = hostname
-        client.port = ports_to_scan
-        client.bind_address = "*"
-        result = client.run()
+                url = hostname+f":{port}"+"/test"
 
-        if result.error:
-            print(result.error, flush=True)
-        else:
-            print('', flush=True)
-            print('Test completed:', flush=True)
-            print('  started at         {0}'.format(result.time), flush=True)
-            print('  bytes transmitted  {0}'.format(result.bytes), flush=True)
-            print('  jitter (ms)        {0}'.format(result.jitter_ms), flush=True)
-            print('  avg cpu load       {0}%\n'.format(result.local_cpu_total), flush=True)
+        iperf_server_ip = Network()
+        iperf_server_ip.get_public_ip()
 
-            print('Average transmitted data in all sorts of networky formats:', flush=True)
-            print('  bits per second      (bps)   {0}'.format(result.bps), flush=True)
-            print('  Kilobits per second  (kbps)  {0}'.format(result.kbps), flush=True)
-            print('  Megabits per second  (Mbps)  {0}'.format(result.Mbps), flush=True)
-            print('  KiloBytes per second (kB/s)  {0}'.format(result.kB_s), flush=True)
-            print('  MegaBytes per second (MB/s)  {0}'.format(result.MB_s), flush=True)
+        iperf_server = app.config['IPERF_URL']
+        iperf_port = app.config['IPERF_PORT']
+
+        payload = {
+            "hostname": iperf_server,
+            "port": iperf_port
+        }
+
+        async with aiopost as session:
+            async with session.post(url, json=payload) as response:
+                if response.status == 200:
+                    response_data = await response.json()
+                    return jsonify(response_data), 200
+                else:
+                    error_message = await response.text()
+                    return jsonify({"error": error_message}), response.status
+            
     except Exception as e:
          return json.dumps({
             'status': 'error',

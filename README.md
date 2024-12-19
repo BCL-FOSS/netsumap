@@ -47,7 +47,7 @@ Model training data captured from:
 
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
-3. Update core-node/Caddyfile with url (if self hosting)
+3. Update core-node/Caddyfile with new url (if self hosting)
 ```bash
     change.url.com {
         ...

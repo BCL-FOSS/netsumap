@@ -40,7 +40,7 @@ def test():
     port = app.config['IPERF_PORT']
 
     client = iperf3.Client()
-    client.server_hostname = str(core_url)
+    client.server_hostname = str(core_url)+"/iperf"
     client.port = port
     client.json_output = True
     client.reverse = True

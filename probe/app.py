@@ -15,10 +15,15 @@ db_search_path = os.getcwd()
 
 db_path = Path(db_search_path).rglob('*.db')
 
-db_conn = sqlite3.connect(db_path)
+if db_path:
+    for file_path in db_path:
+        db_conn = sqlite3.connect(str(file_path.absolute().resolve()))
+else:
+    print('No probe database found. Verify initial probe enrollment completed successfully.')
 
 if isinstance(db_conn, Connection):
     app.config['USE_DB'] = True
+    print(db_conn, flush=True)
 
 @app.route('/pcap', methods=['POST'])
 def pcap():
@@ -29,11 +34,11 @@ def pcap():
         pcap_file = pcap_dir+str(pcap_id)+"pcap.pcap"
         main_network.pcap_scan(iface=scan_options['iface'], count=scan_options['count'], pcap_path=pcap_file)
 
-@app.route('/test' ,methods=['POST'])
-def test():
+@app.route('/bdwthtst' , methods=['POST'])
+def bdwthtst():
 
     cur = db_conn.cursor()
-    core_url_search = cur.execute("SELECT url FROM pbdata")
+    core_url_search = cur.execute("SELECT core_url FROM pbdata")
     core_url = core_url_search.fetchone()
     print(core_url, flush=True)
     iperf_url = str(core_url)+"/iperf"
@@ -64,8 +69,19 @@ def test():
     }
 
     cur.close()
-
     return response_data
+
+@app.route('/allsrvcs' , methods=['GET'])
+def allsrvcs():
+    process_names_to_filter = ["python", "bash", "nginx"]  # Replace with desired process names
+    filtered_processes = main_network.get_processes_by_names(process_names=process_names_to_filter)
+    
+    if filtered_processes:
+        print(f"Processes matching {process_names_to_filter}:", flush=True)
+        for process in filtered_processes:
+            print(f"PID: {process['pid']}, Name: {process['name']}, Cmdline: {process['cmdline']}", flush=True)
+    else:
+        print(f"No processes found matching {process_names_to_filter}.", flush=True)
         
 @app.errorhandler(404)
 def page_not_found():

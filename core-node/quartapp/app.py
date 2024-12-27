@@ -17,6 +17,7 @@ import uuid
 import iperf3
 from iperf3 import TestResult
 import aiohttp
+from models.util.NN import NN
 
 # init Redis DB connection
 db = app.config['DB_CONN']
@@ -126,6 +127,7 @@ async def csv_inference():
 
 @app.post("/json_inference")
 async def rest_prediction():
+    ml_obj = NN()
     try:
         if request.method == 'POST':
         
@@ -136,10 +138,10 @@ async def rest_prediction():
                 json_data = dict(data_value)
 
                 # JSON preprocessing for prediction
-                X_input = preprocess_input(json_data=data_value['packet_data'])
+                X_input = ml_obj.preprocess_input(json_data=data_value['packet_data'])
 
                 # Response conversion to JSON
-                prediction = predict(processed_input=X_input)
+                prediction = ml_obj.predict(processed_input=X_input)
                 inference_value = json.dumps(prediction)
             else:
                 return jsonify({"Error": "Packet data missing for threat assessment"})
@@ -370,7 +372,7 @@ async def speed_test():
             for port in port_to_scan:
                 if port == 5000:
                     print(port, flush=True)
-                    url = hostname+f":{port}"+"/test"
+                    url = hostname+f":{port}"+"/bdwthtst"
 
         payload = {"": ""}
 
@@ -378,10 +380,10 @@ async def speed_test():
             async with session.post(url, json=payload) as response:
                 if response.status == 200:
                     response_data = await response.json()
-                    return jsonify(response_data), 200
+                    return response_data, 200
                 else:
                     error_message = await response.text()
-                    return jsonify({"error": error_message}), response.status
+                    return {"error": error_message}, response.status
             
     except Exception as e:
          return json.dumps({
@@ -401,53 +403,6 @@ def background_input_test():
     print("User Input:", user_input, flush=True)
     # You can add more logic here to process the input
     return jsonify(result=f"Processed input: {user_input}")
-
-def preprocess_input(json_data):
-    # JSON -> Pandas DataFrame 
-    df = pd.DataFrame([json_data])
-
-    # Scaling features before running predictions
-    features = ['avg_ipt', 'bytes_in', 'bytes_out', 'dest_ip',	'entropy', 'num_pkts_out', 'num_pkts_in', 'proto', 'src_ip', 'time_end', 'time_start', 'total_entropy', 'duration', 'src_port', 'dest_port'] 
-    df_cleaned = df[features].fillna(0)  # Fill missing values
-
-    # Scale data
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(df_cleaned)
-
-    return X_scaled
-
-# Function to preprocess the data for inference
-def preprocess_file_for_inference(file_path):
-    # Load the data
-    data = pd.read_csv(file_path)
-
-    # Drop rows with missing values in relevant columns (src_port, dest_port)
-    data_cleaned = data.dropna(subset=['src_port', 'dest_port'])
-
-    # Retain the original data for analysis after predictions
-    original_data = data_cleaned.copy()
-
-    # Drop the label column if present (in this case, for inference)
-    if 'label' in data_cleaned.columns:
-        data_cleaned = data_cleaned.drop(columns=['label'])
-
-    # Scale the numerical features
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(data_cleaned)
-
-    return X_scaled, original_data
-
-def predict(processed_input=None):
-    # Model determines if packet is malicious, benign or outlier
-    predictions = model.predict(processed_input)
-
-    # Prediction -> binary conversion (benign, malicious, outlier)
-    predicted_classes = np.argmax(predictions, axis=1)
-
-    # Response conversion to JSON
-    prediction = predicted_classes.tolist()
-    inference_value = json.dumps(prediction)
-    return inference_value
 
 def gen_id():
     id = uuid.uuid4()

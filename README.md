@@ -47,17 +47,17 @@ Model training data captured from:
 
 1. Install CUDA Driver
 2. [Install CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=runfile_local)
-3. Update core-node/Caddyfile with new url (if self hosting)
+3. Update core-node/Caddyfile with new url
 ```bash
     change.url.com {
         ...
     }
 ```
-4. Run startup script (starts netsumap after initialization)
+4. Run startup script (starts netsumap core after initialization)
 ```bash
     sudo ./netsumap_init.sh
 ```
-5. Visit netsumap core @ [https://your-core-node-domain.com/] to get started.
+5. Visit core dashboard @ [https://url-set-in-Caddyfile.com/] to get started.
 
 To restart netsumap 
 ```bash

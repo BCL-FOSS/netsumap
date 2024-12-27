@@ -166,6 +166,43 @@ class Network:
         except requests.RequestException as e:
             print(f"Error: Unable to send request to {url}. Details: {e}")
 
+    import psutil
+
+    def get_processes_by_names(self, process_names):
+        """
+        Retrieves a list of running processes on a Linux host and filters them by a list of process names.
+
+        Args:
+            process_names (list): A list of process names to filter by.
+
+        Returns:
+            list: A list of dictionaries containing process details (pid, name, and command line) for matching processes.
+        """
+        if not isinstance(process_names, list):
+            raise ValueError("process_names must be a list of strings.")
+
+        matching_processes = []
+        lower_case_names = [name.lower() for name in process_names]
+        
+        # Iterate through all running processes
+        for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+            try:
+                # Check if the process name is in the list (case-insensitive)
+                if proc.info['name'] and proc.info['name'].lower() in lower_case_names:
+                    matching_processes.append({
+                        'pid': proc.info['pid'],
+                        'name': proc.info['name'],
+                        'cmdline': proc.info['cmdline']
+                    })
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                # Ignore processes that terminate or are inaccessible during iteration
+                continue
+        
+        return matching_processes
+
+    
+
+
             
        
 

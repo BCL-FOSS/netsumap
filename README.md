@@ -1,6 +1,6 @@
 # netsumap
 ## Infrastructure Monitor & Network Analyzer
-### EXPERIMENTAL 🔬 
+### EXPERIMENTAL & CURRENTLY UNDER DEVELOPMENT 🔬 
 <p align="center">
   <img width="300" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netsumapicon.png?raw=true">
 </p>

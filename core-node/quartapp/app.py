@@ -161,7 +161,7 @@ async def rest_prediction():
             'message': str(e)
         }), 500
     
-@app.post("/register")
+@app.post("/enroll")
 async def probe_registration():
     try:
         await db.ping_db()
@@ -204,12 +204,11 @@ async def probe_registration():
             'message': str(e)
         }), 500
     
-@app.post("/rmprobe")    
+@app.post("/unenroll")    
 async def probe_removal():
     try:
         data_value = await request.get_json()
         if data_value:
-
             probe_to_rm = json.dumps(data_value)
 
             if probe_to_rm['confirm'] == 'y':
@@ -224,8 +223,8 @@ async def probe_removal():
             'message': str(e)
         }), 500
     
-@app.post("/netmetadata")
-async def probe_webhook():
+@app.post("/pong")
+async def pong():
     try:
         data = await request.get_json()
         if data:

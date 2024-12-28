@@ -1,35 +1,33 @@
 #!/usr/bin/python
 
-import scapy
-import scapy.all
-import scapy.tools
-import socket
-import sys
 import json
 import requests
-import uuid
 import sqlite3
 import time
 import os
-import urllib.request
 from models.Network import Network
 from models.Probe import Probe
+import argparse
 
 USE_DB=True
 
 probe_cfg = Probe()
 main_network = Network()
 
-if os.path.exists('probe.db') == False:
-    conn = sqlite3.connect('probe.db')
-    cur = conn.cursor()
-    cur.execute("CREATE TABLE pbdata(id, host_ip, hostname, core_url)")
-    res = cur.execute("SELECT name FROM sqlite_master")
-    if res.fetchone() is None:
-        print('Failed to create table in db ')
-        USE_DB=False
-else:
-     print("Probe DB already exists")
+def initialize_database():
+    if os.path.exists('probe.db') == False:
+        conn = sqlite3.connect('probe.db')
+        cur = conn.cursor()
+        cur.execute("CREATE TABLE pbdata(id, host_ip, hostname, core_url)")
+        res = cur.execute("SELECT name FROM sqlite_master")
+        if res.fetchone() is None:
+            print('Failed to create table in db ')
+            USE_DB=False
+
+        conn.commit()
+        conn.close()
+    else:
+        print("Probe DB already exists")
 
 def make_request(url='', probe_json={}):
 
@@ -56,7 +54,7 @@ def make_request(url='', probe_json={}):
     finally:
          response.close()
         
-def register(url=''):
+def enroll(url=''):
     conn = sqlite3.connect('probe.db')
     cur = conn.cursor()
     probe_status = cur.execute("SELECT id FROM pbdata")
@@ -71,7 +69,7 @@ def register(url=''):
 
         print(ifaces, flush=True)
 
-        register_url = url+'/register'
+        enroll_url = url+'/enroll'
 
         probe_obj = {
                         "id": probe_id,
@@ -81,7 +79,7 @@ def register(url=''):
                         "ifaces": str(ifaces)
                     }
 
-        response = make_request(url=register_url, probe_json=probe_obj)
+        response = make_request(url=enroll_url, probe_json=probe_obj)
 
         
         print(json.dumps(response))
@@ -96,14 +94,44 @@ def register(url=''):
     else:
          print('Probe already configured')
          pass
-   
 
-def main(url=''):
-    register(url=url)
+def unenroll():
+    print('Removing probe configuration...')
+    conn = sqlite3.connect('probe.db')
+    cur = conn.cursor()
+
+    search_result = cur.execute("SELECT url FROM pbdata")
+    core_url = search_result.fetchone()
+    if core_url is not None:
+        unenroll_url = core_url+'/unenroll'
+        print(unenroll_url)
+        
+        response = make_request(url=unenroll_url, probe_json=probe_obj)
+        
+        cur.execute("DELETE FROM pbdata")
+        conn.commit()
+        print('Probe configuration removed.')
+    else:
+        print('No probe configuration found.')
+    conn.close()
     
 if __name__ == "__main__":
-    url = sys.argv[1]
-    main(url=url)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--url", action="store_true")
+    parser.add_argument("--enroll", action="store_true")
+    parser.add_argument("--unenroll", action="store_true")
+
+    args = parser.parse_args()
+
+    initialize_database()
+
+    if args.enroll:
+        url = args.url
+        enroll(url=url)
+    elif args.unenroll:
+        unenroll()
+    else:
+        print("No valid action specified. Use --enroll or --unenroll.")
 
 
     

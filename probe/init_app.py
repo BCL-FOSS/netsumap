@@ -2,6 +2,9 @@ from flask import Flask
 import os
 from config.models.Network import Network
 import os
+from pathlib import Path
+import sqlite3
+from sqlite3 import Connection
 
 app = Flask(__name__)
 
@@ -27,12 +30,23 @@ if os.path.isdir(pcap_save_path) is False:
 else:
     pass
 
-# General quart settings
+# Locate probe database
+db_search_path = os.getcwd()
+db_search_result = Path(db_search_path).rglob('*.db')
+if db_search_result:
+    for file_path in db_search_result:
+        db_path = str(file_path.absolute().resolve())
+    db_search_result.close()
+else:
+    print('No probe database found. Verify initial probe enrollment completed successfully.')
+    exit()
+
+# General Probe Configurations
 app.config['MAX_CONTENT_LENGTH'] = 500 * 1000 * 1000  # 500 MB
 app.config['PROBE_DATA_FOLDER'] = data_dir_path
 app.config['PCAP_FOLDER'] = pcap_save_path
+app.config['PROBE_DB_PATH'] = db_path
 app.config['CORS_HEADER'] = 'application/json'
-
 app.config['NETWORK_OBJ'] = Network()
 
 

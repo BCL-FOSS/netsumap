@@ -6,7 +6,11 @@ netsumap.baughcl.com {
 		reverse_proxy quart_app:5000
 	}
 
-    handle /register* {
+    handle /enroll* {
+		reverse_proxy quart_app:5000
+	}
+
+	handle /unenroll* {
 		reverse_proxy quart_app:5000
 	}
 
@@ -14,11 +18,7 @@ netsumap.baughcl.com {
 		reverse_proxy quart_app:5000
 	}
 
-	handle /netmetadata* {
-		reverse_proxy quart_app:5000
-	}
-
-	handle /rmprobe* {
+	handle /pong* {
 		reverse_proxy quart_app:5000
 	}
 

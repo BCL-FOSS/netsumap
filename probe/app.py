@@ -11,19 +11,7 @@ from pathlib import Path
 
 main_network = app.config['NETWORK_OBJ']
 
-db_search_path = os.getcwd()
-
-db_path = Path(db_search_path).rglob('*.db')
-
-if db_path:
-    for file_path in db_path:
-        db_conn = sqlite3.connect(str(file_path.absolute().resolve()))
-else:
-    print('No probe database found. Verify initial probe enrollment completed successfully.')
-
-if isinstance(db_conn, Connection):
-    app.config['USE_DB'] = True
-    print(db_conn, flush=True)
+db_path = app.config['PROBE_DB_PATH']
 
 @app.route('/pcap', methods=['POST'])
 def pcap():
@@ -36,6 +24,12 @@ def pcap():
 
 @app.route('/bdwthtst' , methods=['POST'])
 def bdwthtst():
+
+    db_conn = sqlite3.connect(db_path)
+
+    if isinstance(db_conn, Connection):
+        app.config['USE_DB'] = True
+        print(db_conn, flush=True)
 
     cur = db_conn.cursor()
     core_url_search = cur.execute("SELECT core_url FROM pbdata")
@@ -68,7 +62,7 @@ def bdwthtst():
         "MB_s": result.MB_s
     }
 
-    cur.close()
+    db_conn.close()
     return response_data
 
 @app.route('/allsrvcs' , methods=['GET'])

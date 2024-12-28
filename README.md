@@ -1,21 +1,18 @@
 # netsumap
-## Threat Management & Network Automation ##
+## Infrastructure Monitor & Network Analyzer##
 ### EXPERIMENTAL 🔬 
 <p align="center">
   <img width="300" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netsumapicon.png?raw=true">
 </p>
 
 ### What is this?
-This initially started as a Quart app meant to do the following:
-- 👨🏽‍💻 traffic metadata analysis
-- 💥 attack pattern identification 
-- 🤖 network automation
 
-It's currently turning into an infrastructure monitoring & management tool, with network metadata analysis, automation & data visualizations built in. 
-
-The "core" controls the "probes", with probes being either:
-- a self contained server in capture mode
-- existing infrastructure hosting a critical service (in this case the core would be monitoring the service & host).
+- Outage Alert System
+- Service + Infrastructure Monitor for FreeBSD, RHEL & Debian systems
+- Network Visualizer + Mapper
+- Integrated Neural Network performing:
+    + 👨🏽‍💻 Packet metadata analysis 
+    + 💥 Attack pattern identification 
 
 Model training data captured from: 
 - Honey pot(s) hosted & managed by Baugh Consulting & Lab L.L.C.

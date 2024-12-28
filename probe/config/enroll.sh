@@ -38,7 +38,7 @@ get_distro() {
 }
 
 setup_debian() {
-    echo "Detected Debian-based system. Running updates..."
+    echo "Detected Debian-based system. Running probe configuration..."
     sudo apt update && sudo apt upgrade -y
 
     script_dir="$WRKDIR/dst_debian"
@@ -54,6 +54,62 @@ setup_debian() {
 
     sudo ./$script
 
+    create_venv
+
+    python3 cfg.py --url $COREURL --enroll
+
+    source "$VENV_DIR/bin/deactivate"
+}
+
+setup_rhel() {
+    echo "Detected RHEL-based system. Running probe configuration..."
+    sudo dnf update && sudo dnf upgrade -y || sudo yum update -y && sudo yum upgrade -y
+
+    script_dir="$WRKDIR/dst_rhel"
+
+    script="$script_dir/init.sh"
+
+    if [ ! -f $script ]; then
+        echo "Error: File does not exist"
+        exit 1
+    fi
+
+    sudo chmod +x $script
+
+    sudo ./$script
+
+    create_venv
+
+    python3 cfg.py --url $COREURL --enroll
+
+    source "$VENV_DIR/bin/deactivate"
+}
+
+setup_freebsd() {
+    echo "Detected FreeBSD-based system. Running probe configuration..."
+    sudo pkg update -y && sudo pkg upgrade -y
+
+    script_dir="$WRKDIR/dst_freebsd"
+
+    script="$script_dir/init.sh"
+
+    if [ ! -f $script ]; then
+        echo "Error: File does not exist"
+        exit 1
+    fi
+
+    sudo chmod +x $script
+
+    sudo ./$script
+
+    create_venv
+
+    python3 cfg.py --url $COREURL --enroll
+
+    source "$VENV_DIR/bin/deactivate"
+}
+
+create_venv() {
     VENV_DIR="$WRKDIR"
     if [[ ! -d "$VENV_DIR" ]]; then
         echo "Creating a virtual environment in '$VENV_DIR'..."
@@ -82,58 +138,9 @@ setup_debian() {
         echo "Installing packages from requirements.txt..."
         pip install --no-cache-dir -r requirements.txt --upgrade
     fi
-
-    python3 cfg.py --url $COREURL --enroll
-
-    source "$VENV_DIR/bin/deactivate"
 }
 
-setup_rhel() {
-    echo "Detected RHEL-based system. Running updates..."
-    sudo yum update -y || sudo dnf update -y
-
-    script_dir="$WRKDIR/dst_rhel"
-
-    script="$script_dir/init.sh"
-
-    if [ ! -f $script ]; then
-        echo "Error: File does not exist"
-        exit 1
-    fi
-
-    sudo chmod +x $script
-
-    sudo ./$script
-
-    pip install --no-cache-dir -r requirements.txt --upgrade 
-
-    python3 cfg.py --url $COREURL --enroll
-}
-
-setup_freebsd() {
-    echo "Detected FreeBSD system. Running updates..."
-    sudo freebsd-update fetch && sudo freebsd-update install
-    sudo pkg update && sudo pkg upgrade -y
-
-    script_dir="$WRKDIR/dst_freebsd"
-
-    script="$script_dir/init.sh"
-
-    if [ ! -f $script ]; then
-        echo "Error: File does not exist"
-        exit 1
-    fi
-
-    sudo chmod +x $script
-
-    sudo ./$script
-
-    pip install --no-cache-dir -r requirements.txt --upgrade 
-
-    python3 cfg.py --url $COREURL --enroll
-}
-
-# Main script logic
+# Main
 WRKDIR="$(cd "$(dirname "$0")"; pwd)"
 
 echo $WRKDIR

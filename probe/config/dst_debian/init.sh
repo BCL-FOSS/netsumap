@@ -63,7 +63,7 @@ install_probe_dependencies() {
 }
 
 
-# Main logic
+# Main 
 install_probe_dependencies
 open_debian_port
 

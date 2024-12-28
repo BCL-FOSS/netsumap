@@ -11,6 +11,7 @@ remove_cronjob() {
     fi
 }
 
+# Main
 WRKDIR="$(cd "$(dirname "$0")"; pwd)"
 
 echo $WRKDIR

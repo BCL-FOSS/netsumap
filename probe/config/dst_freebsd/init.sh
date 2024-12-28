@@ -16,20 +16,12 @@ is_opnsense() {
     fi
 }
 
-open_pfsense_port() {
-    RULE="pass in on em0 proto tcp from any to any port 5000"
+open_router_port() {
+    RULE="pass in on $ROUTER_IFACE proto tcp from any to any port 5000"
     echo "$RULE" >> /etc/pf.conf
     pfctl -f /etc/pf.conf
     pfctl -e
-    echo "Port 5000 opened on pfSense."
-}
-
-open_opnsense_port() {
-    RULE="pass in on em0 proto tcp from any to any port 5000"
-    echo "$RULE" >> /etc/pf.conf
-    pfctl -f /etc/pf.conf
-    pfctl -e
-    echo "Port 5000 opened on OPNsense."
+    echo "Port 5000 opened on pfSense/OPNSense."
 }
 
 open_freebsd_port() {
@@ -41,9 +33,9 @@ open_freebsd_port() {
     echo "Port 5000 opened on regular FreeBSD system."
 }
 
-install_probe_dependencies(){
+install_probe_dependencies() {
     echo "Updating FreeBSD package repository..."
-    pkg update
+    pkg update -y
 
     echo "Checking for Python installation..."
     if ! command -v python3 > /dev/null 2>&1; then
@@ -53,7 +45,15 @@ install_probe_dependencies(){
 
     if ! command -v pip > /dev/null 2>&1; then
         echo "pip is not installed. Installing pip..."
-        pkg install -y py39-pip 
+        pkg install -y py39-pip
+    fi
+
+    echo "Checking for python3-venv installation..."
+    if ! python3 -m venv --help > /dev/null 2>&1; then
+        echo "python3-venv is not installed. Installing python3-venv..."
+        pkg install -y py39-virtualenv
+    else
+        echo "python3-venv is already installed."
     fi
 
     if ! command -v iperf3 > /dev/null 2>&1; then
@@ -80,16 +80,19 @@ install_probe_dependencies(){
     echo "Installation of tools completed."
 }
 
-# Main logic
+# Main
+ROUTER_IFACE=$1
+
+echo "$ROUTER_IFACE"
 
 install_probe_dependencies
 
 if is_pfsense; then
     echo "System is running pfSense."
-    open_pfsense_port
+    open_router_port
 elif is_opnsense; then
     echo "System is running OPNsense."
-    open_opnsense_port
+    open_router_port
 else
     echo "Neither pfSense nor OPNsense detected. Proceeding with normal FreeBSD firewall configuration."
     open_freebsd_port

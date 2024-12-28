@@ -1,13 +1,9 @@
 from flask import jsonify, request
 from init_app import app
-import requests
-import os
 import uuid
 import iperf3
-from iperf3 import TestResult
 import sqlite3
 from sqlite3 import Connection
-from pathlib import Path
 
 main_network = app.config['NETWORK_OBJ']
 

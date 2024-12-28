@@ -1,5 +1,5 @@
 # netsumap
-## Infrastructure Monitor & Network Analyzer##
+## Infrastructure Monitor & Network Analyzer
 ### EXPERIMENTAL 🔬 
 <p align="center">
   <img width="300" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netsumapicon.png?raw=true">

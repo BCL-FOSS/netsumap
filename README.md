@@ -1,42 +1,32 @@
 # netsumap
+
 ## Infrastructure Monitor & Network Analyzer
 ### EXPERIMENTAL & CURRENTLY UNDER DEVELOPMENT 🔬 
 <p align="center">
   <img width="300" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netsumapicon.png?raw=true">
 </p>
 
-### What is this?
+#### What is this?
+Simple, easy to deploy monitoring & event management solution for FreeBSD & Linux infrastructure. 
 
-- Outage Alert System
-- Service + Infrastructure Monitor for FreeBSD, RHEL & Debian systems
+#### Features
+- Service + Network Outage Alerts
+- Infrastructure Monitoring for FreeBSD, RHEL & Debian systems
 - Network Visualizer + Mapper
 - Integrated Neural Network performing:
     + 👨🏽‍💻 Packet metadata analysis 
     + 💥 Attack pattern identification 
 
-Model training data captured from: 
+NN training data captured from: 
 - Honey pot(s) hosted & managed by Baugh Consulting & Lab L.L.C.
 - Simulated production corporate network with commonly utilized services & servers, and an "attacker" host targeting the resources with various attacks internally & externally.
 
-[Hugging Face Model Repo](https://huggingface.co/bclai) *NN model will be published soon
-
-#### Current Integrations
-- Ubiquiti UniFi Network
-- JSON, CSV network metadata analysis
-- Live packet capture + analysis
-- Uptime monitoring 
-
-#### Upcoming Integrations 👀
-- Cisco Meraki
-- Sonicwall
-- HPE Aruba
-- NETCONF/YANG configuration(s) generation
+[Hugging Face Model Repo](https://huggingface.co/bclai) *NN to be published soon
 
 ## Getting Started
+#### Core Configuration
 
-### Core Configuration
-
-#### Recommended Minimum Environment
+##### Recommended Minimum Environment
 - Ubuntu 22.04 LTS
 - 1/12 GPU 
 - 4 GB GPU Memory 
@@ -59,23 +49,6 @@ Model training data captured from:
 To restart netsumap 
 ```bash
     sudo ./netsumap_restart.sh
-```
-
-### Probe Configuration
-
-#### Recommended Environment
-- Ubuntu 22.04 LTS
-
-1. Register probe with core-node
-```bash
-    sudo ./config/prb_init.sh
-
-    # Enter core-node URL during configuration ie:
-    [https://your-core-node-domain.com]
-```
-2. Start probe with:
-```bash
-    sudo ./probe_start.sh
 ```
 
 

@@ -1,15 +1,15 @@
 # netsumap
 
-## Infrastructure Monitor & Network Analyzer
-### EXPERIMENTAL & CURRENTLY UNDER DEVELOPMENT 🔬 
+## Event Management & Monitoring for Unix & Linux Infrastructure
+#### EXPERIMENTAL & CURRENTLY UNDER DEVELOPMENT 🔬 
 <p align="center">
   <img width="300" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netsumapicon.png?raw=true">
 </p>
 
-#### What is this?
+### What is this?
 Simple, easy to deploy monitoring & event management solution for FreeBSD & Linux infrastructure. 
 
-#### Features
+### Features
 - Service + Network Outage Alerts
 - Infrastructure Monitoring for FreeBSD, RHEL & Debian systems
 - Network Visualizer + Mapper

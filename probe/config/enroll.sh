@@ -45,14 +45,9 @@ setup_debian() {
 
     script="$script_dir/init.sh"
 
-    if [ ! -f $script ]; then
-        echo "Error: File does not exist"
-        exit 1
-    fi
-
     sudo chmod +x $script
 
-    sudo ./$script
+    sudo source $script
 
     create_venv
 
@@ -69,14 +64,9 @@ setup_rhel() {
 
     script="$script_dir/init.sh"
 
-    if [ ! -f $script ]; then
-        echo "Error: File does not exist"
-        exit 1
-    fi
-
     sudo chmod +x $script
 
-    sudo ./$script
+    sudo source $script
 
     create_venv
 
@@ -100,7 +90,7 @@ setup_freebsd() {
 
     sudo chmod +x $script
 
-    sudo ./$script
+    sudo source $script
 
     create_venv
 
@@ -113,7 +103,7 @@ create_venv() {
     VENV_DIR="$WRKDIR"
     if [[ ! -d "$VENV_DIR" ]]; then
         echo "Creating a virtual environment in '$VENV_DIR'..."
-        python3 -m venv "$VENV_DIR"
+        python3 -m venv $VENV_DIR
 
         echo "Activating the virtual environment..."
         source "$VENV_DIR/bin/activate"

@@ -33,7 +33,7 @@ ALLOWED_EXTENSIONS = {'csv'}
 
 @app.route('/favicon.ico')
 async def favicon():
-    return '', 204  # Respond with an empty response and 204 status (No Content)
+    return '', 204
 
 @app.errorhandler(404)
 async def page_not_found():

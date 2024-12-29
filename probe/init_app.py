@@ -36,6 +36,7 @@ db_search_result = Path(db_search_path).rglob('*.db')
 if db_search_result:
     for file_path in db_search_result:
         db_path = str(file_path.absolute().resolve())
+        print(db_path)
     db_search_result.close()
 else:
     print('No probe database found. Verify initial probe enrollment completed successfully.')

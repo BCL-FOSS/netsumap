@@ -1,6 +1,6 @@
 # netsumap
 
-## Open Source Event Management & Monitoring for Unix & Linux Infrastructure
+## Open Source Event Management & Monitoring for Unix & Linux
 #### EXPERIMENTAL & CURRENTLY UNDER DEVELOPMENT 🔬 
 <p align="center">
   <img width="300" height="300" src="https://github.com/BCL-FOSS/net-con.ai/blob/experimental/netsumapicon.png?raw=true">

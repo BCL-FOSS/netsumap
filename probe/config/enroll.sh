@@ -83,11 +83,6 @@ setup_freebsd() {
 
     script="$script_dir/init.sh"
 
-    if [ ! -f $script ]; then
-        echo "Error: File does not exist"
-        exit 1
-    fi
-
     sudo chmod +x $script
 
     sudo source $script

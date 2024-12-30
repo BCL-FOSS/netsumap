@@ -106,7 +106,7 @@ def unenroll():
         unenroll_url = core_url+'/unenroll'
         print(unenroll_url)
         
-        response = make_request(url=unenroll_url, probe_json=probe_obj)
+        response = make_request(url=unenroll_url)
         
         cur.execute("DELETE FROM pbdata")
         conn.commit()
@@ -118,20 +118,25 @@ def unenroll():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", action="store_true")
-    parser.add_argument("--enroll", action="store_true")
-    parser.add_argument("--unenroll", action="store_true")
+    parser.add_argument("--enroll", required=True, action="store_true")
+    parser.add_argument("--unenroll", required=True, action="store_true")
 
     args = parser.parse_args()
 
     initialize_database()
 
     if args.enroll:
-        url = args.url
-        enroll(url=url)
+        if args.url:
+            url = args.url
+            enroll(url=url)
+        else:
+            print("Enter core-node URL.")
+            exit()
     elif args.unenroll:
         unenroll()
     else:
         print("No valid action specified. Use --enroll or --unenroll.")
+        exit()
 
 
     

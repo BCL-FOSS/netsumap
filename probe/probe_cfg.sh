@@ -30,11 +30,11 @@ PRB_CFG_DIR="$WRKDIR/config"
 ENROLL_SCRIPT="$PRB_CFG_DIR/enroll.sh"
 UNENROLL_SCRIPT="$PRB_CFG_DIR/unenroll.sh"
 
-if [ "$1" == "--enroll" ]; then
+if [ "$1" == "enroll" ]; then
     enroll
-elif [ "$1" == "--unenroll" ]; then
+elif [ "$1" == "unenroll" ]; then
     unenroll
 else
-    echo "Usage: $0 [--enroll | --unenroll]"
+    echo "Usage: $0 [enroll | unenroll]"
     exit 1
 fi

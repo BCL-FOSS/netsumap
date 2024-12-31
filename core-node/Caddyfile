@@ -1,6 +1,6 @@
 # Caddyfile
 
-netsumap.baughcl.com {
+netsumap.baughcl.io {
     
     handle /* {
 		reverse_proxy quart_app:5000

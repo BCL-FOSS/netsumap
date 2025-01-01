@@ -69,31 +69,21 @@ config_freebsd() {
     if [ "$1" = "--enroll" ]; then
         sudo pkg update -y && sudo pkg upgrade -y
 
-        echo "Enter core-node URL without trailing '/':"
-        echo "https://your-netsumap-core-url"
-        read -p "Core URL: " COREURL
-
         echo "$COREURL"
 
         sudo chmod +x "$init_script"
-
         . "$init_script"
 
         create_venv
-
         python3 "$cfg_script" --url "$COREURL" "$1"
-
         . "$VENV_DIR/bin/deactivate"
 
         create_checkin_cronjob
-
     elif [ "$1" = "--unenroll" ]; then
         remove_checkin_cronjob
 
         . "$VENV_DIR/bin/activate"
-
         python3 "$cfg_script" "$2"
-
         . "$VENV_DIR/bin/deactivate"
     else
         echo "Usage: [--enroll | --unenroll]"
@@ -107,10 +97,6 @@ config_debian() {
     if [ "$1" = "--enroll" ]; then
         sudo apt update && sudo apt upgrade -y
 
-        echo "Enter core-node URL without trailing '/':"
-        echo "https://your-netsumap-core-url"
-        read -p "Core URL: " COREURL
-
         echo "$COREURL"
         sudo chmod +x "$init_script"
         . "$init_script"
@@ -121,10 +107,11 @@ config_debian() {
 
         create_checkin_cronjob
     elif [ "$1" = "--unenroll" ]; then
+        remove_checkin_cronjob
+
         . "$VENV_DIR/bin/activate"
         python3 "$cfg_script" "$1"
         . "$VENV_DIR/bin/deactivate"
-        remove_checkin_cronjob
     else
         echo "Usage: [--enroll | --unenroll]"
         exit 1
@@ -133,14 +120,10 @@ config_debian() {
 
 config_rhel() {
     init_script="$script_dir/dst_rhel/init.sh"
-    
+
     if [ "$1" = "--enroll" ]; then
         sudo dnf update -y || sudo yum update -y
         sudo dnf upgrade -y || sudo yum upgrade -y
-
-        echo "Enter core-node URL without trailing '/':"
-        echo "https://your-netsumap-core-url"
-        read -p "Core URL: " COREURL
 
         echo "$COREURL"
         sudo chmod +x "$init_script"
@@ -169,6 +152,11 @@ probecfg() {
     checkin_script="$script_dir/ping.py"
     CRON_JOB="*/5 * * * * python3 $checkin_script"
     VENV_DIR="$WRKDIR/venv"
+
+    echo "Enter core-node URL without trailing '/':"
+    echo "https://your-netsumap-core-url"
+    read -p "Core URL: " COREURL
+    echo "$COREURL"
 
     DISTRIBUTION=$(get_distro)
 

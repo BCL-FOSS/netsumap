@@ -1,33 +1,24 @@
-#!/bin/bash
+#!/bin/sh
 
 is_pfsense() {
-    if [ -f "/etc/pfsense-release" ]; then
-        return 0  # is pfsense
-    else
-        return 1  # not pfsense
-    fi
+    [ -f "/etc/pfsense-release" ]
 }
 
 is_opnsense() {
-    if [ -f "/usr/local/etc/os-release" ] && grep -q "OPNsense" /usr/local/etc/os-release; then
-        return 0  
-    else
-        return 1  
-    fi
+    [ -f "/usr/local/etc/os-release" ] && grep -q "OPNsense" /usr/local/etc/os-release
 }
 
 open_router_port() {
     RULE="pass in on $ROUTER_IFACE proto tcp from any to any port 5000"
-    echo "$RULE" >> /etc/pf.conf
+    echo "$RULE" | sudo tee -a /etc/pf.conf > /dev/null
     sudo pfctl -f /etc/pf.conf
     sudo pfctl -e
-    echo "Port 5000 opened on pfSense/OPNSense."
+    echo "Port 5000 opened on pfSense/OPNsense."
 }
 
 open_freebsd_port() {
     RULE="pass in proto tcp from any to any port 5000"
-    echo "$RULE" >> /etc/pf.conf
-
+    echo "$RULE" | sudo tee -a /etc/pf.conf > /dev/null
     sudo pfctl -f /etc/pf.conf
     sudo pfctl -e
     echo "Port 5000 opened on regular FreeBSD system."
@@ -81,18 +72,24 @@ install_probe_dependencies() {
 }
 
 # Main
-ROUTER_IFACE=$1
-
-echo "$ROUTER_IFACE"
-
 install_probe_dependencies
 
 if is_pfsense; then
     echo "System is running pfSense."
+    echo "Enter primary firewall interface: "
+    read -p "Primary Interface: " ROUTER_IFACE
+
+    echo "Configuring pfSense firewall for interface: $ROUTER_IFACE"
     open_router_port
+
 elif is_opnsense; then
     echo "System is running OPNsense."
+    echo "Enter primary firewall interface: "
+    read -p "Primary Interface: " ROUTER_IFACE
+
+    echo "Configuring OPNsense firewall for interface: $ROUTER_IFACE"
     open_router_port
+
 else
     echo "Neither pfSense nor OPNsense detected. Proceeding with normal FreeBSD firewall configuration."
     open_freebsd_port

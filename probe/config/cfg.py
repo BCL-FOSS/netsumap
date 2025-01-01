@@ -127,7 +127,7 @@ if __name__ == "__main__":
 
     if args.enroll:
         if args.url:
-            url = args.url
+            url = str(args.url)
             enroll(url=url)
         else:
             print("Enter core-node URL.")

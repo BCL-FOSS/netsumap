@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Find the process ID (PID) of the Hypercorn application
 pid=$(ps aux | grep 'hypercorn app:app --bind 0.0.0.0:5000' | grep -v grep | awk '{print $2}')

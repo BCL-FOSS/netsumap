@@ -45,7 +45,7 @@ create_venv() {
         pip install --upgrade pip
 
         echo "Installing packages from requirements.txt..."
-        pip install --no-cache-dir -r requirements.txt --upgrade
+        pip install --no-cache-dir -r $requirements_txt --upgrade
 
         echo "Setup complete. To activate the virtual environment, run:"
         echo "source $VENV_DIR/bin/activate"
@@ -59,7 +59,7 @@ create_venv() {
         pip install --upgrade pip
 
         echo "Installing packages from requirements.txt..."
-        pip install --no-cache-dir -r requirements.txt --upgrade
+        pip install --no-cache-dir -r $requirements_txt --upgrade
     fi
 }
 
@@ -152,6 +152,7 @@ probecfg() {
     checkin_script="$script_dir/ping.py"
     CRON_JOB="*/5 * * * * python3 $checkin_script"
     VENV_DIR="$WRKDIR/venv"
+    requirements_txt="$script_dir/requirements.txt"
 
     echo "Enter core-node URL without trailing '/':"
     echo "https://your-netsumap-core-url"

@@ -147,6 +147,7 @@ config_rhel() {
 }
 
 probecfg() {
+    WRKDIR="$(cd "$(dirname "$0")" && pwd)"
     script_dir="$WRKDIR/config"
     cfg_script="$script_dir/cfg.py"
     checkin_script="$script_dir/ping.py"
@@ -182,9 +183,6 @@ probecfg() {
 }
 
 # Main
-WRKDIR="$(cd "$(dirname "$0")" && pwd)"
-echo "$WRKDIR"
-
 if [ "$1" = "--enroll" ]; then
     probecfg "$1"
 elif [ "$1" = "--unenroll" ]; then

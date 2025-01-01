@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 open_rhel_port() {
     echo "Opening port 5000 on RHEL system..."

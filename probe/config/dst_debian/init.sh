@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 open_debian_port() {
     echo "Opening port 5000 on Debian system..."
